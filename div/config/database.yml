@@ -23,8 +23,6 @@ default: &default
   host: db
   username: postgres
   password: password
-
-
 development:
   <<: *default
   database: web_development
@@ -85,6 +83,6 @@ test:
 #
 production:
   <<: *default
-  database: div_production
+  database: web_production
   username: div
   password: <%= ENV["DIV_DATABASE_PASSWORD"] %>

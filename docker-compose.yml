@@ -15,6 +15,24 @@ services:
     ports:
       - 5434:5432
     restart: always
+  div:
+    build:
+      context: .
+      dockerfile: ./div/Dockerfile
+    container_name: div
+    # tmp/pids/server.pidが残ってたら `A server is already running. ~~` のエラーでrailsを起動できないので事前に消してから、`rails sever` する
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    # 上記のdbイメージで指定したユーザー名とパスワードをrails側でも指定するため環境変数に設定。
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    # ホストのカレントディレクトリ(.)とイメージ内の/myappディレクトリを同期させている
+    volumes:
+      - ./div:/div
+    ports:
+      - "127.0.0.5:3000:3000"
+    depends_on:
+      - db
   web:
     build:
       context: .
@@ -30,7 +48,7 @@ services:
     volumes:
       - ./web:/web
     ports:
-      - "127.0.0.1:3000:3000"
+      - "127.0.1.1:3000:3000"
     depends_on:
       - db
   api:
@@ -51,60 +69,5 @@ services:
       - "127.0.0.2:3000:3000"
     depends_on:
       - db
-  div:
-    build:
-      context: .
-      dockerfile: ./div/Dockerfile
-    container_name: div
-    # tmp/pids/server.pidが残ってたら `A server is already running. ~~` のエラーでrailsを起動できないので事前に消してから、`rails sever` する
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
-    # 上記のdbイメージで指定したユーザー名とパスワードをrails側でも指定するため環境変数に設定。
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-    # ホストのカレントディレクトリ(.)とイメージ内の/myappディレクトリを同期させている
-    volumes:
-      - ./div:/div
-    ports:
-      - "127.0.0.5:3000:3000"
-    depends_on:
-      - db
-  settlement:
-    build:
-      context: .
-      dockerfile: ./settlement/Dockerfile
-    container_name: settlement
-    # tmp/pids/server.pidが残ってたら `A server is already running. ~~` のエラーでrailsを起動できないので事前に消してから、`rails sever` する
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
-    # 上記のdbイメージで指定したユーザー名とパスワードをrails側でも指定するため環境変数に設定。
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-    # ホストのカレントディレクトリ(.)とイメージ内の/myappディレクトリを同期させている
-    volumes:
-      - ./settlement:/settlement
-    ports:
-      - "127.0.0.3:3000:3000"
-    depends_on:
-      - db
-  mail:
-    build:
-      context: .
-      dockerfile: ./mail/Dockerfile
-    container_name: mail
-    # tmp/pids/server.pidが残ってたら `A server is already running. ~~` のエラーでrailsを起動できないので事前に消してから、`rails sever` する
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
-    # 上記のdbイメージで指定したユーザー名とパスワードをrails側でも指定するため環境変数に設定。
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-    # ホストのカレントディレクトリ(.)とイメージ内の/myappディレクトリを同期させている
-    volumes:
-      - ./mail:/mail
-    ports:
-      - "127.0.0.4:3000:3000"
-    depends_on:
-      - db
-   
 volumes:
   postgres_volume:

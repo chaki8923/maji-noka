@@ -84,6 +84,6 @@ test:
 #
 production:
   <<: *default
-  database: maji-noka-rds
+  database: web_production
   username: web
   password: <%= ENV["WEB_DATABASE_PASSWORD"] %>

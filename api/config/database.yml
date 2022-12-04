@@ -24,7 +24,6 @@ default: &default
   username: postgres
   password: password
 
-
 development:
   <<: *default
   database: web_development
@@ -85,6 +84,6 @@ test:
 #
 production:
   <<: *default
-  database: api_production
+  database: web_production
   username: api
   password: <%= ENV["API_DATABASE_PASSWORD"] %>

@@ -1,5 +1,6 @@
 class AdminUserController < ApplicationController
+
   def new
-    render template: 'admin_user/new',status: 200
+    # render ('layouts/login')
   end
 end

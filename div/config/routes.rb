@@ -4,5 +4,5 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "articles#index"
 
-  get "login/" => "admin_user#new"
+  get 'new', to: 'admin_user#new'
 end
