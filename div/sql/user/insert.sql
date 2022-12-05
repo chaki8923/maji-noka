@@ -1,0 +1,1 @@
+INSERT INTO admin_user(mail, password) VALUES()
