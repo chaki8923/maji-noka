@@ -16,6 +16,7 @@ services:
       - 5434:5432
     restart: always
   div:
+    platform: linux/amd64
     build:
       context: .
       dockerfile: ./div/Dockerfile
@@ -34,6 +35,7 @@ services:
     depends_on:
       - db
   web:
+    platform: linux/amd64
     build:
       context: .
       dockerfile: ./web/Dockerfile
@@ -52,6 +54,7 @@ services:
     depends_on:
       - db
   api:
+    platform: linux/amd64
     build:
       context: .
       dockerfile: ./api/Dockerfile
