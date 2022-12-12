@@ -1,0 +1,18 @@
+<h1 class="text-center mb-5">Hi!You can Send Mail<h1>
+<div class="container w-50">
+  <%= form_with(model: @data ,url: mail_path, html:{class: 'form-group'}) do |f| %>
+  <div class="mb-3">
+      <%= f.label :email,'宛先',class: 'form-label fs-4' %>
+      <%= f.text_field :email,class: 'form-control' %>
+  </div>
+  <div class="mb-3">
+      <%= f.label :subject,'件名',class: 'form-label fs-4' %>
+      <%= f.text_field :subject,class: 'form-control' %>
+  </div>
+  <div class="mb-3">
+      <%= f.label :body,'本文',class: 'form-label fs-4' %>
+      <%= f.text_area :body,class: 'form-control', size: "60 * 10" %>
+  </div>
+      <%= f.submit "送信", class: 'btn btn-primary' %>
+  <% end %>
+<div>

@@ -72,5 +72,11 @@ services:
       - "127.0.0.2:3000:3000"
     depends_on:
       - db
+  mailcatcher:
+    image: schickling/mailcatcher
+    container_name: mailcatcher
+    ports:
+      - '1080:1080'
+      - '1025:1025'
 volumes:
   postgres_volume:

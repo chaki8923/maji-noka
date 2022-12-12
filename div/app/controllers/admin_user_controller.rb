@@ -1,8 +1,10 @@
 class AdminUserController < ApplicationController
 
+
   def new
     @data = AdminUser.new
   end
+
 
   def login
     admin_user = AdminUser.new
@@ -21,4 +23,5 @@ class AdminUserController < ApplicationController
    def admin_user_params
     params.require(:admin_user).permit(:email, :password)
    end
+
 end

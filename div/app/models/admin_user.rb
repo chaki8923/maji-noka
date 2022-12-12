@@ -6,4 +6,5 @@ class AdminUser < BaseModel
     Rails.logger.debug "div---------------------------------#{params}"
     res = execute_api('admin_user/login', params, method: 'post')
   end
+
 end
