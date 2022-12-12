@@ -18,5 +18,6 @@ module Div
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    config.x.base_url = config_for(:base_url).symbolize_keys
   end
 end

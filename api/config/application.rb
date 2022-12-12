@@ -18,5 +18,6 @@ module Api
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    config.x.sequel = config_for(:sequel).symbolize_keys
   end
 end

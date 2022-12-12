@@ -4,5 +4,8 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "articles#index"
 
-  get 'new', to: 'admin_user#new'
+  scope 'admin_user' do
+    get '/new', to: 'admin_user#new'
+    post '/login', to: 'admin_user#login'
+  end
 end

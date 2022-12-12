@@ -1,0 +1,5 @@
+
+development:
+  db: "postgresql://postgres:password@maji-noka_db_1/web_development"
+production:
+  db: 1000
