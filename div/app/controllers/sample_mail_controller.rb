@@ -2,11 +2,6 @@ class SampleMailController < ApplicationController
 
   def mail
     @data = SampleMail.new
-    ## TODO：あとで消す
-    Rails.logger.debug "SampleMail.action_methods---------------------------------#{SampleMailer.action_methods}"
-    hoge = SampleMailer.hoge
-    Rails.logger.debug "hoge---------------------------------#{hoge.class}"
-
     render template: 'sample_mailer/mail',status: 200
   end
   

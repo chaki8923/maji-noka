@@ -7,11 +7,16 @@ class AdminUserController < ApplicationController
 
 
   def login
-    admin_user = AdminUser.new
-    res = admin_user.login(admin_user_params)
+    @data = AdminUser.new(admin_user_params)
+    res = @data.login(admin_user_params)
     ## TODO:あとで消す
-    Rails.logger.debug "res---------------------------------#{res}"
-    render action: 'index'
+    Rails.logger.debug "最後のres---------------------------------#{res.inspect}"
+    if res == true
+      render action: 'index'
+    else
+      render action: 'new'
+    end
+
   end
 
   def index

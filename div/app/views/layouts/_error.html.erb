@@ -1,17 +1,10 @@
-<ul class="error_container">
-    <% if model.present? %>
-      <% model.errors.each do |error| %>
-        <%
-          atr = error.attribute
-          msg = error.message
-        %>
-        <% if msg.instance_of? String %>
-          <p class="text-danger"><%= msg %></p>
-        <% else %>
-          <% msg.each do |it| %>
-            <li><%= it.gsub(/\*KEY\*/, model.labels[atr]) %></li>
-          <% end %>
-        <% end %>
-      <% end %>
+<% if model.errors.present? %>
+  <ul class="error_container alert alert-danger">
+    <% model.errors.each do |error| %>
+      <%
+        atr = error.attribute
+      %>
+      <li><%= atr %></li>
     <% end %>
   </ul>
+  <% end %>
