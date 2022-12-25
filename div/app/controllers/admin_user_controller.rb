@@ -6,23 +6,20 @@ class AdminUserController < ApplicationController
   end
 
 
-  def login
+  def signup
     @data = AdminUser.new(admin_user_params)
-    res = @data.login(admin_user_params)
-    ## TODO:あとで消す
-    Rails.logger.debug "最後のres---------------------------------#{res.inspect}"
+    res = @data.signup(admin_user_params)
     if res == true
-      render action: 'index'
+      redirect_to index_path
     else
       render action: 'new'
     end
-
   end
 
   def index
-
+    admin_user = AdminUser.new
+    
   end
-
 
   private
    def admin_user_params

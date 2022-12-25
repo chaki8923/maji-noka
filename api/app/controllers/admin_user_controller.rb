@@ -1,16 +1,35 @@
 class AdminUserController < ApplicationController
     after_action :set_csrf_token_header
 
-    def login
+    def signup
       admin_user = AdminUsers.new(admin_user_params)
-      Rails.logger.debug "admmin_userCLASS---------------------------------#{admin_user.class}"
-      Rails.logger.debug "admmin_user---------------------------------#{admin_user}"
+
+      # エラーの場合はオブジェクトではなくArrayで返ってくる
       if admin_user.class == Array
-        Rails.logger.debug "arrayです------------------------------#{admin_user}"
         render json: admin_user[1]
       else
-        res = admin_user.create(admin_user_params)
+        res = admin_user.create(admin_user)
       end
+    end
+
+    def login
+      auth = Auth.new
+      res = auth.check(admin_user_params)
+      # エラーの場合はオブジェクトではなくArrayで返ってくる
+      if res.class == Array
+        render json: res[1]
+      else
+        return true
+      end
+    end
+
+
+    def get_admin_user
+        data = AdminQuery.new
+        res = data.get_admin_user(admin_user_params[:email])
+        ## TODO：あとで消す
+        Rails.logger.debug "get_admin_user結果---------------------------------#{res}"
+        render json: res
     end
 
     private

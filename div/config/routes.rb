@@ -6,7 +6,10 @@ Rails.application.routes.draw do
 
   scope 'admin_user' do
     get '/new', to: 'admin_user#new'
-    post '/login', to: 'admin_user#login'
+    post '/signup', to: 'admin_user#signup'
+    get '/login', to: 'auth#new'
+    post '/login', to: 'auth#login'
+    get '/index', to: 'admin_user#index'
   end
   get 'mail', to: 'sample_mail#mail'
   get 'mail_comp', to: 'sample_mail#mail_comp'

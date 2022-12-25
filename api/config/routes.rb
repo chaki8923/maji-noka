@@ -5,6 +5,9 @@ Rails.application.routes.draw do
   # root "articles#index"
 
   scope 'admin_user' do
-        post '/login', to: 'admin_user#login'
+    get '/get_admin_user', to: 'admin_user#get_admin_user'
+    post '/signup', to: 'admin_user#signup'
+    post '/login', to: 'admin_user#login'
+    get '/index', to: 'admin_user#index'
   end
 end

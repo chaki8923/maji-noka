@@ -14,18 +14,19 @@ class AdminUsers
     end 
 
     def self.new(value)
-      Rails.logger.debug "API_new---------------------------------#{value}"
-      Rails.logger.debug "API_email---------------------------------#{value[:email]}"
       email, err = Email.new(value: value[:email])
       return nil, err unless email
       password, err = Password.new(value: value[:password])
       return nil, err unless password
-
+      ## TODO：あとで消す
+    Rails.logger.debug "最終的なpassword---------------------------------#{password}"
       super(email: email, password: password)
     end
 
     def create(params)
       @adc.create_db(params)
     end
+
+    
 
 end

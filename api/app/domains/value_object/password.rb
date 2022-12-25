@@ -6,6 +6,8 @@ class Password
 
   def self.new(value:)
     return nil, 'password is min length 5' if value.length < 5
-    super(value: value)
+    return nil, 'password is min must be string' if value.nil?
+    
+    super(value: BCrypt::Password.create(value))
   end
 end
