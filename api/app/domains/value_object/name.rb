@@ -4,9 +4,8 @@ class Name
     @value = value
   end
 
-  def self.new(value)
+  def self.new(value:)
     return nil, 'name is must be a string' unless value.is_a?(String)
-    # super(value: value)
-    value
+    super(value: value)
   end
 end

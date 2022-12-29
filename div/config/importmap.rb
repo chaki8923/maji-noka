@@ -1,6 +1,11 @@
 # Pin npm packages by running ./bin/importmap
 
 pin "application", preload: true
+pin "core", to: "calendar/core.js" 
+pin "day", to: "calendar/day.js" 
+pin "interaction", to: "calendar/interaction.js" 
+pin "list", to: "calendar/list.js" 
+pin "time", to: "calendar/time.js" 
 pin "@hotwired/turbo-rails", to: "turbo.min.js", preload: true
 pin "@hotwired/stimulus", to: "stimulus.min.js", preload: true
 pin "jquery", to: "https://ga.jspm.io/npm:jquery@3.6.0/dist/jquery.js"

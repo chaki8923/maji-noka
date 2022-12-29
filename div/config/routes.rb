@@ -14,4 +14,9 @@ Rails.application.routes.draw do
   get 'mail', to: 'sample_mail#mail'
   get 'mail_comp', to: 'sample_mail#mail_comp'
   post 'mail', to: 'sample_mail#send_mail'
+
+  scope 'calendar' do
+    get '/get', to: 'admin_user#get_calender'
+
+  end
 end
