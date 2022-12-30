@@ -24,6 +24,7 @@ class AdminQuery
 
   def get_admin_user(email)
     res = DB[:admin_users]
+    .select(:id, :email, :password)
     .where(:email => email)
     .first
 

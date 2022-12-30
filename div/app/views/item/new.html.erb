@@ -1,0 +1,25 @@
+<div class="container mt-5">
+    <h2>商品登録</h2>
+    <%= render 'layouts/error', model: @data %>
+    <%= form_for @data, url: {action: :create} do |f| %>
+        <div class="mb-3">
+            <%= f.label :name,class: 'form-label' %>
+            <%=  f.text_field :name, placeholder: 'E-mail',required: true,class: 'form-control' %>
+        </div>
+        <div class="mb-3">
+            <%= f.label :price,class: 'form-label' %>
+            <%=  f.text_field :price, placeholder: 'Password',required: true,class: 'form-control' %>
+        </div>
+        <div class="mb-3">
+            <%= f.label :description,class: 'form-label' %>
+            <%=  f.text_area :description,class: 'form-control' %>
+        </div>
+        <div class="mb-3">
+            <%= f.label :image,class: 'form-label' %>
+            <%=  f.file_field :image,class: 'form-control' %>
+        </div>
+        <div class="mt-3" style="margin-top: 20px;">
+            <%= submit_tag "商品登録",class: "btn btn-primary" %>
+        </div>
+    <% end %> 
+</div>
