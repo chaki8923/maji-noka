@@ -1,7 +1,9 @@
 class Item < BaseModel
-  attr_accessor :name, :price, :image, :description
+  attr_accessor :name, :price, :description, :file
 
   def create(params)
+    ## TODO：あとで消す
+    # Rails.logger.debug "APIに渡すparams---------------------------------#{params}"
     res = execute_api('item/create', params, method: 'post')
   end
 

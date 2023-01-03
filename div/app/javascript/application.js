@@ -9,8 +9,11 @@ import "common"
 var calendarEl = document.getElementById('calendar');
 var date = new Date();
 const year = date.getFullYear();
-const month = date.getMonth() + 1;
-const day = date.getDate();
+const month = date.getMonth().toString() + 1;
+const day = date.getDate().toString().padStart(2, "0");
+
+console.log(year + '-' + month + '-' + day);
+
 
 if(document.getElementById("calendar") != null){
   $(function(){
@@ -33,9 +36,6 @@ if(document.getElementById("calendar") != null){
   }).fail(function (result) {
     console.log('エラーが発生しました。運営に問い合わせてください。');
   });
-
-  console.log('外から');
-  console.log(user);
 
   get_user(email).done(function (res) {
 

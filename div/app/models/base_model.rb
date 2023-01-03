@@ -9,6 +9,8 @@ class BaseModel
 
         case method
           when 'post' then
+          ## TODO：あとで消す
+          Rails.logger.debug "basemodelのparams---------------------------------#{params["file"].class}"
           res = client.post(req_url, params.to_h)
           when 'get' then
           res = client.get(req_url, params.to_h)

@@ -5,8 +5,9 @@ class Image
   end
 
   def self.new(value)
-
-    return nil, ""
+    ## TODO：あとで消す
+    Rails.logger.debug "Imagevalue---------------------------------#{value}"
+    # return nil, 'file is must be a string' unless value[:file_name].is_a?(String)
 
 
     super(value: value)

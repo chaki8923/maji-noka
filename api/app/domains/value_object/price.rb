@@ -6,7 +6,9 @@ class Price
 
   def self.new(value)
 
-    return nil, ""
+    ## TODO：あとで消す
+    Rails.logger.debug "price---------------------------------#{value}"
+    # return nil, 'price is must be a integer' unless value.is_a?(Integer)
 
 
     super(value: value)
