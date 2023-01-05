@@ -15,16 +15,13 @@ class ItemController < ApplicationController
     file_prm = {"file" =>{
       :file_name => file.original_filename,
       :ctype =>  file.content_type,
-      :read => file.read
       }}
-    ## TODO：あとで消す
-    # output_path = Rails.root.join("public", file.original_filename)
-    # File.open(output_path, 'wb'){ |f| f.write(file.read) }
-    Rails.logger.debug "read中身---------------------------------#{file}"
     prms = item_params.to_h.merge(file_prm)
 
     res = @data.create(prms)
     if res == true
+      # 問題なければイメージアップロード
+      image_upload(file)
       redirect_to index_path
     else
       render action: 'new'
@@ -33,6 +30,11 @@ class ItemController < ApplicationController
 
   def index
     item = Item.new
+  end
+
+  def image_upload(file)
+    output_path = Rails.root.join("public", file.original_filename)
+    File.open(output_path, 'wb'){ |f| f.write(file.read) }
   end
 
   private

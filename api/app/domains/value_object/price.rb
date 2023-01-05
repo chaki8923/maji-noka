@@ -4,7 +4,7 @@ class Price
     @value = value
   end
 
-  def self.new(value)
+  def self.new(value:)
 
     ## TODO：あとで消す
     Rails.logger.debug "price---------------------------------#{value}"

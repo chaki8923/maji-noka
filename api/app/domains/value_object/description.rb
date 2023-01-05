@@ -4,7 +4,7 @@ class Description
     @value = value
   end
 
-  def self.new(value)
+  def self.new(value:)
 
     # return nil, 'description is must be a string' unless value.is_a?(String)
 
