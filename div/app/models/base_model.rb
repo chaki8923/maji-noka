@@ -1,7 +1,7 @@
 class BaseModel
     include ActiveModel::Model
 
-    def execute_api(key, params, method: 'post', raise_flag: false)
+    def execute_api(key, params = nil, method: 'post', raise_flag: false)
         errors.clear
         url = Rails.configuration.x.base_url
         client = HTTPClient.new
@@ -9,13 +9,9 @@ class BaseModel
 
         case method
           when 'post' then
-          ## TODO：あとで消す
-          Rails.logger.debug "basemodelのparams---------------------------------#{params["file"].class}"
           res = client.post(req_url, params.to_h)
           when 'get' then
           res = client.get(req_url, params.to_h)
-          ## TODO：あとで消す
-          Rails.logger.debug "basemodel---------------------------------#{res.body}"
         end
         
         return res.body if method == 'get'
@@ -23,7 +19,9 @@ class BaseModel
         if res.status_code == 500 || res.status_code == 404
           errors.add("システムエラー発生。管理者へお問い合わせください。")
         else
+          # post成功ならbodyは空
           return true if res.body.empty?
+          # 失敗ならバリューオブジェクトのエラー文が入る
           errors.add(res.body)
         end
     end

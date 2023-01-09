@@ -11,8 +11,8 @@ class Item < BaseModel
     res = execute_api('item/update', params, method: 'post')
   end
 
-  def index(params)
-    res = execute_api('item/index', params, method: 'get')
+  def index
+    res = execute_api('item/index', method: 'get')
   end
 
 

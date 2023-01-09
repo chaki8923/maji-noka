@@ -1,4 +1,5 @@
 require 'sequel'
+
 class ItemCommand
   DB = Sequel.connect(Rails.configuration.x.sequel[:db])
 

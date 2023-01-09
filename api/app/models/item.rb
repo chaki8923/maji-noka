@@ -17,9 +17,6 @@ class Item
 
     def self.new(value)
       file_data = eval(value[:file]).symbolize_keys
-      ## TODO：あとで消す
-      Rails.logger.debug "valueだよ---------------------------------#{value[:file]}"
-      Rails.logger.debug "file_name_data---------------------------------#{file_data[:file_name]}"
       name, err = Name.new(value: value[:name])
       return nil, err unless name
       price, err = Price.new(value: value[:price])

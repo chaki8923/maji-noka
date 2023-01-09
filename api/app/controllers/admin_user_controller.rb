@@ -28,7 +28,7 @@ class AdminUserController < ApplicationController
         data = AdminQuery.new
         res = data.get_admin_user(admin_user_params[:email])
         ## TODO：あとで消す
-        Rails.logger.debug "get_admin_user結果---------------------------------#{res.class}"
+        Rails.logger.debug "get_admin_user結果---------------------------------#{res}"
         render json: res
     end
 
@@ -36,7 +36,7 @@ class AdminUserController < ApplicationController
         data = AdminQuery.new
         res = data.get_admin_user(params["email"])
         ## TODO：あとで消す
-        Rails.logger.debug "get_admin_user結果---------------------------------#{res.class}"
+        Rails.logger.debug "get_admin_user結果---------------------------------#{res}"
         render json: res
     end
 
