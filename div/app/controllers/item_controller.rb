@@ -1,6 +1,8 @@
 require 'base64'
 class ItemController < ApplicationController
   def new
+    ## TODO：あとで消す
+    Rails.logger.debug "item_new---------------------------------#{}"
     @data = Item.new
     @prm = {
       :file_name => nil,

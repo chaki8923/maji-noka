@@ -1,5 +1,6 @@
+require 'date'
 class AuthController < ApplicationController
-
+  skip_before_action :check_logined
   def new
     @data = AdminUser.new
   end
@@ -11,6 +12,7 @@ class AuthController < ApplicationController
     if res == true
       admin_user = @data.get_admin_user(auth_params)
       session[:user] = eval(admin_user)
+      session[:limit] = Time.now + Settings.session_limit
       Rails.logger.debug "session_admin_user---------------------------------#{session[:user]}"
       redirect_to index_path
     else

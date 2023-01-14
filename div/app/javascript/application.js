@@ -31,12 +31,6 @@ if(document.getElementById("calendar") != null){
         })
     }
 
-  var user = get_user(email).done(function (res) {
-    return res
-  }).fail(function (result) {
-    console.log('エラーが発生しました。運営に問い合わせてください。');
-  });
-
   get_user(email).done(function (res) {
 
   var calendar = new FullCalendar.Calendar(calendarEl, {

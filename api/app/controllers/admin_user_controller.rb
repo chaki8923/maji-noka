@@ -1,3 +1,4 @@
+Dir['/api/app/domains/query_service/*.rb'].each { |file| require file }
 class AdminUserController < ApplicationController
     after_action :set_csrf_token_header
 

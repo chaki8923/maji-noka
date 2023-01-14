@@ -73,7 +73,7 @@ class ItemController < ApplicationController
       data = AdminQuery.new
       res = data.get_admin_user(item_params[:email])
       ## TODO：あとで消す
-      Rails.logger.debug "get_admin_user結果---------------------------------#{res.class}"
+      Rails.logger.debug "#{controller_name}::get_admin_user結果---------------------------------#{res.class}"
       render json: res
   end
 
@@ -81,7 +81,7 @@ class ItemController < ApplicationController
       data = AdminQuery.new
       res = data.get_admin_user(params["email"])
       ## TODO：あとで消す
-      Rails.logger.debug "get_admin_user結果---------------------------------#{res.class}"
+      Rails.logger.debug "#{controller_name}::get_admin_user結果---------------------------------#{res.class}"
       render json: res
   end
 

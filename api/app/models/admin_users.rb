@@ -11,6 +11,7 @@ class AdminUsers
       @email = email
       @password = password
       @adc = AdminCommand.new
+      @adq = AdminQuery.new
     end 
 
     def self.new(value)
@@ -19,12 +20,17 @@ class AdminUsers
       password, err = Password.new(value: value[:password])
       return nil, err unless password
       ## TODO：あとで消す
-    Rails.logger.debug "最終的なpassword---------------------------------#{password}"
+      Rails.logger.debug "最終的なpassword---------------------------------#{password}"
       super(email: email, password: password)
     end
 
     def create(params)
       @adc.create_db(params)
+    end
+
+
+    def get_admin_user
+      @adq.get_admin_user(admin_user_params[:email])
     end
 
     
