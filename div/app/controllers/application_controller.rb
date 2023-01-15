@@ -3,13 +3,12 @@ class ApplicationController < ActionController::Base
 
   def check_logined
     session[:user] = nil if session[:limit] < Time.now
-    ## TODO：あとで消す
-    Rails.logger.debug "session[:user]---------------------------------#{session[:user]}"
-    Rails.logger.debug "session[:limit]---------------------------------#{session[:limit]}"
-    Rails.logger.debug "Time.now---------------------------------#{Time.now}"
     if session[:user].nil? || session[:limit] < Time.now
-      Rails.logger.debug "ログイン画面にリターン---------------------------------#{session[:limit]}"
+      Rails.logger.info "ログイン画面にリターン---------------------------------#{session[:limit]}"
       redirect_to login_path and return
+    else
+      @current_user = session[:user]
+      Rails.logger.info "ユーザー情報---------------------------------#{@current_user}"
     end
   end
 end

@@ -1,5 +1,5 @@
 class Item < BaseModel
-  attr_accessor :name, :price, :description, :file
+  attr_accessor :name, :price, :description, :file1, :file2, :file3, :file4
 
   def create(params)
     ## TODO：あとで消す
