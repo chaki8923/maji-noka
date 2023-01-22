@@ -9,7 +9,11 @@ class BaseModel
 
         case method
           when 'post' then
-          res = client.post(req_url, params.to_h)
+          ## TODO：あとで消す
+         Rails.logger.info "base_modelのparams---------------------------------#{params}"
+         Rails.logger.info "base_modelのparams---------------------------------#{params.class}"
+         Rails.logger.info "base_modelのparams[images]---------------------------------#{params["images"].class}"
+          res = client.post(req_url, params)
           when 'get' then
           res = client.get(req_url, params.to_h)
         end

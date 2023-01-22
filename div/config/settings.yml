@@ -1,1 +1,1 @@
-session_limit: 60 * 60 * 24 # 1日
+session_limit: 180000 # 1日

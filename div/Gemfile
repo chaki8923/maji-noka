@@ -41,6 +41,9 @@ gem 'momentjs-rails'
 gem 'carrierwave'
 gem 'mini_magick'
 
+gem 'aws-sdk'
+gem 'dotenv'
+
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
 

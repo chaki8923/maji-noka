@@ -7,8 +7,6 @@ class Age
   def self.new(value)
 
     return nil, ""
-
-
     super(value: value)
   end
 end

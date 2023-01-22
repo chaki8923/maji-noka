@@ -16,8 +16,8 @@
         </div>
         <% [1,2,3,4].each do |num| %>
           <div class="mb-3">
-            <%= f.label :image,class: 'form-label' %>
-            <input class="form-control js-input-<%= num %>" type="file" name="item[image<%= num %>]" id="item_image<%= num %>">
+            <%= f.label :image,class: "form-label#{num}" %>
+            <%= f.file_field :images, multiple: true ,include_hidden: false, class: "form-control js-input-#{num}" %>
             <img src="" alt="" class="js-previewImage-<%= num %> preview-format">
           </div>
         <% end %>
