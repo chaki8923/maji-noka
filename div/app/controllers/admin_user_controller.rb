@@ -1,6 +1,6 @@
 require 'date'
 class AdminUserController < ApplicationController
-
+  skip_before_action :check_logined, only: [:new, :signup]
   def new
     @data = AdminUser.new
   end

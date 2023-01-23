@@ -12,7 +12,7 @@ class AuthController < ApplicationController
     if res == true
       admin_user = @data.get_admin_user(auth_params)
       session[:user] = eval(admin_user)
-      Rails.logger.debug "ログイン期限---------------------------------#{ Settings.session_limit.to_i}"
+      Rails.logger.debug "ログイン期限---------------------------------#{Settings.session_limit.to_i}"
       session[:limit] = Time.now + Settings.session_limit.to_i
       redirect_to index_path
     else
