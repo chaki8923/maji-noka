@@ -1,5 +1,5 @@
 CREATE TABLE
-public.admin_user(
+public.admin_users(
      id                 BIGSERIAL           PRIMARY KEY     --id
     ,email              text                                --E-mail
     ,password           text                                --パスワード

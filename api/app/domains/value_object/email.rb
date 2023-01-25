@@ -9,6 +9,7 @@ class Email
 
     ## TODO:あとで消す
     Rails.logger.debug "email.class---------------------------------#{value.class}"
+    Rails.logger.debug "email.class---------------------------------#{value}"
     adq = AdminQuery.new
     mailRegex = /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
     return nil, 'mail is must be a string' unless value.is_a?(String)

@@ -27,15 +27,15 @@ class Item
       return nil, err unless price
       description, err = Description.new(value: value[:description])
       return nil, err unless description
-      file_data.each do |file|
+      # Imageクラスに配列ごと渡して@value=[{}]の形にする
+      images = file_data.map do |file|
         Rails.logger.debug "file[idx]---------------------------------#{file["name"]}"
-        file, err = Image.new(value: file["name"])
-        Rails.logger.debug "file---------------------------------#{file}"
-        return nil, err unless file
+        Image.new(value: file["name"])
+        # return nil, err unless file
       end
-
-      Rails.logger.debug "file_data---------------------------------#{file_data}"
-      super(name: name, price: price, description: description, images: file_data)
+      
+      Rails.logger.debug "images---------------------------------#{images}"
+      super(name: name, price: price, description: description, images: images)
     end
 
     def create(params)

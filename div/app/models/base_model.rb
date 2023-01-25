@@ -13,7 +13,7 @@ class BaseModel
          Rails.logger.info "base_modelのparams---------------------------------#{params}"
          Rails.logger.info "base_modelのparams---------------------------------#{params.class}"
          Rails.logger.info "base_modelのparams[images]---------------------------------#{params["images"].class}"
-          res = client.post(req_url, params)
+          res = client.post(req_url, params.to_h)
           when 'get' then
           res = client.get(req_url, params.to_h)
         end

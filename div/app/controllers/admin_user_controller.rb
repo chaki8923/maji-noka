@@ -10,6 +10,7 @@ class AdminUserController < ApplicationController
     @data = AdminUser.new(admin_user_params)
     res = @data.signup(admin_user_params)
     if res == true
+      session[:limit] = Time.now + Settings.session_limit.to_i
       redirect_to index_path
     else
       render action: 'new'
