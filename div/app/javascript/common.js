@@ -34,23 +34,25 @@ $(function(){
   
  
   function imagePreview(i, e){
-      console.log(`.js-input-${i}`);
-      console.log(`change${i}`);
-      
       var fileset = $(this).val();
       //ファイルの値空なら入れる
       if (fileset === '') {
         $(`.js-previewImage-${i}`).attr('src', "");
         $(`.js-previewImage-${i}`).css('opacity', 0);
       } else {
-        console.log('else');
         //ファイルの値あるなら消す。キャンセル押した時プレビューも消す為
         var reader = new FileReader();
         reader.onload = function (e) {
-          console.log(`.js-previewImage-${i}`);
-          // console.log(e.target.result);
           $(`.js-previewImage-${i}`).attr('src', e.target.result);
           $(`.js-previewImage-${i}`).css('opacity', 1);
+        }
+        // バイト数表示用に取得
+        var byte = Math.ceil(e.target.files[0].size/1000);
+        $(`.js-byte-preview${i}`).text(byte.toLocaleString() + "Kバイト")
+        if(byte > 3000){
+          $(`.js-byte-preview${i}`).css("color","red");
+        }else{
+
         }
         reader.readAsDataURL(e.target.files[0]);
       };
@@ -58,7 +60,6 @@ $(function(){
   };
   // なんかfor文で上手くいかん
   $(`.js-input-1`).on('change', function (e) {
-
     imagePreview(1, e);
   });
   $(`.js-input-2`).on('change', function (e) {

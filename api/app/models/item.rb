@@ -28,11 +28,10 @@ class Item
       description, err = Description.new(value: value[:description])
       return nil, err unless description
       # Imageクラスに配列ごと渡して@value=[{}]の形にする
-      images = file_data.map do |file|
-        Rails.logger.debug "file[idx]---------------------------------#{file["name"]}"
-        Image.new(value: file["name"])
-        # return nil, err unless file
-      end
+      images, err =  Image.new(value: file_data)
+
+      return nil, err unless images
+      
       
       Rails.logger.debug "images---------------------------------#{images}"
       super(name: name, price: price, description: description, images: images)

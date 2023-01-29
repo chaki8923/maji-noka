@@ -9,10 +9,6 @@ class BaseModel
 
         case method
           when 'post' then
-          ## TODO：あとで消す
-         Rails.logger.info "base_modelのparams---------------------------------#{params}"
-         Rails.logger.info "base_modelのparams---------------------------------#{params.class}"
-         Rails.logger.info "base_modelのparams[images]---------------------------------#{params["images"].class}"
           res = client.post(req_url, params.to_h)
           when 'get' then
           res = client.get(req_url, params.to_h)
@@ -28,5 +24,10 @@ class BaseModel
           # 失敗ならバリューオブジェクトのエラー文が入る
           errors.add(res.body)
         end
+    end
+
+    def send_error(msg)
+      errors.clear
+      errors.add(msg)
     end
 end

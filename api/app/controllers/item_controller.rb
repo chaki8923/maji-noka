@@ -5,12 +5,12 @@ class ItemController < ApplicationController
   def create
     Rails.logger.debug "item_paramsだ---------------------------------#{item_params}"
     Rails.logger.debug "params[images]だ---------------------------------#{params["images"]}"
+    Rails.logger.debug "params[price]だ---------------------------------#{params["price"].class}"
     data = Item.new(item_params)
     # エラーの場合はオブジェクトではなくArrayで返ってくる
     if data.class == Array
       render json: data[1]
     else
-     
       res = data.create(data)
     end
   end
@@ -46,6 +46,6 @@ class ItemController < ApplicationController
   private
   def item_params
   #  params.permit(:name, :price, :description,  file: [:file_name, :ctype])
-  params.permit(:name, :price, :description, :images)
+  params.permit(:name, :price, :description, :images, images: [])
   end
 end

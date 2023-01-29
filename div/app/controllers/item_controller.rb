@@ -1,6 +1,7 @@
 require 'base64'
 require "aws-sdk"
 require "dotenv"
+require 'mini_magick'
 Dotenv.load
 ACCESS_KEY = ENV["ACCESS_KEY_ID"]
 SECRET_KEY = ENV["SECRET_ACCESS_KEY"]
@@ -19,29 +20,31 @@ class ItemController < ApplicationController
 
   def create
     @data = Item.new(item_params)
-    s3resource = get_s3_resource(ACCESS_KEY, SECRET_KEY, REGION)
-    s3_key = "item/"
-    Rails.logger.debug "item_params---------------------------------#{item_params}"
-    
-    params["item"]["images"] = params["item"]["images"].map do |prm|
-      prm = {:name => prm.original_filename}
-        
+    s3resource = get_s3_resource(ACCESS_KEY, SECRET_KEY, REGION)  
+    send_params = item_params
+    send_params["images"] = send_params["images"].map do |prm|
+      prm = {:name => prm.original_filename, :size => prm.size}
     end
-    Rails.logger.debug "最初params[images]---------------------------------#{params["item"]["images"]}"
-    params["item"]["images"] = params["item"]["images"].to_json
-    Rails.logger.debug "Jsonあとparams[images]---------------------------------#{params["item"]["images"]}"
-    res = @data.create(params["item"].to_unsafe_h)
+    send_params["images"] = send_params["images"].to_json
+    send_params["price"] = send_params["price"].to_i
+    
+    ## TODO：あとで消す
+    Rails.logger.debug "send_params---------------------------------#{item_params["images"]}"
+    res = @data.create(send_params.to_unsafe_h)
+
     if res == true
        # 問題なければイメージアップロード
-       item_params["images"].each do |item|
-        file_path = Rails.root.join("public", item.original_filename)
+       item_params["images"].each_with_index do |item, idx|
+        file_path = Rails.root.join("public/images", item.original_filename)
         image_upload(item)
+        # 画像圧縮
+        compress_image("public/images/#{item.original_filename}")
         # s3へアップロード
+        s3_key = "item/#{item.original_filename}"
         s3_upload(s3resource, s3_key, file_path)
         # ローカルのデータは消す
         image_delete(file_path)
-
-       end
+      end
       redirect_to index_path
     else
       render action: 'new'
@@ -50,13 +53,19 @@ class ItemController < ApplicationController
 
   def image_upload(file)
     Rails.logger.info "ローカルのpublic配下に画像保存---------------------------------"
-    output_path = Rails.root.join("public", file.original_filename)
+    output_path = Rails.root.join("public/images", file.original_filename)
     File.open(output_path, 'wb'){ |f| f.write(file.read) }
   end
   
   def s3_upload(s3resource, key, file_path)
     Rails.logger.info "S3に#{file_path}を保存---------------------------------"
     s3resource.bucket(BUCKET).object(key).upload_file(file_path)
+  end
+
+  def compress_image(file_path)
+    image = MiniMagick::Image.open(file_path)
+    image.resize "40%"
+    image.write file_path
   end
   
   def image_delete(file_name)
@@ -72,8 +81,7 @@ class ItemController < ApplicationController
 
   private
    def item_params
-    # params.require(:item).permit(:name, :price, :description, :image1, :image2, :image3, :image4)
-    params.require(:item).permit(:name, :price, :description ,images: [])
+    params.require(:item).permit(:name, :price, :description, :images ,images: [])
     
    end
 

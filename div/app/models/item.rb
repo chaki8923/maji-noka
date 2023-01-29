@@ -4,7 +4,7 @@ class Item < BaseModel
 
   def create(params)
     ## TODO：あとで消す
-    Rails.logger.debug "APIに渡すparams---------------------------------#{params}"
+    Rails.logger.debug "APIに渡すparams---------------------------------#{params["price"].class}"
     res = execute_api('item/create', params, method: 'post')
   end
 
@@ -15,6 +15,4 @@ class Item < BaseModel
   def index
     res = execute_api('item/index', method: 'get')
   end
-
-
 end
