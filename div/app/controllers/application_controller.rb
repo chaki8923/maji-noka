@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  include ItemHelper
   before_action :check_logined
 
   def check_logined
@@ -10,5 +11,9 @@ class ApplicationController < ActionController::Base
       @current_user = session[:user]
       Rails.logger.info "ユーザー情報---------------------------------#{@current_user}"
     end
+  end
+
+  def change_json(str)
+    return JSON.parse(str)
   end
 end

@@ -8,12 +8,17 @@ $(function(){
   });
 
 
+  console.log(location.pathname);
   $('.navbar li a').each(function () {
     var $href = $(this).attr('href');
-    if (location.href.match($href)) {
-      $(this).parent().addClass('active');
+    console.log($href);
+    
+    if (location.pathname === $href) {
+      console.log('入った');
+      
+      $(this).addClass('active');
     } else {
-      $(this).parent().removeClass('active');
+      $(this).removeClass('active');
     }
   });
 
@@ -22,10 +27,7 @@ $(function(){
   })
 
 
-    if(location.pathname != "/") {
-        $('.navbar li a[href^="/' + location.pathname.split("/")[1] + '"]').addClass('active');
-    } else $('.navbar li a:eq(0)').addClass('active');
-
+    
   //======================================================================
   //アイデア登録画面の画像プレビュー
   //======================================================================
@@ -75,6 +77,19 @@ $(function(){
     imagePreview(4, e);
   });
 
+  //======================================================================
+  //toggleメッセージ
+  //======================================================================
+
+  if($('.js-toggle-msg') && $('.js-toggle-msg').text().length){
+    
+    $('.js-toggle-msg').show()
+    setTimeout(()=>{
+      $('.js-toggle-msg').fadeOut()
+    },3000)
+
+    
+  }
 
 
   });

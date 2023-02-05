@@ -1,6 +1,5 @@
 class Item < BaseModel
-  attr_accessor :name, :price, :description, :images
-  # attr_accessor :name, :price, :description, :image1, :image2, :image3, :image4
+  attr_accessor :name, :price, :description, :images, :postage, :inventory, :maji_flag
 
   def create(params)
     ## TODO：あとで消す

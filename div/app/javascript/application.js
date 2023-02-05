@@ -12,14 +12,17 @@ const year = date.getFullYear();
 const month = date.getMonth().toString() + 1;
 const day = date.getDate().toString().padStart(2, "0");
 
-console.log(year + '-' + month + '-' + day);
-
+// console.log(year + '-' + month + '-' + day);
+if(location.protocol === "https:"){
+  var link = location.protocol + "//" + location.hostname + "/item/index";
+}else if(location.protocol === "http:"){
+  var link = location.protocol + "//" + location.hostname + ":3000" + "/item/index";
+}
 
 if(document.getElementById("calendar") != null){
   $(function(){
 
     var email = $("#calendar").data('email');
-    console.log(email);
     function get_user(email){
       return $.ajax({
           type: 'GET',
@@ -28,6 +31,15 @@ if(document.getElementById("calendar") != null){
           data:{
             email: email
           }
+        })
+    }
+
+    function item_index(){
+      return $.ajax({
+          type: 'GET',
+          url: '/item/index',
+          dataType : "json",
+          
         })
     }
 
@@ -40,10 +52,23 @@ if(document.getElementById("calendar") != null){
       center: 'title',
       right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
     },
-    defaultDate: `${year}-${month}-${day}`,
+    defaultDate: `${year}-${'02'}-${day}`,
     navLinks: true, // can click day/week names to navigate views
     businessHours: true, // display business hours
     editable: true,
+    dateClick: (e)=>{// 日付マスのクリックイベント
+    console.log("dateClick:", e);
+    },
+    eventClick: (e)=>{// イベントのクリックイベント
+      location.replace(link);
+      console.log("eventClick:", e.event.title);
+    },
+    eventDidMount: (e)=>{// カレンダーに配置された時のイベント
+      console.log('マウスオーバー');
+      tippy(e.el, {// TippyでTooltipを設定する
+        content: e.event.extendedProps.description,
+      });
+    },
     events: [
       {
         title: 'Business Lunch',
@@ -58,8 +83,12 @@ if(document.getElementById("calendar") != null){
       },
       {
         title: res.email,
-        start: '2022-12-18',
-        end: '2022-12-20'
+        start: '2023-02-18',
+        end: '2023-02-19',
+        description: "悪い鬼を追い払い福を招く",// イベントの詳細
+        backgroundColor: "red",// 背景色
+        borderColor: "red",// 枠線色
+        editable: true//
       },
       {
         title: 'Party',
@@ -69,16 +98,19 @@ if(document.getElementById("calendar") != null){
       // areas where "Meeting" must be dropped
       {
         groupId: 'availableForMeeting',
-        start: '2019-08-11T10:00:00',
-        end: '2019-08-11T16:00:00',
+        title: 'Party',
+        start: '2023-02-11T10:00:00',
+        end: '223-02-11T16:00:00',
         rendering: 'background'
       },
       {
         title: 'Birthday',
-        start: '2022-12-13T10:00:00',
-        end: '2022-12-13T16:00:00',
+        start: '2023-01-28T10:00:00',
+        end: '2023-01-28T16:00:00',
         color: '#ff9f89',
-        rendering: 'background'
+        backgroundColor: "green",// 背景色
+        borderColor: "#333",// 枠線色
+        editable: true//
 
       },
 

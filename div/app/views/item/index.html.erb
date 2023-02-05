@@ -1,4 +1,8 @@
 <div class="container mt-5">
     <h2>商品一覧</h2>
-   
+    
+    <% change_json(@items).each do |it| %>
+      <p><%= it["name"] %></p>
+      <img src="<%= s3_first_image(@signer, change_json(it["images"]))  %>" alt="" class="item_image">
+    <% end %>
 </div>
