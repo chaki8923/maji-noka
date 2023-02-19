@@ -2,7 +2,11 @@
     <h2>商品一覧</h2>
     
     <% change_json(@items).each do |it| %>
+    <div class="card w-25">
       <p><%= it["name"] %></p>
+      <p><%= it["id"] %></p>
       <img src="<%= s3_first_image(@signer, change_json(it["images"]))  %>" alt="" class="item_image">
+      <%= link_to "編集", "edit/#{it["id"]}",class: 'btn btn-info' %>
+    </div>
     <% end %>
 </div>

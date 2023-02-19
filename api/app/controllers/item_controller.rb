@@ -3,6 +3,8 @@ class ItemController < ApplicationController
   after_action :set_csrf_token_header
 
   def create
+    ## TODO：あとで消す
+    Rails.logger.debug "item_params---------------------------------#{item_params}"
     data = Item.new(item_params)
     # エラーの場合はオブジェクトではなくArrayで返ってくる
     if data.class == Array
@@ -14,16 +16,26 @@ class ItemController < ApplicationController
 
   def index
     res = Item.index
-    ## TODO：あとで消す
-    Rails.logger.debug "all_item---------------------------------#{res}"
-
     render json: res
   end
 
+  def edit
+    res = Item.find(params["id"])
+    ## TODO：あとで消す
+    Rails.logger.debug "res---------------------------------#{res}"
+    render json: res
+  end
+  
+  
   def update
-      data = AdminQuery.new
-      res = data.get_admin_user(item_params[:email])
-      render json: res
+    Rails.logger.debug "update---------------------------------#{params}"
+    data = Item.new(item_params)
+    # エラーの場合はオブジェクトではなくArrayで返ってくる
+    if data.class == Array
+      render json: data[1]
+    else
+      res = data.update(data)
+    end
   end
 
   def delete
@@ -37,14 +49,16 @@ class ItemController < ApplicationController
   private
   def item_params
   #  params.permit(:name, :price, :description,  file: [:file_name, :ctype])
-  params.permit(:name, 
-                :price, 
-                :description, 
-                :postage, 
-                :inventory, 
-                :maji_flag, 
-                :images
-              )
+  params.permit(
+    :id, 
+    :name, 
+    :price, 
+    :description, 
+    :postage, 
+    :inventory, 
+    :maji_flag, 
+    :images
+  )
   end
 
   def get_s3_resource(access_key, secret_key, region)

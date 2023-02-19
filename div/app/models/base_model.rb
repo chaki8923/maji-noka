@@ -11,6 +11,9 @@ class BaseModel
           when 'post' then
           res = client.post(req_url, params.to_h)
           when 'get' then
+          ## TODO：あとで消す
+          Rails.logger.debug "base---------------------------------#{params}"
+          Rails.logger.debug "base---------------------------------#{params.class}"
           res = client.get(req_url, params.to_h)
         end
         

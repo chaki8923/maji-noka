@@ -9,10 +9,11 @@ import "common"
 var calendarEl = document.getElementById('calendar');
 var date = new Date();
 const year = date.getFullYear();
-const month = date.getMonth().toString() + 1;
+var intMonth = date.getMonth() + 1;
+const month = intMonth.toString().padStart(2, "0");
 const day = date.getDate().toString().padStart(2, "0");
 
-// console.log(year + '-' + month + '-' + day);
+console.log(year + '-' + month + '-' + day);
 if(location.protocol === "https:"){
   var link = location.protocol + "//" + location.hostname + "/item/index";
 }else if(location.protocol === "http:"){
@@ -52,7 +53,7 @@ if(document.getElementById("calendar") != null){
       center: 'title',
       right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
     },
-    defaultDate: `${year}-${'02'}-${day}`,
+    defaultDate: `${year}-${month}-${day}`,
     navLinks: true, // can click day/week names to navigate views
     businessHours: true, // display business hours
     editable: true,
