@@ -1,0 +1,11 @@
+{
+  "configurations": [
+    {
+      "type": "chrome",
+      "name": "http://web-maji:3000/",
+      "request": "launch",
+      "url": "http://web-maji:3000/",
+      "webRoot": "${workspaceFolder}"
+    }
+  ]
+}
