@@ -37,12 +37,20 @@ services:
   web:
     build:
       context: .
-    command: sh -c 'cd web && yarn start'
+      dockerfile: ./Dockerfile
     container_name: web
+    working_dir: /web
+    # command: node
+    # command: npm start
+    restart: always
+    environment:
+      - CHOKIDAR_USEPOLLING=true
     volumes:
-      - ./:/usr/src/app
+      - ./web:/web
     ports:
       - "127.0.1.1:3000:3000"
+    tty: true 
+    stdin_open: true
   api:
     platform: linux/amd64
     build:

@@ -29,6 +29,8 @@ gem "jbuilder"
 
 gem 'httpclient'
 
+gem 'rack-cors'
+
 gem 'sequel-rails'
 
 gem 'jquery-rails'
