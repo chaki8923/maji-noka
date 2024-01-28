@@ -62,7 +62,7 @@ class ItemController < ApplicationController
     @data = Item.new
     @item = get_item(params.permit(:id))
   end
-
+  
   def update
     @data = Item.new(item_params)
     s3resource = get_s3_resource(ACCESS_KEY, SECRET_KEY, REGION)  
@@ -94,6 +94,7 @@ class ItemController < ApplicationController
       end
       redirect_to index_path, notice: "商品が編集されました"
     else
+      @item = get_item(params.permit(:id))
       render action: 'edit'
     end
   end
