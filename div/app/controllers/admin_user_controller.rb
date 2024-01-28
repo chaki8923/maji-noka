@@ -5,7 +5,6 @@ class AdminUserController < ApplicationController
     @data = AdminUser.new
   end
 
-
   def signup
     @data = AdminUser.new(admin_user_params)
     res = @data.signup(admin_user_params)

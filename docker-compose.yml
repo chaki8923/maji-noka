@@ -47,6 +47,7 @@ services:
       - CHOKIDAR_USEPOLLING=true
     volumes:
       - ./web:/web
+    command: sh -c 'cd web && yarn start'
     ports:
       - "127.0.1.1:3000:3000"
     tty: true 

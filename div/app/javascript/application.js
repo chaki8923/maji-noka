@@ -6,6 +6,8 @@ import "time"
 import "list"
 import "common"
 
+console.log("application.js");
+
 var calendarEl = document.getElementById('calendar');
 var date = new Date();
 const year = date.getFullYear();
@@ -22,7 +24,6 @@ if(location.protocol === "https:"){
 
 if(document.getElementById("calendar") != null){
   $(function(){
-
     var email = $("#calendar").data('email');
     function get_user(email){
       return $.ajax({
@@ -62,7 +63,7 @@ if(document.getElementById("calendar") != null){
     },
     eventClick: (e)=>{// イベントのクリックイベント
       location.replace(link);
-      console.log("eventClick:", e.event.title);
+      console.log("eventClick:", e.event);
     },
     eventDidMount: (e)=>{// カレンダーに配置された時のイベント
       console.log('マウスオーバー');

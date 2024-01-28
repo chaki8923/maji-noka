@@ -28,7 +28,6 @@ class AdminUsers
       @adc.create_db(params)
     end
 
-
     def get_admin_user
       @adq.get_admin_user(admin_user_params[:email])
     end

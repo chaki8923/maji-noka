@@ -3,8 +3,8 @@ class ApplicationController < ActionController::Base
   before_action :check_logined
 
   def check_logined
-    session[:user] = nil if session[:limit] < Time.now
-    if session[:user].nil? || session[:limit] < Time.now
+    if check_session?(session)
+      session[:user] = nil
       Rails.logger.info "ログイン画面にリターン---------------------------------#{session[:limit]}"
       redirect_to login_path and return
     else
@@ -15,5 +15,10 @@ class ApplicationController < ActionController::Base
 
   def change_json(str)
     return JSON.parse(str)
+  end
+
+  private
+  def check_session?(session)
+    session[:user].nil? || session[:limit].nil? ||session[:limit] < Time.now
   end
 end

@@ -55,6 +55,8 @@ class Item
 
     def update(params)
       @idc.update_db(params)
+      rescue => e
+        raise e
     end 
    
     class << self

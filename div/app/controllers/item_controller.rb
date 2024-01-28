@@ -1,7 +1,6 @@
 require 'base64'
 require "aws-sdk"
 require "dotenv"
-require 'mini_magick'
 Dotenv.load
 ACCESS_KEY = ENV["ACCESS_KEY_ID"]
 SECRET_KEY = ENV["SECRET_ACCESS_KEY"]
@@ -19,10 +18,7 @@ class ItemController < ApplicationController
   end
 
   def create
-    @data = Item.new(item_params)
-    ## TODO：あとで消す
-    Rails.logger.debug "item_params---------------------------------#{item_params["maji_flag"]}"
-    
+    @data = Item.new(item_params)    
     s3resource = get_s3_resource(ACCESS_KEY, SECRET_KEY, REGION)  
     send_params = item_params
     if send_params["images"].present?
@@ -37,7 +33,7 @@ class ItemController < ApplicationController
 
     if res == true
        # 問題なければイメージアップロード
-      item_params["images"].each_with_index do |item, idx|
+      item_params["images"].each do |item|
         file_path = Rails.root.join("public/images", item.original_filename)
         image_upload(item)
         # 画像圧縮
@@ -62,7 +58,6 @@ class ItemController < ApplicationController
     @items
   end
 
-
   def edit
     @data = Item.new
     @item = get_item(params.permit(:id))
@@ -70,7 +65,6 @@ class ItemController < ApplicationController
 
   def update
     @data = Item.new(item_params)
-    @item = get_item(item_params)
     s3resource = get_s3_resource(ACCESS_KEY, SECRET_KEY, REGION)  
     send_params = item_params
     if send_params["images"].present?
@@ -82,12 +76,14 @@ class ItemController < ApplicationController
     send_params["maji_flag"] = send_params["maji_flag"].to_i == 1 ? true:false
     send_params["images"] = send_params["images"].to_json
     res = @data.update(send_params.to_unsafe_h)
-
+    Rails.logger.debug "item_params[""]---------------------------------#{item_params["images"]}"
     if res == true
        # 問題なければイメージアップロード
-      item_params["images"].each_with_index do |item, idx|
+      item_params["images"].each do |item|
         file_path = Rails.root.join("public/images", item.original_filename)
         image_upload(item)
+        ## TODO：あとで消す
+        Rails.logger.debug "更新画像パス---------------------------------#{item.original_filename}"
         # 画像圧縮
         compress_image("public/images/#{item.original_filename}")
         # s3へアップロード
@@ -96,20 +92,22 @@ class ItemController < ApplicationController
         # ローカルのデータは消す
         image_delete(file_path)
       end
-      redirect_to index_path, notice: "商品が登録されました"
+      redirect_to index_path, notice: "商品が編集されました"
     else
       render action: 'edit'
     end
   end
+  # <ActionDispatch::Http::UploadedFile:0x00007f4cb3ada2a8 @tempfile=#<Tempfile:/tmp/RackMultipart20240127-1-5gkt98.jpeg>, @original_filename="IMG_4170.jpeg", @content_type="image/jpeg", @headers="Content-Disposition: form-data; name=\"item[images][]\"; filename=\"IMG_4170.jpeg\"\r\nContent-Type: image/jpeg\r\n">
+
+  #<ActionDispatch::Http::UploadedFile:0x00007f4cb3d5f578 @tempfile=#<Tempfile:/tmp/RackMultipart20240127-1-lanh0q.jpeg>, @original_filename="IMG_4181.jpeg", @content_type="image/jpeg", @headers="Content-Disposition: form-data; name=\"item[images][]\"; filename=\"IMG_4181.jpeg\"\r\nContent-Type: image/jpeg\r\n">
 
   def image_upload(file)
-    Rails.logger.info "ローカルのpublic配下に画像保存---------------------------------"
+    Rails.logger.info "ローカルのpublic配下に画像保存---------------------------------#{file.inspect}"
     output_path = Rails.root.join("public/images", file.original_filename)
     File.open(output_path, 'wb'){ |f| f.write(file.read) }
   end
   
   def s3_upload(s3resource, key, file_path)
-    Rails.logger.info "S3に#{file_path}を保存---------------------------------"
     s3resource.bucket(BUCKET).object(key).upload_file(file_path)
   end
 
@@ -122,17 +120,23 @@ class ItemController < ApplicationController
   def get_s3_images(signer, items)
     image_arr = []
     items.each do |it|
-      image_arr.push(signer.presigned_url(:get_object,
-        bucket: BUCKET, 
-        key: "item/#{change_json(it["images"])[0]["name"]}", 
-        expires_in: 60))
-      ## TODO：あとで消す
+      image_arr.push(
+        signer.presigned_url(
+          :get_object,
+          bucket: BUCKET, 
+          key: "item/#{change_json(it["images"])[0]["name"]}", 
+          expires_in: 60
+        )
+      )
+  
     end
     
     image_arr
   end
 
   def compress_image(file_path)
+    ## TODO：あとで消す
+    Rails.logger.debug "圧縮前---------------------------------#{file_path}"
     image = MiniMagick::Image.open(file_path)
     image.resize "40%"
     image.write file_path
