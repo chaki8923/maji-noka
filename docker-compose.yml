@@ -31,7 +31,8 @@ services:
     volumes:
       - ./div:/div
     ports:
-      - "127.0.0.5:3000:3000"
+      # - "127.0.0.5:3000:3000"
+      - "3001:3000"
     depends_on:
       - db
   web:
@@ -49,7 +50,8 @@ services:
       - ./web:/web
     command: sh -c 'cd web && yarn start'
     ports:
-      - "127.0.1.1:3000:3000"
+      # - "127.0.1.1:3000:3000"
+      - "3002:3000"
     tty: true 
     stdin_open: true
   api:
@@ -68,7 +70,8 @@ services:
     volumes:
       - ./api:/api
     ports:
-      - "127.0.0.2:3000:3000"
+      # - "127.0.0.2:3000:3000"
+      - "3003:3000"
     depends_on:
       - db
   mailcatcher:
