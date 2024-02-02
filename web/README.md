@@ -1,8 +1,11 @@
 # Getting Started with Create React App
-
+# typescriptとreact
 ### create-react-app . --template typescript
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
+# docker立ち上げ前
+### docker compose build
+### docker-compose run web npm install
+### docker compose up -d
 ## Available Scripts
 
 In the project directory, you can run:

@@ -48,7 +48,7 @@ services:
       - CHOKIDAR_USEPOLLING=true
     volumes:
       - ./web:/web
-    command: sh -c 'cd web && yarn start'
+    command: sh -c 'cd /web && npm start'
     ports:
       # - "127.0.1.1:3000:3000"
       - "3002:3000"
@@ -60,6 +60,7 @@ services:
       context: .
       dockerfile: ./api/Dockerfile
     container_name: api
+    working_dir: /api
     # tmp/pids/server.pidが残ってたら `A server is already running. ~~` のエラーでrailsを起動できないので事前に消してから、`rails sever` する
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     # 上記のdbイメージで指定したユーザー名とパスワードをrails側でも指定するため環境変数に設定。

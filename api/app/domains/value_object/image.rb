@@ -7,7 +7,7 @@ class Image
   def self.new(value:)
     ## TODO：あとで消す
     Rails.logger.debug "Imagevalue---------------------------------#{value.class}"
-    return nil, '画像は必要です' if value.nil?
+    return nil, '画像は流石に必要です' if value.nil?
     if value.present?
       value.each do |val|
         return nil, 'file is must be a string' unless val["name"].is_a?(String)
