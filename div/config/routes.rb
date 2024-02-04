@@ -14,15 +14,15 @@ Rails.application.routes.draw do
   end
 
   scope 'item' do
-    get '/new', to: 'item#new'
-    post '/create', to: 'item#create'
-    get '/index', to: 'item#index'
-    get '/edit/:id', to: 'item#edit'
-    post '/update', to: 'item#update'
+    get '/new', to: 'items#new'
+    post '/create', to: 'items#create'
+    get '/index', to: 'items#index'
+    get '/edit/:id', to: 'items#edit'
+    post '/update', to: 'items#update'
   end
 
   scope 'customer' do
-    get '/index', to: 'customer#index'
+    get '/index', to: 'customers#index'
   end
 
   get 'mail', to: 'sample_mail#mail'

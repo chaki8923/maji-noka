@@ -8,14 +8,10 @@ $(function(){
   });
 
 
-  console.log(location.pathname);
   $('.navbar li a').each(function () {
     var $href = $(this).attr('href');
     console.log($href);
-    
-    if (location.pathname === $href) {
-      console.log('入った');
-      
+    if (location.pathname === $href) {      
       $(this).addClass('active');
     } else {
       $(this).removeClass('active');

@@ -11,6 +11,8 @@ class BaseModel
           when 'post' then
             res = client.post(req_url, params.to_h)
           when 'get' then
+            ## TODO：あとで消す
+           Rails.logger.debug "base-params--------------------------------#{params}"
             res = client.get(req_url, params.to_h)
         end
         
@@ -24,6 +26,10 @@ class BaseModel
           # 失敗ならバリューオブジェクトのエラー文が入る
           errors.add(res.body)
         end
+    end
+
+    def make_list(res)
+      JSON.parse(res).map { |obj| obj.transform_keys(&:to_sym) }
     end
 
     def send_error(msg)

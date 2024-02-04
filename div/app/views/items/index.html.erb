@@ -1,0 +1,12 @@
+<div class="container mt-5">
+    <h2>商品一覧</h2>
+    
+    <% @items.each do |it| %>
+    <div class="card w-25">
+      <p><%= it[:name] %></p>
+      <p><%= it[:id] %></p>
+      <img src="<%= it[:image]  %>" alt="" class="item_image">
+      <%= link_to "編集", "edit/#{it[:id]}",class: 'btn btn-info' %>
+    </div>
+    <% end %>
+</div>

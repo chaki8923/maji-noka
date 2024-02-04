@@ -6,7 +6,8 @@ class Item < BaseModel
   :images, 
   :postage, 
   :inventory, 
-  :maji_flag
+  :maji_flag,
+  :action
 
   def create(params)
     res = execute_api('item/create', params, method: 'post')
@@ -18,6 +19,7 @@ class Item < BaseModel
 
   def index
     res = execute_api('item/index', method: 'get')
+    make_list(res)
   end
 
   def edit(params)

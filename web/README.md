@@ -8,6 +8,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ### docker compose up -d
 ## Available Scripts
 
+# マテリアルUIインストール
+# npm install @mui/material @emotion/react @emotion/styled
+
 In the project directory, you can run:
 
 ### `npm start`

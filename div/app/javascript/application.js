@@ -6,7 +6,6 @@ import "time"
 import "list"
 import "common"
 
-console.log("application.js");
 
 var calendarEl = document.getElementById('calendar');
 var date = new Date();
@@ -15,7 +14,7 @@ var intMonth = date.getMonth() + 1;
 const month = intMonth.toString().padStart(2, "0");
 const day = date.getDate().toString().padStart(2, "0");
 
-console.log(year + '-' + month + '-' + day);
+
 if(location.protocol === "https:"){
   var link = location.protocol + "//" + location.hostname + "/item/index";
 }else if(location.protocol === "http:"){

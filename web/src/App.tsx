@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import TodoList from './components/TodoList';
-import NewTodo from './components/NewTodo';
 import { Todo } from './todo.model'
 import Items from './components/Items';
-import customerRouter from './routes/cutomers/customer'
+import { RouterConfig } from "./router/RouterConfig";
+import {BrowserRouter as Router, Route, Link} from "react-router-dom"
+
 
 const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -15,10 +15,8 @@ const App: React.FC = () => {
   }
   return (
     <div className="App">
-      <NewTodo onAddTodo={todoAddHandler}/>
-      <TodoList items={todos} onDeleteTodo={todoDeleteHandler}/>
+      <RouterConfig />
       <Items/>
-
     </div>
   );
 }
