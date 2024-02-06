@@ -9,7 +9,7 @@ class Image
     ## TODO：あとで消す
     Rails.logger.debug "imagevalue---------------------------------#{value}"
     Rails.logger.debug "action---------------------------------#{action}"
-    return nil, '画像は流石に必要です' if value.nil? && action == "new"
+    return nil, '画像は流石に必要です' if value.nil? && action == "create"
     if value.present?
       value.each do |val|
         return nil, 'file is must be a string' unless val["name"].is_a?(String) && value.present?

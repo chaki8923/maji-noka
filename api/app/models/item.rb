@@ -55,6 +55,8 @@ class Item
 
     def create(params)
       @idc.create_db(params)
+      rescue => e
+        raise e
     end 
 
     def update(params)

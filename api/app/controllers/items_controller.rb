@@ -9,11 +9,14 @@ class ItemsController < ApplicationController
 
   def create
     data = Item.new(item_params)
+    ## TODO:あとで消す
+    Rails.logger.debug "item_params---------------------------------#{item_params}"
     # エラーの場合はオブジェクトではなくArrayで返ってくる
     if data.class == Array
       render json: data[1]
     else
       res = data.create(data)
+      render json: res[0]
     end
   end
 
@@ -44,6 +47,7 @@ class ItemsController < ApplicationController
       render json: data[1]
     else
       res = data.update(data)
+      render json: res[0]
     end
   end
 

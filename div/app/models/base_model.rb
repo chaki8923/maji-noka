@@ -11,8 +11,6 @@ class BaseModel
           when 'post' then
             res = client.post(req_url, params.to_h)
           when 'get' then
-            ## TODO：あとで消す
-           Rails.logger.debug "base-params--------------------------------#{params}"
             res = client.get(req_url, params.to_h)
         end
         
@@ -21,8 +19,9 @@ class BaseModel
         if res.status_code == 500 || res.status_code == 404
           errors.add("システムエラー発生。管理者へお問い合わせください。")
         else
-          # post成功ならbodyは空
-          return true if res.body.empty?
+          # post成功ならidが帰ってくる
+          hash = JSON.parse(res.body)
+          return hash if hash.key?("id")
           # 失敗ならバリューオブジェクトのエラー文が入る
           errors.add(res.body)
         end

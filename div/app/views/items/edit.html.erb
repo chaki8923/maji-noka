@@ -3,7 +3,7 @@
     <%= render 'layouts/error', model: @data %>
     <%= form_for @data, url: {action: :update}, multipart: true do |f| %>
         <%=  f.hidden_field :id, value: @item["id"] %>
-         <%=  f.hidden_field :action , value: :update %>
+        <%=  f.hidden_field :action , value: :update %>
         <div class="mb-3">
             <%= f.label :name,class: 'form-label' %>
             <%=  f.text_field :name, value: @item["name"], placeholder: '商品名',required: true,class: 'form-control' %>

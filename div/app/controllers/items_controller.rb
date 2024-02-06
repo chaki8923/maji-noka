@@ -20,9 +20,12 @@ class ItemsController < ApplicationController
     send_params["images"] = convert_image_params(send_params["images"]).to_json
     send_params["maji_flag"] = send_params["maji_flag"].to_i == 1 ? true:false
     res = @data.create(send_params.to_unsafe_h)
-    if res == true
+    ## TODO:あとで消す
+    if res.key?("id")
+      item_params.merge!("id" => res["id"])
+      Rails.logger.debug "item_params---------------------------------#{item_params}"
        # 問題なければイメージアップロード
-      item_images_upload([item_params], s3resource)
+      item_images_upload([item_params], s3resource, res["id"])
       redirect_to index_path, notice: "商品が登録されました"
     else
       render action: 'new'
@@ -48,11 +51,11 @@ class ItemsController < ApplicationController
     send_params["images"] = convert_image_params(send_params["images"]).to_json
     send_params["maji_flag"] = send_params["maji_flag"].to_i == 1 ? true:false
     send_params["images"] = send_params["images"]
-    ## TODO：あとで消す
-    Rails.logger.debug "send_params ---------------------------------#{send_params}"
     res = @data.update(send_params.to_unsafe_h)
-    if res == true
-      item_images_upload([item_params], s3resource)
+    if res.key?("id")
+      ## TODO:あとで消す
+    Rails.logger.debug "update_res---------------------------------#{res}"
+      item_images_upload([item_params], s3resource, item_params["id"])
       redirect_to index_path, notice: "商品が編集されました"
     else
       @item = get_item(item_params)
@@ -120,17 +123,17 @@ class ItemsController < ApplicationController
     s3resource
   end
 
-  def item_images_upload(item_prams, s3resource)
+  def item_images_upload(item_prams, s3resource, item_id)
     return if item_params["images"].nil?
     # 問題なければイメージアップロード
     item_params["images"].each_with_index do |image, idx|
-      file_name = "item_image_#{item_params["id"]}_#{idx}"
+      file_name = "item_image_#{item_id}_#{idx}"
       file_path = Rails.root.join("public/images", file_name)
       image_upload(image, file_name)
       # 画像圧縮
       compress_image("public/images/#{file_name}")
       # s3へアップロード
-      s3_key = "item/#{item_params["id"]}/#{file_name}"
+      s3_key = "item/#{item_id}/#{file_name}"
       s3_upload(s3resource, s3_key, file_path)
       # ローカルのデータは消す
       image_delete(file_path)
