@@ -1547,6 +1547,8 @@ GEM
     momentjs-rails (2.29.4.1)
       railties (>= 3.1)
     msgpack (1.6.0)
+    net-http (0.4.1)
+      uri
     net-imap (0.3.1)
       net-protocol
     net-pop (0.1.2)
@@ -1640,6 +1642,7 @@ GEM
       railties (>= 6.0.0)
     tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
+    uri (0.13.0)
     web-console (4.2.0)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -1677,6 +1680,7 @@ DEPENDENCIES
   jquery-rails
   mini_magick
   momentjs-rails
+  net-http
   pg (~> 1.1)
   puma (~> 5.0)
   rack-cors

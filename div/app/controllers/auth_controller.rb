@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 require 'date'
-class AuthController < ApplicationController
+class AuthController < ApplicationController # rubocop:disable Style/Documentation
   skip_before_action :check_logined
   def new
     @data = AdminUser.new
@@ -11,7 +13,7 @@ class AuthController < ApplicationController
 
     if res == true
       admin_user = @data.get_admin_user(auth_params)
-      session[:user] = eval(admin_user)
+      session[:user] = admin_user
       Rails.logger.debug "ログイン期限---------------------------------#{Settings.session_limit.to_i}"
       session[:limit] = Time.now + Settings.session_limit.to_i
       redirect_to index_path
@@ -21,8 +23,8 @@ class AuthController < ApplicationController
   end
 
   private
-   def auth_params
-    params.require(:admin_user).permit(:email, :password)
-   end
 
+  def auth_params
+    params.require(:admin_user).permit(:email, :password)
+  end
 end

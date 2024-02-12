@@ -1,22 +1,18 @@
-class Customer < BaseModel
-  attr_accessor 
-  :id,
-  :name, 
-  :gender,
-  :tell, 
-  :email, 
-  :city, 
-  :prefecture,
-  :address, 
+# frozen_string_literal: true
 
-  def create(params)
+class Customer < BaseModel # rubocop:disable Style/Documentation
+  attr_accessor :id,
+                :name,
+                :gender,
+                :tell,
+                :email,
+                :city,
+                :prefecture,
+                :address
 
-  end
+  def create(params); end
 
-  def update(params)
+  def update(params); end
 
-  end
-
-  def index
-  end
+  def index; end
 end

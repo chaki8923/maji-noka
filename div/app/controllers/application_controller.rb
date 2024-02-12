@@ -1,4 +1,6 @@
-class ApplicationController < ActionController::Base
+# frozen_string_literal: true
+
+class ApplicationController < ActionController::Base # rubocop:disable Style/Documentation
   include ItemHelper
   before_action :check_logined
 
@@ -14,11 +16,12 @@ class ApplicationController < ActionController::Base
   end
 
   def change_json(str)
-    return JSON.parse(str)
+    JSON.parse(str)
   end
 
   private
+
   def check_session?(session)
-    session[:user].nil? || session[:limit].nil? ||session[:limit] < Time.now
+    session[:user].nil? || session[:limit].nil? || session[:limit] < Time.now
   end
 end

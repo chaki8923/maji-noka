@@ -1,20 +1,24 @@
-class Item < BaseModel
-  attr_accessor :id, 
-  :name, 
-  :price, 
-  :description, 
-  :images, 
-  :postage, 
-  :inventory, 
-  :maji_flag,
-  :action
+# frozen_string_literal: true
+
+class Item < BaseModel # rubocop:disable Style/Documentation
+  attr_accessor :id,
+                :name,
+                :price,
+                :description,
+                :images,
+                :postage,
+                :inventory,
+                :maji_flag,
+                :action
 
   def create(params)
     res = execute_api('item/create', params, method: 'post')
+    make_data(res)
   end
 
   def update(params)
     res = execute_api('item/update', params, method: 'post')
+    make_data(res)
   end
 
   def index
@@ -23,10 +27,13 @@ class Item < BaseModel
   end
 
   def edit(params)
+    ## TODO：あとで消す
+    Rails.logger.debug "edit_res---------------------------------#{params}"
     res = execute_api('item/edit', params, method: 'get')
+    make_data(res)
   end
 
-  def update(params)
-    res = execute_api('item/update', params, method: 'post')
+  def update(params) # rubocop:disable Lint/DuplicateMethods
+    execute_api('item/update', params, method: 'post')
   end
 end

@@ -10,7 +10,7 @@ Rails.application.configure do
   config.hosts << 'div-maji'
   # Do not eager load code on boot.
   config.eager_load = false
-
+  config.web_console.whitelisted_ips = '172.19.0.1'
   # Show full error reports.
   config.consider_all_requests_local = true
 
@@ -43,6 +43,7 @@ Rails.application.configure do
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
+
   # Raise exceptions for disallowed deprecations.
   config.active_support.disallowed_deprecation = :raise
 
@@ -58,7 +59,7 @@ Rails.application.configure do
   # Suppress logger output for asset requests.
   # config.assets.quiet = true
 
-  
+
   # メール送信設定
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = { address: 'mailcatcher', port: 1025 }

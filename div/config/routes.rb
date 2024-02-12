@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
-  # root "articles#index"
+  root 'admin_user#new'
 
   scope 'admin_user' do
     get '/new', to: 'admin_user#new', as: 'admin_new'
