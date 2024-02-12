@@ -5,7 +5,7 @@
     <div class="card w-25">
       <p><%= it[:name] %></p>
       <p><%= it[:id] %></p>
-      <img src="<%= it[:image]  %>" alt="" class="item_image">
+      <img src="<%= it[:image][0] %>" alt="" class="item_image">
       <%= link_to "編集", "edit/#{it[:id]}",class: 'btn btn-info' %>
     </div>
     <% end %>
