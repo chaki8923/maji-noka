@@ -4,6 +4,9 @@ Welcome to your new gem! In this directory, you'll find the files you need to be
 
 TODO: Delete this and the text above, and describe your gem
 
+# tRPC参考記事
+- https://zenn.dev/sutamac/articles/459c37e5e6de02
+
 ## Installation
 
 Add this line to your application's Gemfile:
