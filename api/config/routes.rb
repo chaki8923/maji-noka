@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   scope 'item' do
     post '/create', to: 'items#create'
     get '/index', to: 'items#index'
+    get '/show/:item_id', to: 'items#show'
     get '/edit', to: 'items#edit'
     post '/update', to: 'items#update'
     post '/delete', to: 'items#delete'

@@ -7,8 +7,8 @@ import Typography from '@mui/material/Typography';
 import Grid from "@mui/material/Grid";
 import axios from 'axios';
 import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom"
-// axios.defaults.baseURL = 'http://api-maji:3000';
-axios.defaults.baseURL = 'http://localhost:3003';
+axios.defaults.baseURL = 'http://api-maji:3000';
+// axios.defaults.baseURL = 'http://localhost:3003';
 
 
 const Items: React.FC = () => {
@@ -33,7 +33,7 @@ const Items: React.FC = () => {
           <Card variant="outlined" sx={{ maxWidth: 400, height: 408 }}>
             <CardMedia
               sx={{ height: 220 }}
-              image={item.image}
+              image={item.image[0]}
               title="green iguana"
             />
             <Link to={`/item/${item.id}`}>
