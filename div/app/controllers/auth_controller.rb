@@ -4,15 +4,15 @@ require 'date'
 class AuthController < ApplicationController # rubocop:disable Style/Documentation
   skip_before_action :check_logined
   def new
-    @data = AdminUser.new
+    @admin_user = AdminUser.new
   end
 
   def login
-    @data = AdminUser.new(auth_params)
-    res = @data.login(auth_params)
+    @admin_user = AdminUser.new(auth_params)
+    res = @admin_user.login(auth_params)
 
     if res == true
-      admin_user = @data.get_admin_user(auth_params)
+      admin_user = @admin_user.get_admin_user(auth_params)
       session[:user] = admin_user
       Rails.logger.debug "ログイン期限---------------------------------#{Settings.session_limit.to_i}"
       session[:limit] = Time.now + Settings.session_limit.to_i

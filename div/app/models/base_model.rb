@@ -59,7 +59,7 @@ class BaseModel # rubocop:disable Style/Documentation
   end
 
   def convert_boolean(res)
-    return true if res.key?(:success_message)
+    return true if res.key?('success_message')
 
     false
   end
