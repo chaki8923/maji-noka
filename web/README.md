@@ -12,6 +12,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 # npm install @mui/material @emotion/react @emotion/styled
 # Prisma手順
 # npx prisma init 
+# dbURL postgres://postgres:password@db:5432/postgres
 
 In the project directory, you can run:
 
