@@ -11,11 +11,10 @@ import { useParams } from 'react-router-dom';
 axios.defaults.baseURL = 'http://localhost:3003';
 
 
-const ItemDetail: React.FC = (prop) => {
+const ItemDetail: React.FC = () => {
   console.log(useParams());
   const params = useParams();
   const itemId = params.id;
-  console.log(itemId);
   
   const [item, setItem] = useState<ItemsProps>()
   const [imageLength, setImageLength] = useState(0)
@@ -23,8 +22,7 @@ const ItemDetail: React.FC = (prop) => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`/item/show/${itemId}`);
-        console.log("response", response.data);
-        
+      
         setItem(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);

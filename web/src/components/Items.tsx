@@ -7,8 +7,8 @@ import Typography from '@mui/material/Typography';
 import Grid from "@mui/material/Grid";
 import axios from 'axios';
 import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom"
-axios.defaults.baseURL = 'http://api-maji:3000';
-// axios.defaults.baseURL = 'http://localhost:3003';
+// axios.defaults.baseURL = 'http://api-maji:3000';
+axios.defaults.baseURL = 'http://localhost:3003';
 
 
 const Items: React.FC = () => {
@@ -17,6 +17,8 @@ const Items: React.FC = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get('/item/index');
+        console.log("response", response);
+        
         setItems(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
