@@ -22,8 +22,6 @@ class Item # rubocop:disable Style/Documentation
   end
 
   def self.new(value)
-    ## TODO：あとで消す
-    Rails.logger.debug "value---------------------------------#{value}"
     errors = []
     name, err = Name.new(value: value[:name])
     errors.push(err) unless name
@@ -45,13 +43,11 @@ class Item # rubocop:disable Style/Documentation
 
     action, err = Action.new(value: value[:action])
     errors.push(err) unless action
-
-    Rails.logger.debug "action---------------------------------#{action.inspect}"
     # Imageクラスに配列ごと渡して@value=[{}]の形にする
     images, err = Image.new(value: value['images'], action: action.value)
     errors.push(err) unless images
 
-    return { value: nil, err_message: errors } unless errors.blank?
+    raise errors.join(', ') unless errors.blank?
 
     super(
       id: value[:id],
@@ -78,6 +74,7 @@ class Item # rubocop:disable Style/Documentation
     raise e
   end
 
+
   class << self
     def index
       idq = ItemQuery.new
@@ -86,7 +83,19 @@ class Item # rubocop:disable Style/Documentation
 
     def find(id)
       idq = ItemQuery.new
-      idq.find(id)
+      item = idq.find(id)
+      ## TODO：あとで消す
+      Rails.logger.debug "item---------------------------------#{item}"
+      raise "商品#{SystemMessage::NOTFOUND}" if item.nil?
+      item
+    end
+
+    def delete(id)
+      idc = ItemCommand.new
+      Rails.logger.debug "deleteparams---------------------------------#{id}"
+      idc.delete_db(id)
+    rescue StandardError => e
+      raise e
     end
   end
 end

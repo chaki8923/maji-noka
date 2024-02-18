@@ -1,3 +1,4 @@
+<%= render partial: 'layouts/flash_message' %>
 <div class="container mt-5">
     <h2>商品一覧</h2>
     
@@ -7,6 +8,7 @@
       <p><%= it[:id] %></p>
       <img src="<%= it[:image][0] %>" alt="" class="item_image">
       <%= link_to "編集", "edit/#{it[:id]}",class: 'btn btn-info' %>
+      <%= button_to "削除", delete_item_path(it[:id]), { method: :delete, form: { data: { turbo_confirm: "本当に削除しますか？" } }, class: 'btn btn-danger delete-button' } %>
     </div>
     <% end %>
 </div>

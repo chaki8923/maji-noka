@@ -30,6 +30,15 @@ class ItemCommand # rubocop:disable Style/Documentation
       .update(update_params(item))
   end
 
+  def delete_db(id)
+    ## TODO：あとで消す
+    Rails.logger.debug "削除id---------------------------------#{id}"
+    DB[:items]
+      .returning(:id)
+      .where(:id => id)
+      .delete
+  end
+
   private
 
   def update_params(item)

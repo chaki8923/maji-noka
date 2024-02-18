@@ -13,12 +13,12 @@ class Item < BaseModel # rubocop:disable Style/Documentation
 
   def create(params)
     res = execute_api('item/create', params, method: 'post')
-    make_data(res)
+    convert_boolean(res)
   end
 
   def update(params)
     res = execute_api('item/update', params, method: 'post')
-    make_data(res)
+    convert_boolean(res)
   end
 
   def index
@@ -27,13 +27,11 @@ class Item < BaseModel # rubocop:disable Style/Documentation
   end
 
   def edit(params)
-    ## TODO：あとで消す
-    Rails.logger.debug "edit_res---------------------------------#{params}"
     res = execute_api('item/edit', params, method: 'get')
     make_data(res)
   end
 
-  def update(params) # rubocop:disable Lint/DuplicateMethods
-    execute_api('item/update', params, method: 'post')
+  def delete # rubocop:disable Lint/DuplicateMethods
+    execute_api('item/delete', {id: @id}, method: 'post')
   end
 end

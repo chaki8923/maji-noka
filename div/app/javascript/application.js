@@ -5,6 +5,7 @@ import "day"
 import "time"
 import "list"
 import "common"
+// import "@hotwired/turbo-rails"
 
 
 var calendarEl = document.getElementById('calendar');

@@ -16,14 +16,12 @@ class AdminUsers # rubocop:disable Style/Documentation
   end
 
   def self.new(value)
+    erros = []
     email, err = Email.new(value: value[:email])
-    return nil, err unless email
-
+    errors.push(err) unless email
     password, err = Password.new(value: value[:password])
-    return nil, err unless password
-
-    ## TODO：あとで消す
-    Rails.logger.debug "最終的なpassword---------------------------------#{password}"
+    errors.push(err) unless password
+    return { value: nil, err_message: errors } unless errors.blank?
     super(email: email, password: password)
   end
 

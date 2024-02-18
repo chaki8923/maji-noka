@@ -12,10 +12,9 @@ class BaseModel # rubocop:disable Style/Documentation
     # HTTPリクエストの作成
 
     case method
-    when 'post'
+    when 'post', 'delete'
       # パラメータを設定
       # HTTPリクエストの作成
-      Rails.logger.debug "post---------------------------------#{params}"
       boundary = '----BOUNDARYBOUNDARY----'
       file_paths = create_file_paths(params['images'])
       body = add_request_body(params)
@@ -32,7 +31,6 @@ class BaseModel # rubocop:disable Style/Documentation
         http.request(request)
       end
     when 'get'
-      Rails.logger.debug "params---------------------------------#{params}"
       query_string = params.present? ? "?#{params.to_query}" : nil
       # GETリクエストの作成
       request = Net::HTTP::Get.new("#{base_url.request_uri}#{query_string}")
@@ -41,13 +39,23 @@ class BaseModel # rubocop:disable Style/Documentation
       end
     end
     json_res = JSON.parse(response.body)
-    return json_res if method == 'get'
-
-    errors.add('システムエラー発生。管理者へお問い合わせください。') if response.code == 500 || response.code == 404
     ## TODO：あとで消す
     Rails.logger.debug "json_res---------------------------------#{json_res}"
-    json_res['err_message'].each { |error| errors.add(error) } if json_res['err_message'].present?
+    return output_error(json_res['err_message']) if response.code.to_i == 500 || response.code.to_i == 404
     json_res
+  end
+
+  def output_error(err_message)
+    return errors.add('システムエラー。管理者へお問い合わせください。') if err_message.nil?
+    err_message = err_message.split(", ")
+    if err_message.is_a?(Array)
+      err_message.each { |error| errors.add(error)}
+    else
+      ## TODO：あとで消す
+      Rails.logger.debug "エラー出力2---------------------------------#{err_message}"
+      errors.add(err_message)
+    end
+    errors
   end
 
   def make_data(res)
@@ -60,7 +68,6 @@ class BaseModel # rubocop:disable Style/Documentation
 
   def convert_boolean(res)
     return true if res.key?('success_message')
-
     false
   end
 
@@ -84,8 +91,6 @@ class BaseModel # rubocop:disable Style/Documentation
     file_paths.each do |file_path|
       file_name = File.basename(file_path)
       read_file = File.read(file_path)
-      ## TODO：あとで消す
-      Rails.logger.debug "file_name---------------------------------#{file_name}"
       body << "--#{boundary}\r\n"
       body << "Content-Disposition: form-data; name=\"images[]\"; filename=\"#{file_name}\"\r\n"
       body << "Content-Type: image/jpeg\r\n"

@@ -14,29 +14,22 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
     ## TODO:あとで消す
     Rails.logger.debug "item---------------------------------#{item}"
     # エラーの場合はオブジェクトではなくArrayで返ってくる
-    if item.instance_of?(Item)
-      res = item.create(item)
-      item_images_upload(item_params, s3resource, res.first[:id])
-      render json: res[0]
-    else
-      render json: item
-    end
+    res = item.create(item)
+    item_images_upload(item_params, s3resource, res.first[:id])
+    render json: { value: nil, success_message: SystemMessage::API_SUCCESS }
+  rescue => err_message
+    Rails.logger.debug "err_message---------------------------------#{err_message}"
+    render json: {value: nil, err_message: err_message}, status: :internal_server_error
   end
 
   def update
-    ## TODO：あとで消す
-    Rails.logger.debug "item_params---------------------------------#{item_params}"
     item = Item.new(item_params)
-    ## TODO：あとで消す
-    Rails.logger.debug "item---------------------------------#{item.inspect}"
     s3resource = get_s3_resource(ACCESS_KEY, SECRET_KEY, REGION)
-    if item.instance_of?(Item)
-      res = item.update(item)
-      item_images_upload(item_params, s3resource, res.first[:id])
-      render json: res[0]
-    else
-      render json: item
-    end
+    res = item.update(item)
+    item_images_upload(item_params, s3resource, res.first[:id])
+    render json: { value: nil, success_message: SystemMessage::API_SUCCESS }
+  rescue => err_message
+    render json: {value: nil, err_message: err_message}, status: :internal_server_error
   end
 
   def index
@@ -64,12 +57,21 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
     signer = Aws::S3::Presigner.new(client: s3resource.client)
     res[:image] = item_get_images(signer, res)
     render json: res
+    rescue => err_message
+      render json: {value: nil, err_message: err_message}, status: :not_found
   end
 
   def delete
-    data = AdminQuery.new
-    res = data.get_admin_user(params['email'])
-    render json: res
+    s3resource = get_s3_resource(ACCESS_KEY, SECRET_KEY, REGION)
+    object_key = "item/#{params['id']}/"
+    delete_item = Item.find(params['id'])
+    res = Item.delete(delete_item[:id])
+    s3_delete(s3resource, object_key)
+    ## TODO：あとで消す
+    Rails.logger.debug "削除後res---------------------------------#{res}"
+    render json: res[0]
+  rescue => err_message
+    render json: {value: nil, err_message: err_message}, status: :internal_server_error
   end
 
   private
@@ -137,8 +139,6 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
     return if item_params['images'].nil?
 
     item_params['images'].each do |image|
-      ## TODO：あとで消す
-      Rails.logger.debug "image---------------------------------#{image}"
       file_name = "item_#{image.original_filename}_#{item_id}"
       file_path = Rails.root.join('public/images', file_name)
       FileUtils.mkdir_p('public/images')
@@ -164,10 +164,14 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
     s3resource.bucket(BUCKET).object(key).upload_file(file_path)
   end
 
-  def s3_delete(s3resource, key, file_path)
-    # TODO: 勘で書いたのでテスト必要
-    Rails.logger.info "S3の#{file_path}を削除---------------------------------"
-    s3resource.bucket(BUCKET).object(key).delete(file_path)
+  def s3_delete(s3resource, key)
+    bucket = s3resource.bucket(BUCKET)
+    target_s3_directory = bucket.objects({prefix: key})
+    ## TODO：あとで消す
+    Rails.logger.debug "key---------------------------------#{key}"
+    target_s3_directory.batch_delete!
+  rescue Aws::S3::Errors::ServiceError => e
+    render json: {value: nil, err_message: "オブジェクトの削除中にエラーが発生しました：#{e.message}"}, status: :not_found
   end
 
   def compress_image(file_path)

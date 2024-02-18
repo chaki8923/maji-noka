@@ -22,9 +22,9 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
     ## TODO：あとで消す
     Rails.logger.debug "item_res---------------------------------#{res}"
     ## TODO:あとで消す
-    if res.key?(:id)
+    if res == true
       Rails.logger.debug "イメージアップロード処理---------------------------------#{item_params}"
-      redirect_to index_path, notice: '商品が登録されました'
+      redirect_to item_index_path, notice: '商品が登録されました'
     else
       render action: 'new'
     end
@@ -38,21 +38,32 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
   def edit
     @item_instance = Item.new
     @item = get_item(params.permit(:id), @item_instance)
+    redirect_to item_index_path, alert: @item[:err_message] if @item[:err_message].present?
   end
 
   def update
     @item_instance = Item.new(item_params)
     item_params['maji_flag'] = item_params['maji_flag'].to_i == 1
+    @item = get_item(item_params, @item_instance)
     res = @item_instance.update(item_params)
-    if res.key?('id')
-      ## TODO:あとで消す
-      Rails.logger.debug "update_res---------------------------------#{res}"
-      redirect_to index_path, notice: '商品が編集されました'
+    ## TODO：あとで消す
+    Rails.logger.debug "update_res---------------------------------#{res.class}"
+    if res == true
+      redirect_to item_index_path, notice: '商品が編集されました'
     else
-      @item = get_item(item_params, @item_instance)
-      ## TODO：あとで消す
       render action: 'edit'
     end
+  end
+
+  def delete
+    @item_instance = Item.new(params.permit(:id))
+    res = @item_instance.delete
+    if res.key?('id')
+      redirect_to item_index_path, notice: '商品が削除されました'
+    else
+      redirect_to item_index_path, alert: res["err_message"]
+    end
+
   end
 
   private
@@ -84,8 +95,6 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
   end
 
   def get_item(id, item)
-    ## TODO：あとで消す
-    Rails.logger.debug "id---------------------------------#{id}"
     item.edit(id)
   end
 end
