@@ -7,8 +7,8 @@ import Typography from '@mui/material/Typography';
 import Grid from "@mui/material/Grid";
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-// axios.defaults.baseURL = 'http://api-maji:3000';
-axios.defaults.baseURL = 'http://localhost:3003';
+axios.defaults.baseURL = 'http://api-maji:3000';
+// axios.defaults.baseURL = 'http://localhost:3003';
 
 
 const ItemDetail: React.FC = () => {
