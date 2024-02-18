@@ -18,9 +18,10 @@ Rails.application.routes.draw do
   scope 'item' do
     get '/new', to: 'items#new'
     post '/create', to: 'items#create'
-    get '/index', to: 'items#index'
+    get '/index', to: 'items#index', as: 'item_index'
     get '/edit/:id', to: 'items#edit'
     post '/update', to: 'items#update'
+    delete '/delete/:id', to: 'items#delete', as: 'delete_item'
   end
 
   scope 'customer' do

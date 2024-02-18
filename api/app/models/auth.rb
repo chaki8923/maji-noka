@@ -7,13 +7,13 @@ Dir['/api/app/domains/query_service/*.rb'].sort.each { |file| require file }
 class Auth # rubocop:disable Style/Documentation
   def check(value)
     adq = AdminQuery.new
-    ## TODO：あとで消す
-    Rails.logger.debug "value---------------------------------#{value}"
+    errors = []
     hash_pass = adq.get_hash_password(value)
 
-    return { value: nil, err_message: SystemMessage::AUTH_ERR } if adq.check_mail(value['email']).nil?
-    return { value: nil, err_message: SystemMessage::AUTH_ERR } unless BCrypt::Password.new(hash_pass[:password]) == value['password']
+    errors.push(SystemMessage::AUTH_ERR) if adq.check_mail(value['email']).nil?
+    errors.push(SystemMessage::AUTH_ERR) unless BCrypt::Password.new(hash_pass[:password]) == value['password']
 
+    return { value: nil, err_message: errors } unless errors.blank?
     { value: nil, success_message: SystemMessage::API_SUCCESS }
   end
 end

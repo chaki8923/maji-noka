@@ -83,9 +83,16 @@ $(function(){
     setTimeout(()=>{
       $('.js-toggle-msg').fadeOut()
     },3000)
-
-    
   }
+
+  $('.delete-button').click(function(e) {
+    e.preventDefault(); // デフォルトのイベントをキャンセルする
+    var result = confirm("本当に削除しますか？");
+    if (result) {
+      // OKボタンがクリックされた場合、DELETEリクエストを送信
+      $(this).closest('form').submit();
+    }
+  });
 
 
   });

@@ -18,24 +18,18 @@ class AdminUserController < ApplicationController # rubocop:disable Style/Docume
   def login
     auth = Auth.new
     res = auth.check(admin_user_params)
-    Rails.logger.debug "login---------------------------------#{res}"
-    Rails.logger.debug "loginclass---------------------------------#{res.key?(:err_message)}"
     render json: res
   end
 
   def get_admin_user # rubocop:disable Naming/AccessorMethodName
     data = AdminQuery.new
     res = data.get_admin_user(admin_user_params[:email])
-    ## TODO：あとで消す
-    Rails.logger.debug "get_admin_user結果---------------------------------#{res}"
     render json: res
   end
 
   def get_calendar # rubocop:disable Naming/AccessorMethodName
     data = AdminQuery.new
     res = data.get_admin_user(params['email'])
-    ## TODO：あとで消す
-    Rails.logger.debug "get_admin_user結果---------------------------------#{res}"
     render json: res
   end
 
