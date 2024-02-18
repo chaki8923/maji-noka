@@ -13,7 +13,7 @@ class Auth # rubocop:disable Style/Documentation
     errors.push(SystemMessage::AUTH_ERR) if adq.check_mail(value['email']).nil?
     errors.push(SystemMessage::AUTH_ERR) unless BCrypt::Password.new(hash_pass[:password]) == value['password']
 
-    return { value: nil, err_message: errors } unless errors.blank?
+    raise errors.join(', ') unless errors.blank?
     { value: nil, success_message: SystemMessage::API_SUCCESS }
   end
 end

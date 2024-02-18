@@ -16,12 +16,12 @@ class AdminUsers # rubocop:disable Style/Documentation
   end
 
   def self.new(value)
-    erros = []
+    errors = []
     email, err = Email.new(value: value[:email])
     errors.push(err) unless email
     password, err = Password.new(value: value[:password])
     errors.push(err) unless password
-    return { value: nil, err_message: errors } unless errors.blank?
+    raise errors.join(', ') unless errors.blank?
     super(email: email, password: password)
   end
 

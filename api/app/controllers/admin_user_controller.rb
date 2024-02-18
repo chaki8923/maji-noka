@@ -6,19 +6,22 @@ class AdminUserController < ApplicationController # rubocop:disable Style/Docume
 
   def signup
     admin_user = AdminUsers.new(admin_user_params)
-
-    # エラーの場合はオブジェクトではなくArrayで返ってくる
-    if admin_user.instance_of?(Array)
-      render json: admin_user[1]
-    else
-      admin_user.create(admin_user)
-    end
+    ## TODO：あとで消す
+    Rails.logger.debug "admin_user---------------------------------#{admin_user}"
+    admin_user.create(admin_user)
+    render json: { value: nil, success_message: SystemMessage::API_SUCCESS }
+  rescue => err_message
+    Rails.logger.debug "err_message---------------------------------#{err_message}"
+    render json: {value: nil, err_message: err_message}, status: :internal_server_error
   end
 
   def login
     auth = Auth.new
     res = auth.check(admin_user_params)
-    render json: res
+    render json: { value: nil, success_message: SystemMessage::API_SUCCESS }
+  rescue => err_message
+    Rails.logger.debug "err_message---------------------------------#{err_message}"
+    render json: {value: nil, err_message: err_message}, status: :internal_server_error
   end
 
   def get_admin_user # rubocop:disable Naming/AccessorMethodName
