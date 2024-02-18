@@ -11,18 +11,21 @@ datasource db {
 }
 
 
-model item {
+model items {
   id          Int       @id @default(autoincrement())   // id (BIGSERIALに相当)
   name        String                                  // 商品名 (textに相当)
   price       String                                  // 値段 (textに相当)
   description String                                  // 説明 (textに相当)
   images      Json                                    // 画像 (JSONに相当)
-  deletedAt   DateTime?                               // 削除日時 (timestamp with time zoneに相当、NULLを許可)
-  createdAt   DateTime                                // 作成日時 (timestamp with time zoneに相当)
-  updatedAt   DateTime                                // 更新日時 (timestamp with time zoneに相当)
+  maji_flag   Boolean   @default(false)
+  postage     Int?
+  inventory   Int?
+  deleted_at  DateTime?                                 // 削除日時 (timestamp with time zoneに相当、NULLを許可)
+  created_at  DateTime                                  // 作成日時 (timestamp with time zoneに相当)
+  updated_at  DateTime                                  // 更新日時 (timestamp with time zoneに相当)
 }
 
-model admin_user {
+model admin_users {
   id          BigInt      @id @default(autoincrement())   // id (BIGSERIALに相当)
   email       String                                    // E-mail (textに相当)
   password    String                                    // パスワード (textに相当)

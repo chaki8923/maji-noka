@@ -23,8 +23,10 @@ if(location.protocol === "https:"){
 }
 
 if(document.getElementById("calendar") != null){
+  
   $(function(){
     var email = $("#calendar").data('email');
+    console.log('入った', email);
     function get_user(email){
       return $.ajax({
           type: 'GET',
