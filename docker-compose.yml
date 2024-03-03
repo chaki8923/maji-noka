@@ -35,23 +35,6 @@ services:
       # - "3001:3000"
     depends_on:
       - db
-  web:
-    build:
-      context: .
-      dockerfile: ./Dockerfile
-    container_name: web
-    working_dir: /web
-    restart: always
-    environment:
-      - CHOKIDAR_USEPOLLING=true
-    volumes:
-      - ./web:/web
-    command: sh -c 'cd /web && npm start'
-    ports:
-      - "127.0.1.1:3000:3000"
-      # - "3000:3000"
-    tty: true 
-    stdin_open: true
   api:
     platform: linux/amd64
     build:
