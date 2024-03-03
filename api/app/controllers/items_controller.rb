@@ -11,14 +11,11 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
   def create
     item = Item.new(item_params)
     s3resource = get_s3_resource(ACCESS_KEY, SECRET_KEY, REGION)
-    ## TODO:あとで消す
-    Rails.logger.debug "item---------------------------------#{item}"
     # エラーの場合はオブジェクトではなくArrayで返ってくる
     res = item.create(item)
     item_images_upload(item_params, s3resource, res.first[:id])
     render json: { value: nil, success_message: SystemMessage::API_SUCCESS }
   rescue => err_message
-    Rails.logger.debug "err_message---------------------------------#{err_message}"
     render json: {value: nil, err_message: err_message}, status: :internal_server_error
   end
 
@@ -67,8 +64,6 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
     delete_item = Item.find(params['id'])
     res = Item.delete(delete_item[:id])
     s3_delete(s3resource, object_key)
-    ## TODO：あとで消す
-    Rails.logger.debug "削除後res---------------------------------#{res}"
     render json: res[0]
   rescue => err_message
     render json: {value: nil, err_message: err_message}, status: :internal_server_error
