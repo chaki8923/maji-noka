@@ -6,8 +6,6 @@ class AdminUserController < ApplicationController # rubocop:disable Style/Docume
 
   def signup
     admin_user = AdminUsers.new(admin_user_params)
-    ## TODO：あとで消す
-    Rails.logger.debug "admin_user---------------------------------#{admin_user}"
     admin_user.create(admin_user)
     render json: { value: nil, success_message: SystemMessage::API_SUCCESS }
   rescue => err_message

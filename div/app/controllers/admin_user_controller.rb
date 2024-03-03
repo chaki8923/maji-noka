@@ -12,7 +12,7 @@ class AdminUserController < ApplicationController # rubocop:disable Style/Docume
     res = @admin_user.signup(admin_user_params)
     if res == true
       session[:limit] = Time.now + Settings.session_limit.to_i
-      admin_user = @admin_user.get_admin_user(auth_params)
+      admin_user = @admin_user.get_admin_user(admin_user_params)
       session[:user] = admin_user
       redirect_to index_path
     else
