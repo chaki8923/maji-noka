@@ -9,6 +9,10 @@ TODO: Delete this and the text above, and describe your gem
 
 ## Installation
 
+- npx create-next-app web --ts
+- npm install tailwindcss
+- npm install autoprefixer
+- npm run dev
 Add this line to your application's Gemfile:
 
 ```ruby
