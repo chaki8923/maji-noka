@@ -18,7 +18,6 @@ function getBaseUrl() {
   // assume localhost
   return `http://localhost:${process.env.PORT ?? 3000}`;
 }
-console.log(getBaseUrl());
 
 export const trpc = createTRPCNext<AppRouter>({
   config({ ctx }) {
