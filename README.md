@@ -6,7 +6,6 @@ TODO: Delete this and the text above, and describe your gem
 
 # tRPC参考記事
 - https://zenn.dev/sutamac/articles/459c37e5e6de02
--
 
 ## Installation
 
