@@ -1,15 +1,22 @@
-import { trpc } from '../utils/trpc';
-import React, { useState, useEffect } from 'react';
-import { getImageUrl } from './awsImageOperations';
-import Items from '../components/items';
+
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import type { NextPage } from "next";
+
 
 export default function IndexPage() {
-  const items = trpc.item.getItems.useQuery();
-  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const router = useRouter();
+  const { session, status }: any = useSession();
+  switch (status) {
+    case "loading":
+      return (<div>loading…</div>);
+    case "unauthenticated":
+      router.push("/login");
+      break;
+    case "authenticated":
+      return (<div>ログイン成功</div>);
+  }
 
-
-  return (
-    <Items />
-  );
+  return null;
 }
 

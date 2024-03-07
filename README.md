@@ -15,6 +15,10 @@ TODO: Delete this and the text above, and describe your gem
 - npm run dev
 Add this line to your application's Gemfile:
 
+## auth.jsを使用してデータを永続化させたい場合
+- @next-auth/prisma-adapter
+- 参考：https://reffect.co.jp/react/next-auth#Session_Provider
+
 ```ruby
 gem 'maji-noka'
 ```
