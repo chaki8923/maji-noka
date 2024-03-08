@@ -7,7 +7,7 @@ import Link from "next/link";
 export default function Items() {
   const items = trpc.item.getItems.useQuery();
   const [imageUrls, setImageUrls] = useState<string[]>([]);
-
+  
   useEffect(() => {
     if (items.data) {
       const fetchImageUrls = async () => {
