@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import TwitterProvider from "next-auth/providers/twitter";
+import Credentials from 'next-auth/providers/credentials'
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
@@ -27,10 +28,48 @@ export default NextAuth({
       version: "2.0",
       authorization: TWITTER_AUTHORIZATION,
     }),
+    Credentials({
+      id: 'credentials',
+      name: 'Credentials',
+      credentials: {
+        email: {
+          label: 'Email',
+          type: 'text',
+        },
+        password: {
+          label: 'Password',
+          type: 'password',
+        },
+      },
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials.password) {
+          throw new Error('Email and password required')
+        }
+
+        const user = await prismadb.user.findUnique({
+          where: { email: credentials.email },
+        })
+
+        if (!user || !user.hashedPassword) {
+          throw new Error('Email does not exists')
+        }
+
+        const isCorrectPassword = await bcrypt.compare(
+          credentials.password,
+          user.hashedPassword,
+        )
+
+        if (!isCorrectPassword) {
+          throw new Error('Incorrect password')
+        }
+
+        return user
+      },
+    }),
   ],
   callbacks: {
     async session({ session, user, token }) {
-      console.log(user);
+      console.log("user-------------", user);
       return session;
     },
   },
@@ -38,4 +77,5 @@ export default NextAuth({
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60,
   },
+
 });
