@@ -19,6 +19,8 @@
     "@trpc/server": "^10.45.1",
     "@types/bcrypt": "^5.0.2",
     "aws-sdk": "^2.1569.0",
+    "bcrypt": "^5.1.1",
+    "graceful-fs": "^4.2.11",
     "next": "14.1.1",
     "next-auth": "^4.24.6",
     "react": "^18",

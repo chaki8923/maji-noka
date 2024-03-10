@@ -1,11 +1,12 @@
-import NextAuth from "next-auth";
+import NextAuth, { AuthOptions }  from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import TwitterProvider from "next-auth/providers/twitter";
 import Credentials from 'next-auth/providers/credentials'
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
+import prismadb from '@/lib/prismadb'
+import bcrypt from 'bcrypt'
 const prisma = new PrismaClient();
-
 const TWITTER_AUTHORIZATION = {
   url: "https://twitter.com/i/oauth2/authorize",
   params: {
@@ -15,8 +16,12 @@ const TWITTER_AUTHORIZATION = {
   },
 };
 
-export default NextAuth({
+export const authOptions: AuthOptions = ({
   adapter: PrismaAdapter(prisma),
+    pages: {
+    signIn: "/auth/signin",  // ← 追加
+    error: "/auth/signin",    // ← 追加
+  },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID || "",
@@ -25,47 +30,9 @@ export default NextAuth({
     TwitterProvider({
       clientId: process.env.TWITTER_CLIENT_ID || "",
       clientSecret: process.env.TWITTER_CLIENT_SECRET || "",
-      version: "2.0",
-      authorization: TWITTER_AUTHORIZATION,
+      version: "2.0"
     }),
-    Credentials({
-      id: 'credentials',
-      name: 'Credentials',
-      credentials: {
-        email: {
-          label: 'Email',
-          type: 'text',
-        },
-        password: {
-          label: 'Password',
-          type: 'password',
-        },
-      },
-      async authorize(credentials) {
-        if (!credentials?.email || !credentials.password) {
-          throw new Error('Email and password required')
-        }
 
-        const user = await prismadb.user.findUnique({
-          where: { email: credentials.email },
-        })
-
-        if (!user || !user.hashedPassword) {
-          throw new Error('Email does not exists')
-        }
-
-        const isCorrectPassword = await bcrypt.compare(
-          credentials.password,
-          user.hashedPassword,
-        )
-
-        if (!isCorrectPassword) {
-          throw new Error('Incorrect password')
-        }
-
-        return user
-      },
-    }),
   ],
   callbacks: {
     async session({ session, user, token }) {
@@ -79,3 +46,5 @@ export default NextAuth({
   },
 
 });
+
+export default NextAuth(authOptions)
