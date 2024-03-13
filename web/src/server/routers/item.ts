@@ -9,16 +9,16 @@ const prisma = new PrismaClient();
 // 新しいrouterを作成します。
 export const itemRouter = router({
   
-  // 全てのTODOを取得するクエリです。
+  // 全てのitemを取得するクエリです。
   getItems: procedure.query(async () => {
-    // 全てのTODOをデータベースから取得します。
+    // 全てのitemをデータベースから取得します。
     const items = await prisma.items.findMany();
     
-    // 取得したTODOを返します。
+    // 取得したitemを返します。
     return items;
   }),
   
-  // 特定のIDのTODOを取得するクエリです。
+  // 特定のIDのitemを取得するクエリです。
   getItemById: procedure
     .input(
       // 入力スキーマを指定します。IDは数値である必要があります。
@@ -27,17 +27,39 @@ export const itemRouter = router({
       })
     )
     .query(async ({ input }) => {
-      // 指定されたIDのTODOをデータベースから取得します。
+      // 指定されたIDのitemをデータベースから取得します。
       const item = await prisma.items.findUnique({
         where: { id: input.id },
       });
       
-      // TODOが見つからない場合、エラーをスローします。
+      // itemが見つからない場合、エラーをスローします。
       if (!item) {
-        throw new Error("Todo not found");
+        throw new Error("item not found");
       }
       
-      // 取得したTODOを返します。
+      // 取得したitemを返します。
       return item;
+    }),
+  // 特定のIDのitemを取得するクエリです。
+  getItemByKeyword: procedure
+    .input(
+      // 入力スキーマを指定します。IDは数値である必要があります。
+      z.object({
+        keyword: z.string(),
+      })
+    )
+    .query(async ({ input }) => {
+      // 指定されたIDのitemをデータベースから取得します。
+      const items = await prisma.items.findMany({
+        where: { name: input.keyword },
+      });
+      
+      // itemが見つからない場合、エラーをスローします。
+      if (!items) {
+        throw new Error("item not found");
+      }
+      
+      // 取得したitemを返します。
+      return items;
     }),
 });
