@@ -27,7 +27,7 @@ export const userRouter = router({
       if (!user) {
         throw new Error("User not found");
       }
-      // 取得したTODOを返します。
+      // 取得したuserを返します。
       return user;
     }),
 });

@@ -34,8 +34,13 @@ export default function Item() {
 
   return (
     <>
-      <p>{data.name}</p>
-      <img src={imageUrl} alt="" />
+      <Link href={`/`} className="px-4 py-2 text-sm text-blue-100 bg-blue-500 rounded shadow">
+        Go List
+      </Link>
+      <div>
+        <p>{data.name}</p>
+        <img src={imageUrl} alt="" />
+      </div>
     </>
   );
 }

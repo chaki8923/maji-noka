@@ -1,22 +1,12 @@
-import NextAuth, { AuthOptions }  from "next-auth";
+import NextAuth, { NextAuthOptions }  from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import TwitterProvider from "next-auth/providers/twitter";
-import Credentials from 'next-auth/providers/credentials'
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
-import prismadb from '@/lib/prismadb'
-import bcrypt from 'bcrypt'
 const prisma = new PrismaClient();
-const TWITTER_AUTHORIZATION = {
-  url: "https://twitter.com/i/oauth2/authorize",
-  params: {
-    // 以下のScopesに書かれいるもの設定
-    // https://developer.twitter.com/en/docs/authentication/oauth-2-0/authorization-code
-    scope: "users.read tweet.read offline.access",
-  },
-};
 
-export const authOptions: AuthOptions = ({
+
+export const nextAuthOptions: NextAuthOptions = ({
   adapter: PrismaAdapter(prisma),
     pages: {
     signIn: "/auth/signin",  // ← 追加
@@ -36,15 +26,9 @@ export const authOptions: AuthOptions = ({
   ],
   callbacks: {
     async session({ session, user, token }) {
-      console.log("user-------------", user);
       return session;
     },
   },
-  session: {
-    strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60,
-  },
-
 });
 
-export default NextAuth(authOptions)
+export default NextAuth(nextAuthOptions)
