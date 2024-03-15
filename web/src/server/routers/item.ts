@@ -45,13 +45,17 @@ export const itemRouter = router({
     .input(
       // 入力スキーマを指定します。IDは数値である必要があります。
       z.object({
-        keyword: z.string(),
+        keyword: z.string().optional(),
       })
     )
     .query(async ({ input }) => {
       // 指定されたIDのitemをデータベースから取得します。
       const items = await prisma.items.findMany({
-        where: { name: input.keyword },
+        where: { 
+          name: {
+            contains:  input.keyword 
+          }
+        },
       });
       
       // itemが見つからない場合、エラーをスローします。

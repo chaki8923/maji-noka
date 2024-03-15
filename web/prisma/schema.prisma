@@ -19,7 +19,7 @@ generator client2 {
 model items {
   id          Int       @id @default(autoincrement())   // id (BIGSERIALに相当)
   name        String                                  // 商品名 (textに相当)
-  price       String                                  // 値段 (textに相当)
+  price       Int                                    // 値段
   description String                                  // 説明 (textに相当)
   category_id Int?
   images      String[]                            

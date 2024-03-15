@@ -3,6 +3,7 @@ import React, { useEffect, useState, ChangeEvent } from 'react';
 import { useRouter } from "next/router";
 import { getImageUrl } from '../awsImageOperations';
 import Link from "next/link";
+import { Card, Spinner } from 'flowbite-react';
 
 
 export default function Item() {
@@ -29,18 +30,29 @@ export default function Item() {
     }
   }, [data]); // コンポーネントがマウントされたときのみ実行
   if (!data) {
-    return <div>Loading...</div>;
+    return <div> <Spinner color="info" aria-label="Info spinner example" /></div>;
   }
 
   return (
     <>
-      <Link href={`/`} className="px-4 py-2 text-sm text-blue-100 bg-blue-500 rounded shadow">
-        Go List
-      </Link>
-      <div>
-        <p>{data.name}</p>
-        <img src={imageUrl} alt="" />
-      </div>
+      <Card
+        className="max-w-sm"
+      >
+        <div className='text-center'>
+          <img src={imageUrl} alt="" className='h-48 object-contain w-full' />
+        </div>
+        <h5 className="ymca text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
+          {data.name}
+        </h5>
+        <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
+          {data.description}
+        </h5>
+        <div className="mb-5 mt-2.5 flex items-center">
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="text-3xl font-bold text-gray-900 dark:text-white">{data.price.toLocaleString()}円</span>
+        </div>
+      </Card>
     </>
   );
 }
