@@ -2,6 +2,7 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Items from "./item/index";
+import { Spinner } from "flowbite-react";
 
 
 export default function IndexPage() {
@@ -10,7 +11,7 @@ export default function IndexPage() {
   
   switch (status) {
     case "loading":
-      return (<div>loading…</div>);
+      return (<div> <Spinner color="info" aria-label="Info spinner example" /></div>);
     case "unauthenticated":
       router.push("/login");
       break;

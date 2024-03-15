@@ -1,20 +1,29 @@
-import React from "react";
+import React, { ChangeEvent, useEffect } from "react";
+import { useRouter } from 'next/router';
 import { Input, Button } from "@material-tailwind/react";
 import Link from "next/link";
-type SearchForm = {
-  keyword: string;
-  type: string;
-};
+import { useSearchParams } from "next/navigation";
 
 
 export const SearchForm = () => {
+  const router = useRouter();
   const [keyword, setKeyword] = React.useState("");
-  console.log("入力値", keyword);
-
+  const searchParams = useSearchParams();
+  const keywordValue = searchParams?.get("keyword") ?? ''; // もしnullなら空文字列をデフォルト値とする
+  useEffect(() => {
+    // URLからクエリパラメーターを取得して、キーワードを設定
+    const { keyword: queryKeyword } = router.query;
+    if (typeof queryKeyword === 'string') {
+      setKeyword(queryKeyword);
+    }
+  }, [router.query]);
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setKeyword(e.target.value);
+  }
 
   return (
     <>
-      <div className="relative">
+      <div className="relative w-2/5 mt-2 mb-3">
         <div className="absolute left-4 top-3 text-gray-400">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
             <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -25,7 +34,12 @@ export const SearchForm = () => {
             Search
           </Link>
         </div>
-        <input className="text-gray-800 w-full rounded-full hover:shadow-lg focus:shadow-lg focus:outline-0 p-2.5 border pl-10" type="text" placeholder="Search Google or type a URL" onChange={(e) => setKeyword(e.target.value)} />
+        <input
+          value={keyword}
+          className="text-gray-800 w-full rounded-full hover:shadow-lg focus:shadow-lg focus:outline-0 p-2.5 border pl-10"
+          type="text"
+          placeholder="商品名を入力してください😗"
+          onChange={handleInputChange} />
       </div>
     </>
   )
