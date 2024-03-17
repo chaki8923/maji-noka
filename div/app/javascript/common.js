@@ -7,10 +7,8 @@ $(function(){
     $("#navbarNav").slideToggle("fast");
   });
 
-
   $('.navbar li a').each(function () {
     var $href = $(this).attr('href');
-    console.log($href);
     if (location.pathname === $href) {      
       $(this).addClass('active');
     } else {

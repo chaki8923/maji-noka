@@ -24,6 +24,14 @@ Rails.application.routes.draw do
     delete '/delete/:id', to: 'items#delete', as: 'delete_item'
   end
 
+  scope 'schedule' do
+    get '/new', to: 'schedules#new'
+    post '/create', to: 'schedules#create'
+    get '/index', to: 'schedules#index', as: 'schedule_index'
+    get '/edit/:id', to: 'schedules#edit'
+    post '/update', to: 'schedules#update'
+    delete '/delete/:id', to: 'schedules#delete', as: 'schedule_item'
+  end
   scope 'customer' do
     get '/index', to: 'customers#index'
   end

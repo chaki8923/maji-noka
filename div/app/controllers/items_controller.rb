@@ -19,9 +19,6 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
     @item_instance = Item.new(item_params)
     item_params['maji_flag'] = item_params['maji_flag'].to_i == 1
     res = @item_instance.create(item_params)
-    ## TODO：あとで消す
-    Rails.logger.debug "item_res---------------------------------#{res}"
-    ## TODO:あとで消す
     if res == true
       Rails.logger.debug "イメージアップロード処理---------------------------------#{item_params}"
       redirect_to item_index_path, notice: '商品が登録されました'

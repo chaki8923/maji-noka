@@ -19,4 +19,13 @@ Rails.application.routes.draw do
     post '/update', to: 'items#update'
     post '/delete', to: 'items#delete'
   end
+
+  scope 'schedule' do
+    post '/create', to: 'schedules#create'
+    get '/index', to: 'schedules#index'
+    get '/show/:schedile_id', to: 'schedules#show'
+    get '/edit', to: 'schedules#edit'
+    post '/update', to: 'schedules#update'
+    post '/delete', to: 'schedules#delete'
+  end
 end

@@ -58,7 +58,7 @@ export default function Items() {
               <p className="mb-2 leading-normal">
                 {item.price}
               </p>
-              <Link href={`item/${item.id}`} className="px-4 py-2 text-sm text-blue-100 bg-blue-500 rounded shadow hover:bg-gray-600">
+              <Link href={`/item/${item.id}`} className="px-4 py-2 text-sm text-blue-100 bg-blue-500 rounded shadow hover:bg-gray-600">
                 Read more
               </Link>
             </div>

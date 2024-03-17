@@ -22,6 +22,7 @@ class AdminUserController < ApplicationController # rubocop:disable Style/Docume
 
   def index
     AdminUser.new
+    @schedule_instance = Schedule.new
     session[:user] = session[:user].symbolize_keys
   end
 

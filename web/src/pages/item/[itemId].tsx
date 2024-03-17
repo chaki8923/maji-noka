@@ -1,58 +1,75 @@
 import { trpc } from '../../utils/trpc';
-import React, { useEffect, useState, ChangeEvent } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from "next/router";
-import { getImageUrl } from '../awsImageOperations';
 import Link from "next/link";
 import { Card, Spinner } from 'flowbite-react';
+const { generatePresignedUrlsForFolder } = require('../awsAllItemImage');
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
+import styles from "../../../styles/swiper.module.css";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 
 export default function Item() {
   const router = useRouter();
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
   const id = Number(router.query.itemId);
+  generatePresignedUrlsForFolder('maji-image', `item/${id}/`)
+  .then((urls: string[]) => {
+    if(urls){
+      setImageUrls(urls);
+    }
+  })
+  .catch((error: Error) => {
+    console.error('S3Error:', error);
+  });
 
   const { data } = trpc.item.getItemById.useQuery({
     id,
   });
 
-  const [imageUrl, setImageUrl] = useState('');
+  const slideSettings = {
+    0: {
+      slidesPerView: 1,
+      spaceBetween: 10,
+    },
+    1024: {
+      slidesPerView: 2,
+      spaceBetween: 10,
+    },
+  };  
 
-  useEffect(() => {
-    if (data) {
-      const fetchImageUrl = async () => {
-        try {
-          const url = await getImageUrl('maji-image', `item/${data.id}/item_image_0_${data.id}`, 3600);
-          setImageUrl(url);
-        } catch (error) {
-          console.error('Error fetching image URL:', error);
-        }
-      };
-      fetchImageUrl();
-    }
-  }, [data]); // コンポーネントがマウントされたときのみ実行
   if (!data) {
-    return <div> <Spinner color="info" aria-label="Info spinner example" /></div>;
+    return <div className='flex fixed justify-center top-48'> <Spinner color="info" aria-label="Info spinner example" /></div>;
   }
 
   return (
     <>
-      <Card
-        className="max-w-sm"
-      >
-        <div className='text-center'>
-          <img src={imageUrl} alt="" className='h-48 object-contain w-full' />
-        </div>
-        <h5 className="ymca text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
-          {data.name}
-        </h5>
-        <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
-          {data.description}
-        </h5>
-        <div className="mb-5 mt-2.5 flex items-center">
-        </div>
-        <div className="flex items-center justify-between">
-          <span className="text-3xl font-bold text-gray-900 dark:text-white">{data.price.toLocaleString()}円</span>
-        </div>
-      </Card>
+     <Swiper
+      modules={[Navigation, Pagination, Autoplay]}
+      breakpoints={slideSettings} // slidesPerViewを指定
+      slidesPerView={"auto"} // ハイドレーションエラー対策
+      centeredSlides={true} // スライドを中央に配置
+      loop={true} // スライドをループさせる
+      speed={1000} // スライドが切り替わる時の速度
+      autoplay={{
+        delay: 2500,
+        disableOnInteraction: false,
+      }} // スライド表示時間
+      navigation // ナビゲーション（左右の矢印）
+      pagination={{
+        clickable: true,
+      }} // ページネーション, クリックで対象のスライドに切り替わる
+      className={styles.slideWrapper}
+    >
+      {imageUrls.map((src: string, index: number) => (
+        <SwiperSlide key={index}>
+          <img src={src} width={640} height={400} alt="" className={styles.slideImage}/>
+        </SwiperSlide>
+      ))}
+    </Swiper>
     </>
   );
 }
