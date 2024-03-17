@@ -9,9 +9,11 @@ class Auth # rubocop:disable Style/Documentation
     adq = AdminQuery.new
     errors = []
     hash_pass = adq.get_hash_password(value)
-
-    errors.push(SystemMessage::AUTH_ERR) if adq.check_mail(value['email']).nil?
-    errors.push(SystemMessage::AUTH_ERR) unless BCrypt::Password.new(hash_pass[:password]) == value['password']
+    ## TODO：あとで消す
+    Rails.logger.debug "hash_pass---------------------------------#{hash_pass}"
+    raise SystemMessage::AUTH_ERR if hash_pass.blank?
+    raise SystemMessage::AUTH_ERR if adq.check_mail(value['email']).nil?
+    raise SystemMessage::AUTH_ERR unless BCrypt::Password.new(hash_pass[:password]) == value['password']
 
     raise errors.join(', ') unless errors.blank?
     { value: nil, success_message: SystemMessage::API_SUCCESS }

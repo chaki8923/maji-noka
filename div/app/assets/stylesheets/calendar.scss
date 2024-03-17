@@ -4,6 +4,15 @@
   text-align: left;
 }
 
+.datepicker-days th.dow:first-child,
+.datepicker-days td:first-child {
+  color: #f00;
+}
+.datepicker-days th.dow:last-child,
+.datepicker-days td:last-child {
+  color: #00f;
+}
+
 .fc-rtl {
   text-align: right;
 }
@@ -11,6 +20,13 @@
 body .fc {
   /* extra precedence to overcome jqui */
   font-size: 1em;
+}
+
+.date_modal{
+  display: none;
+}
+.date_modal_edit{
+  display: none;
 }
 
 /* Colors

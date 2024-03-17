@@ -11,8 +11,6 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
   def create
     item = Item.new(item_params)
     s3resource = get_s3_resource(ACCESS_KEY, SECRET_KEY, REGION)
-    ## TODO:あとで消す
-    Rails.logger.debug "item---------------------------------#{item}"
     # エラーの場合はオブジェクトではなくArrayで返ってくる
     res = item.create(item)
     item_images_upload(item_params, s3resource, res.first[:id])

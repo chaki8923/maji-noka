@@ -9,9 +9,15 @@ class Item < BaseModel # rubocop:disable Style/Documentation
                 :postage,
                 :inventory,
                 :maji_flag,
-                :action
+                :action,
+                :image1,
+                :image2,
+                :iamge3,
+                :image4
 
   def create(params)
+    ## TODO：あとで消す
+    Rails.logger.debug "params---------------------------------#{params}"
     res = execute_api('item/create', params, method: 'post')
     convert_boolean(res)
   end
@@ -33,5 +39,26 @@ class Item < BaseModel # rubocop:disable Style/Documentation
 
   def delete # rubocop:disable Lint/DuplicateMethods
     execute_api('item/delete', {id: @id}, method: 'post')
+  end
+
+  private
+  def item_params
+    images = []
+    (1..4).each do |num|
+      images.push("@image#{num}")
+    end
+    ## TODO：あとで消す
+    Rails.logger.debug "images---------------------------------#{images}"
+    images.push(@images)
+    {
+      name: @name,
+      price: @price,
+      description: @description,
+      postage: @postage,
+      inventory: @inventory,
+      maji_flag: @maji_flag,
+      action: @action,
+      images: images
+      }
   end
 end

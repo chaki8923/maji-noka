@@ -4,32 +4,32 @@
   <%= form_for @item_instance, url: {action: :create}, multipart: true do |f| %>
     <%=  f.hidden_field :action , value: :create %>
     <div class="mb-3">
-      <%= f.label :name,class: 'form-label' %>
-      <%=  f.text_field :name, placeholder: '商品名',required: true,class: 'form-control' %>
+      <%= f.label :name, "商品名", class: 'form-label' %>
+      <%=  f.text_field :name, placeholder: '',required: true,class: 'form-control' %>
     </div>
     <div class="mb-3">
-      <%= f.label :price,class: 'form-label' %>
-      <%=  f.text_field :price, placeholder: '値段',required: true,class: 'form-control' %>
+      <%= f.label :price, "値段" ,class: 'form-label' %>
+      <%=  f.text_field :price, placeholder: '',required: true,class: 'form-control' %>
     </div>
     <div class="mb-3">
-      <%= f.label :postage,class: 'form-label' %>
+      <%= f.label :postage, "送料", class: 'form-label' %>
       <%=  f.text_field :postage,class: 'form-control' %>
     </div>
     <div class="mb-3">
-      <%= f.label :inventory,class: 'form-label' %>
+      <%= f.label :inventory, "在庫", class: 'form-label' %>
       <%=  f.text_field :inventory, class: 'form-control' %>
     </div>
     <div class="mb-3">
-      <%= f.label :maji_flag,class: 'form-label' %>
+      <%= f.label :maji_flag, "おすすめ表示",class: 'form-label' %>
       <%=  f.check_box :maji_flag %>
     </div>
     <div class="mb-3">
-      <%= f.label :description,class: 'form-label' %>
+      <%= f.label :description, "アピールコメント", class: 'form-label' %>
       <%=  f.text_area :description,class: 'form-control' %>
     </div>
     <% (1..4).each_with_index do |num, idx| %>
       <div class="mb-3">
-        <%= f.label :image,class: "form-label#{num}" %><span>バイト数:</span><span class="js-byte-preview<%= num %>"></span>
+        <%= f.label :image, "商品画像",class: "form-label#{num}" %><span>(バイト数:</span><span class="js-byte-preview<%= num %>">)</span>
         <%= f.file_field "image#{num}".to_sym ,include_hidden: false, class: "form-control js-input-#{num}" %>
         <img src="" alt="" class="js-previewImage-<%= num %> preview-format">
       </div>

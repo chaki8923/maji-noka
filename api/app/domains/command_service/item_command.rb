@@ -15,6 +15,7 @@ class ItemCommand # rubocop:disable Style/Documentation
         description: item.description.value,
         postage: item.postage.value,
         inventory: item.inventory.value,
+        images_count: item.images.value.size,
         maji_flag: item.maji_flag.value,
         updated_at: 'NOW()',
         created_at: 'NOW()'
@@ -48,7 +49,7 @@ class ItemCommand # rubocop:disable Style/Documentation
       description: item.description.value,
       postage: item.postage.value,
       inventory: item.inventory.value,
-      maji_flag: item.maji_flag.value,
+      maji_flag: item.maji_flag.value
       updated_at: 'NOW()',
       created_at: 'NOW()'
     }

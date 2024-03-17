@@ -16,129 +16,140 @@ const month = intMonth.toString().padStart(2, "0");
 const day = date.getDate().toString().padStart(2, "0");
 
 
-if(location.protocol === "https:"){
+if (location.protocol === "https:") {
   var link = location.protocol + "//" + location.hostname + "/item/index";
-}else if(location.protocol === "http:"){
+} else if (location.protocol === "http:") {
   var link = location.protocol + "//" + location.hostname + ":3000" + "/item/index";
 }
 
-if(document.getElementById("calendar") != null){
-  
-  $(function(){
+if (document.getElementById("calendar") != null) {
+
+  $(function () {
     var email = $("#calendar").data('email');
-    console.log('入った', email);
-    function get_user(email){
+    function get_user(email) {
       return $.ajax({
-          type: 'GET',
-          url: '/calendar/get',
-          dataType : "json",
-          data:{
-            email: email
+        type: 'GET',
+        url: '/calendar/get',
+        dataType: "json",
+        data: {
+          email: email
+        }
+      })
+    }
+
+    function schedule_index() {
+      return $.ajax({
+        type: 'GET',
+        url: '/schedule/index',
+        dataType: "json",
+
+      })
+    }
+
+    function convertToJsDateFormat(date) {
+
+      // Dateオブジェクトに変換
+      const schedule_date = new Date(date);
+
+      // ISO 8601形式の文字列に変換
+      let isoString = schedule_date.toISOString();
+
+      // 不要な部分を削除
+      isoString = isoString.replace(/\.\d{3}Z$/, '');
+
+      return isoString; // 期待値: "2024-03-06T17:47:00"
+    }
+
+    schedule_index().done(function (schedules) {
+
+      const scheduleArray = [];
+      console.log('schedules', schedules);
+
+      schedules.forEach(schedule => {
+        const newItem = {
+          id: schedule.id,
+          title: schedule.title,
+          start: convertToJsDateFormat(schedule.start_time),
+          end: convertToJsDateFormat(schedule.end_time),
+          constraint: schedule.memo,
+          extendedProps: {
+            date: schedule.schedule_date
           }
-        })
-    }
-
-    function item_index(){
-      return $.ajax({
-          type: 'GET',
-          url: '/item/index',
-          dataType : "json",
-          
-        })
-    }
-
-  get_user(email).done(function (res) {
-
-  var calendar = new FullCalendar.Calendar(calendarEl, {
-    plugins: [ 'interaction', 'dayGrid', 'timeGrid', 'list' ],
-    header: {
-      left: 'prev,next today',
-      center: 'title',
-      right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
-    },
-    defaultDate: `${year}-${month}-${day}`,
-    navLinks: true, // can click day/week names to navigate views
-    businessHours: true, // display business hours
-    editable: true,
-    dateClick: (e)=>{// 日付マスのクリックイベント
-    console.log("dateClick:", e);
-    },
-    eventClick: (e)=>{// イベントのクリックイベント
-      location.replace(link);
-      console.log("eventClick:", e.event);
-    },
-    eventDidMount: (e)=>{// カレンダーに配置された時のイベント
-      console.log('マウスオーバー');
-      tippy(e.el, {// TippyでTooltipを設定する
-        content: e.event.extendedProps.description,
+        };
+        scheduleArray.push(newItem);
       });
-    },
-    events: [
-      {
-        title: 'Business Lunch',
-        start: '2019-08-03T13:00:00',
-        constraint: 'businessHours'
-      },
-      {
-        title: 'Meeting',
-        start: '2019-08-13T11:00:00',
-        constraint: 'availableForMeeting', // defined below
-        color: '#257e4a'
-      },
-      {
-        title: res.email,
-        start: '2023-02-18',
-        end: '2023-02-19',
-        description: "悪い鬼を追い払い福を招く",// イベントの詳細
-        backgroundColor: "red",// 背景色
-        borderColor: "red",// 枠線色
-        editable: true//
-      },
-      {
-        title: 'Party',
-        start: '2019-08-29T20:00:00'
-      },
 
-      // areas where "Meeting" must be dropped
-      {
-        groupId: 'availableForMeeting',
-        title: 'Party',
-        start: '2023-02-11T10:00:00',
-        end: '223-02-11T16:00:00',
-        rendering: 'background'
-      },
-      {
-        title: 'Birthday',
-        start: '2023-01-28T10:00:00',
-        end: '2023-01-28T16:00:00',
-        color: '#ff9f89',
-        backgroundColor: "green",// 背景色
-        borderColor: "#333",// 枠線色
-        editable: true//
+      function timeFormat(schedule_date) {
 
-      },
+        var dateTime = new Date(schedule_date);
 
-      // red areas where no events can be dropped
-      {
-        start: '2019-08-24',
-        end: '2019-08-28',
-        overlap: false,
-        rendering: 'background',
-        color: '#ff9f89'
-      },
-      {
-        start: '2019-08-06',
-        end: '2019-08-08',
-        overlap: false,
-        rendering: 'background',
-        color: '#ff9f89'
+        // 時間部分を取得
+        var hours = dateTime.getHours();
+        var minutes = dateTime.getMinutes();
+
+        // 時間部分のフォーマットを作成（HH:mm形式）
+        var timeString = ("0" + hours).slice(-2) + ":" + ("0" + minutes).slice(-2);
+        return timeString;
       }
-    ]
-  });
-  calendar.render();
-  }).fail(function (result) {
-    console.log('エラーが発生しました。運営に問い合わせてください。');
-  });
+
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        plugins: ['interaction', 'dayGrid', 'timeGrid', 'list'],
+        header: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+        },
+        defaultDate: `${year}-${month}-${day}`,
+        navLinks: true, // can click day/week names to navigate views
+        businessHours: true, // display business hours
+        editable: true,
+        nowIndicator: true,
+        locale: 'local',
+        buttonText: {
+          today: '今日',
+          month: '月',
+          week: '週',
+          day: '日',
+          list: '一覧'
+        },
+        dateClick: (e) => {// 日付マスのクリックイベント
+          // $(".date_modal").click();
+          $('.date_modal').trigger('click');
+          $('.date-form').val(e.dateStr)
+        },
+        eventClick: (e) => {// イベントのクリックイベント
+          $('.date_modal_edit').trigger('click');
+          $('.date-form').val(e.event.extendedProps.date);
+          var startTime = timeFormat(e.event.start);
+          var endTime = timeFormat(e.event.end);
+
+          $('#schedule_id').val(e.event.id);
+          $('.edit_start_time').val(startTime);
+          $('.edit_end_time').val(endTime);
+          $('.edit_title').val(e.event.title);
+          $('.edit_memo').val(e.event.constraint);
+
+        },
+        eventDidMount: (e) => {// カレンダーに配置された時のイベント
+          tippy(e.el, {// TippyでTooltipを設定する
+            content: e.event.extendedProps.description,
+          });
+        },
+        events: [
+          // {
+          //   id: 1,
+          //   title: "サンプル",
+          //   start: "2024-03-20T12:00:00",
+          //   end: "2024-03-20T00:13:00",
+          //   constraint: "テスト用す",
+          // },
+          ...scheduleArray
+        ]
+      });
+      calendar.render();
+    }).fail(function (result) {
+      console.log('エラーが発生しました。運営に問い合わせてください。');
+    });
 
   })
 }

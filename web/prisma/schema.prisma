@@ -30,6 +30,17 @@ model items {
   created_at  DateTime                                  // 作成日時 (timestamp with time zoneに相当)
   updated_at  DateTime                                  // 更新日時 (timestamp with time zoneに相当)
 }
+model schedules {
+  id          Int       @id @default(autoincrement())   // id (BIGSERIALに相当)
+  title        String                                  // 商品名 (textに相当)
+  memo        String?                               // 説明 (textに相当)
+  start_time  DateTime?                              // 説明 (textに相当)
+  end_time    DateTime?                               // 説明 (textに相当)
+  schedule_date    DateTime                            // 説明 (textに相当)
+  deleted_at  DateTime?                                 // 削除日時 (timestamp with time zoneに相当、NULLを許可)
+  created_at  DateTime                                  // 作成日時 (timestamp with time zoneに相当)
+  updated_at  DateTime                                  // 更新日時 (timestamp with time zoneに相当)
+}
 
 model admin_users {
   id          BigInt      @id @default(autoincrement())   // id (BIGSERIALに相当)

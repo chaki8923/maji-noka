@@ -4,4 +4,8 @@
 <% if  flash[:alert].present? %>
   <p class="alert-line js-toggle-msg"><%= flash[:alert] %></p>
 <% end %>
+<%= render 'layouts/error', model: @schedule_instance %>
 <div id="calendar" class="mt-5"  data-email=<%= session[:user][:email]%>></div>
+
+<%= render 'admin_user/modal/schedule_create', locals: { schedule_instance: @schedule_instance } %>
+<%= render 'admin_user/modal/schedule_edit', locals: { schedule_instance: @schedule_instance } %>

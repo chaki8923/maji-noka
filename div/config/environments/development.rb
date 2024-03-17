@@ -10,7 +10,7 @@ Rails.application.configure do
   config.hosts << 'div-maji'
   # Do not eager load code on boot.
   config.eager_load = false
-  config.web_console.whitelisted_ips = '172.19.0.1'
+  config.web_console.whitelisted_ips = '127.0.0.0/8', '::1'
   # Show full error reports.
   config.consider_all_requests_local = true
 
