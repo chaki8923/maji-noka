@@ -3,7 +3,8 @@
 class SchedulesController < ApplicationController # rubocop:disable Style/Documentation
 
   def create
-    schedule = Schedule.new(schedule_params)
+    convert_params = format_date(schedule_params)
+    schedule = Schedule.new(convert_params)
     res = schedule.create(schedule)
     render json: { value: nil, success_message: SystemMessage::API_SUCCESS }
   rescue => err_message

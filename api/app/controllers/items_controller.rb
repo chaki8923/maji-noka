@@ -1,6 +1,7 @@
 # frozen_string_literal: true
-
+require 'sequel'
 class ItemsController < ApplicationController # rubocop:disable Style/Documentation
+  DB = Sequel.connect(Rails.configuration.x.sequel[:db])
   Dotenv.load
   ACCESS_KEY = ENV.fetch('ACCESS_KEY_ID', nil)
   SECRET_KEY = ENV.fetch('SECRET_ACCESS_KEY', nil)
@@ -23,10 +24,14 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
   def update
     item = Item.new(item_params)
     s3resource = get_s3_resource(ACCESS_KEY, SECRET_KEY, REGION)
+
     res = item.update(item)
     item_images_upload(item_params, s3resource, res.first[:id])
+    image_count = object_count(res.first[:id])
+    item.update_image_count(res.first[:id], image_count)
     render json: { value: nil, success_message: SystemMessage::API_SUCCESS }
   rescue => err_message
+    Rails.logger.debug "err_message---------------------------------#{err_message}"
     render json: {value: nil, err_message: err_message}, status: :internal_server_error
   end
 
@@ -159,14 +164,14 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
   end
 
   def s3_upload(s3resource, key, file_path)
+    image_data = File.binread(file_path)
     s3resource.bucket(BUCKET).object(key).upload_file(file_path)
   end
 
   def s3_delete(s3resource, key)
     bucket = s3resource.bucket(BUCKET)
     target_s3_directory = bucket.objects({prefix: key})
-    ## TODO：あとで消す
-    Rails.logger.debug "key---------------------------------#{key}"
+
     target_s3_directory.batch_delete!
   rescue Aws::S3::Errors::ServiceError => e
     render json: {value: nil, err_message: "オブジェクトの削除中にエラーが発生しました：#{e.message}"}, status: :not_found
@@ -190,10 +195,19 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
     false
   end
 
+  def object_count(id)
+    aws_config_update
+    s3 = Aws::S3::Client.new
+    resp = s3.list_objects_v2(bucket: BUCKET, prefix: "item/#{id}/")
+
+    resp.key_count
+  end
+
   def aws_config_update
     Aws.config.update({
                         region: REGION,
                         credentials: Aws::Credentials.new(ACCESS_KEY, SECRET_KEY)
                       })
   end
+
 end

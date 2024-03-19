@@ -74,6 +74,12 @@ class Item # rubocop:disable Style/Documentation
     raise e
   end
 
+  def update_image_count(id, count)
+    @idc.update_image_count(id, count)
+  rescue StandardError => e
+    raise e
+  end
+
 
   class << self
     def index

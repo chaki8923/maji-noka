@@ -22,7 +22,7 @@ model items {
   price       Int                                    // 値段
   description String                                  // 説明 (textに相当)
   category_id Int?
-  images      String[]                            
+  image_count     Int                        
   maji_flag   Boolean   @default(false)
   postage     Int?
   inventory   Int?
@@ -50,6 +50,7 @@ model admin_users {
   created_at  DateTime                                  // 作成日時 (timestamp with time zoneに相当)
   updated_at  DateTime                                  // 更新日時 (timestamp with time zoneに相当)
 }
+
 
 model Account {
   id                 String  @id @default(cuid())
