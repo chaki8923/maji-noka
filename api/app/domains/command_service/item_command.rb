@@ -15,7 +15,7 @@ class ItemCommand # rubocop:disable Style/Documentation
         description: item.description.value,
         postage: item.postage.value,
         inventory: item.inventory.value,
-        images_count: item.images.value.size,
+        image_count: item.images.value.count,
         maji_flag: item.maji_flag.value,
         updated_at: 'NOW()',
         created_at: 'NOW()'
@@ -40,6 +40,14 @@ class ItemCommand # rubocop:disable Style/Documentation
       .delete
   end
 
+  def update_image_count(id, count)
+    DB[:items]
+    .where(
+      id: id
+    )
+    .update(image_count: count)
+  end
+
   private
 
   def update_params(item)
@@ -49,7 +57,7 @@ class ItemCommand # rubocop:disable Style/Documentation
       description: item.description.value,
       postage: item.postage.value,
       inventory: item.inventory.value,
-      maji_flag: item.maji_flag.value
+      maji_flag: item.maji_flag.value,
       updated_at: 'NOW()',
       created_at: 'NOW()'
     }

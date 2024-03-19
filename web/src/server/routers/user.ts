@@ -2,9 +2,10 @@ import { PrismaClient } from "@prisma/client";
 import { z } from "zod";
 import { createInput } from "../types/user";
 import { procedure, router } from "../trpc";
+import prisma from '../../../lib/prismadb'
 
 // 新しいPrismaClientインスタンスを作成します。
-const prisma = new PrismaClient();
+// const prisma = new PrismaClient();
 
 // 新しいrouterを作成します。
 export const userRouter = router({
