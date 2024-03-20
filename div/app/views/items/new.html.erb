@@ -12,6 +12,10 @@
       <%=  f.text_field :price, placeholder: '',required: true,class: 'form-control' %>
     </div>
     <div class="mb-3">
+      <%= f.label :category_id, "カテゴリー" ,class: 'form-label' %>
+      <%= f.select :category_id, @categories.map { |option| [option[:name], option[:id]] }, {include_blank: '選択してください'}, { class: 'form-select' } %>
+    </div>
+    <div class="mb-3">
       <%= f.label :postage, "送料", class: 'form-label' %>
       <%=  f.text_field :postage,class: 'form-control' %>
     </div>

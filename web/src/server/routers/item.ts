@@ -30,6 +30,7 @@ export const itemRouter = router({
       // 指定されたIDのitemをデータベースから取得します。
       const item = await prisma.items.findUnique({
         where: { id: input.id },
+        include: { category: { select: { name: true } } }
       });
       
       // itemが見つからない場合、エラーをスローします。

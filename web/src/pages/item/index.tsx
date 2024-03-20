@@ -4,7 +4,7 @@ import { getImageUrl } from '../../pages/awsImageOperations';
 import Link from "next/link";
 import { SearchForm } from "../_component/searchForm";
 import { useSearchParams } from "next/navigation";
-import { Card, Spinner } from 'flowbite-react';
+import { Card, Spinner, Badge } from 'flowbite-react';
 
 
 
@@ -36,7 +36,6 @@ export default function Items() {
     const result = items.data.filter((item) =>
       item.name.toLowerCase().includes(keyword.toLowerCase())
     );
-    console.log("result", result);
   }
 
   return (
@@ -48,8 +47,11 @@ export default function Items() {
             <Card
               className="max-w-sm"
             >
-              <div className='text-center'>
+              <div className='text-center relative'>
                 <img src={imageUrls[idx]} alt="" className='h-48 object-contain w-full'/>
+                {item.maji_flag && (
+                <Badge color="pink" className='absolute bottom-0 p-2 border-gray-50 border-2 animate-bounce'>New</Badge>
+                )}
               </div>
               <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
                 {item.name}

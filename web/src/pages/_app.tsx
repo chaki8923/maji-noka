@@ -4,6 +4,7 @@ import Header from "./_component/header";
 import type { AppProps, AppType } from 'next/app';
 import { trpc } from '../utils/trpc';
 import "../../styles/globals.css"
+import './item/styles.css';
 
 
 function MyApp({ Component, pageProps }: AppProps<{

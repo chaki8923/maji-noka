@@ -90,6 +90,7 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
       :inventory,
       :maji_flag,
       :action,
+      :category_id,
       images: []
     )
   end
