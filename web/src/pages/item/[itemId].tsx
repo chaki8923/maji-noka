@@ -3,16 +3,15 @@ import React, { useState, useCallback, useRef, useEffect } from 'react'; // useC
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { Card, Spinner } from 'flowbite-react';
-import { Autoplay, Navigation, Pagination, Thumbs, FreeMode } from "swiper/modules";
-import { Swiper, SwiperSlide, SwiperClass, SwiperRef } from "swiper/react";
+import { Autoplay, Navigation, Pagination, Thumbs, FreeMode, EffectFade } from "swiper/modules";
+import { Swiper, SwiperSlide, SwiperClass } from "swiper/react";
 import { getImageUrl } from '../../pages/awsImageOperations';
 
 import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
-
-import './styles.css';
+import "swiper/css/effect-fade";
 
 
 export default function Item() {
@@ -40,7 +39,7 @@ export default function Item() {
     }
   }, [data]);
 
-  console.log("imageUrls");
+  console.log("data", data);
 
 
   const slideSettings = {
@@ -63,13 +62,14 @@ export default function Item() {
     <div className='flex justify-around'>
       <div className='item-container'>
         <Swiper
-          modules={[Navigation, Pagination, Autoplay, Thumbs]}
+          modules={[Navigation, Pagination, Autoplay, Thumbs, EffectFade]}
           thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
           slidesPerView={1} // ハイドレーションエラー対策
-          effect={'fade'}
           loop={true}
+          effect={"fade"}
+          fadeEffect={{ crossFade: true }}
           autoplay={{
-            delay: 2500,
+            delay: 3500,
             disableOnInteraction: false,
           }}
           speed={1000} // スライドが切り替わる時の速度
@@ -77,7 +77,7 @@ export default function Item() {
           pagination={{
             clickable: true,
           }} // ページネーション, クリックで対象のスライドに切り替わる
-          className="mySwiper2"
+          className="mainSwiper "
         >
           {imageUrls.map((src: string, index: number) => (
             <SwiperSlide key={index} className='main-inner-slide'>
@@ -91,35 +91,39 @@ export default function Item() {
           slidesPerView={data.image_count}
           watchSlidesProgress={true}
           modules={[FreeMode, Navigation, Thumbs]}
-          className="mySwiper"
+          className="subSwiper"
         >
           {/* なんかこうやんないとうまくいかん */}
           <SwiperSlide >
             <img src={imageUrls[0]} />
           </SwiperSlide>
           {data.image_count > 1 && (
-          <SwiperSlide >
-            <img src={imageUrls[1]} />
-          </SwiperSlide>
+            <SwiperSlide >
+              <img src={imageUrls[1]} />
+            </SwiperSlide>
           )}
           {data.image_count > 2 && (
-          <SwiperSlide >
-            <img src={imageUrls[2]} />
-          </SwiperSlide>
+            <SwiperSlide >
+              <img src={imageUrls[2]} />
+            </SwiperSlide>
           )}
           {data.image_count > 3 && (
-          <SwiperSlide >
-            <img src={imageUrls[3]} />
-          </SwiperSlide>
+            <SwiperSlide >
+              <img src={imageUrls[3]} />
+            </SwiperSlide>
           )}
-    
+
         </Swiper>
       </div>
-      <div className='item-description p-11'>
-        <h1 className='text-white'>Cmment</h1>
-        <p className='text-white'>{data.description}</p>
-        <h1 className='text-white'>Price</h1>
-        <p className='text-white'>{data.price}</p>
+      <div className='item-description'>
+        <div className="text-group mb-6">
+          <h2 className='text-white font-bold text-lg'>Cmment</h2>
+          <p className='text-white'>{data.description}</p>
+        </div>
+        <div className="text-group mb-6">
+          <h2 className='text-white font-bold text-lg'>Price</h2>
+          <p className='text-white'>{data.price}</p>
+        </div>
       </div>
     </div>
   );

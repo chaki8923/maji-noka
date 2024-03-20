@@ -9,6 +9,7 @@ class Item < BaseModel # rubocop:disable Style/Documentation
                 :postage,
                 :inventory,
                 :maji_flag,
+                :category_id,
                 :action,
                 :image1,
                 :image2,
@@ -47,8 +48,7 @@ class Item < BaseModel # rubocop:disable Style/Documentation
     (1..4).each do |num|
       images.push("@image#{num}")
     end
-    ## TODO：あとで消す
-    Rails.logger.debug "images---------------------------------#{images}"
+
     images.push(@images)
     {
       name: @name,
@@ -58,6 +58,7 @@ class Item < BaseModel # rubocop:disable Style/Documentation
       inventory: @inventory,
       maji_flag: @maji_flag,
       action: @action,
+      category_id: @category_id,
       images: images
       }
   end

@@ -28,4 +28,8 @@ Rails.application.routes.draw do
     post '/update', to: 'schedules#update'
     post '/delete', to: 'schedules#delete'
   end
+
+  scope 'categories' do
+    get '/index', to: 'categories#index'
+  end
 end
