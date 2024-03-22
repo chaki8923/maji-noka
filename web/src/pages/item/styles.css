@@ -43,7 +43,7 @@
 
 .mainSwiper {
   height: 480px;
-  width: 50%;
+  width: 65%;
   margin-bottom: 24px;
 }
 
@@ -73,9 +73,9 @@
 
 
 .item-container{
-  width: 50%;
+  width: 65%;
 }
 
 .item-description{
-  width: 35%;
+  width: 20%;
 }

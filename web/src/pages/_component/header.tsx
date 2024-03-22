@@ -5,17 +5,19 @@ import Link from "next/link";
 import { type Session } from "next-auth";
 import { signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
+import { SearchForm } from "./searchForm";
 
 const Header = () => {
 const { data: session }: any = useSession();
 
   return (
-    <header className="flex items-center justify-between bg-white p-4 shadow-md">
+    <header className="flex items-center justify-between bg-white p-4 shadow-md mb-12">
       <div className="mr-40">
         <Link href="/" className="text-black">
           Maji-Noka
         </Link>
       </div>
+      <SearchForm />
       <ul className="flex items-center space-x-4">
         {session ? (
           <>

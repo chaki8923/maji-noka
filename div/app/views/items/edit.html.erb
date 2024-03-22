@@ -12,12 +12,12 @@
       <%= f.label :price, "値段" ,class: 'form-label' %>
       <%=  f.text_field :price, value: @item[:price],required: true,class: 'form-control' %>
     </div>
-    
+
      <div class="mb-3">
       <%= f.label :category_id, "カテゴリー" ,class: 'form-label' %>
       <%= f.select :category_id, @categories.map { |option| [option[:name], option[:id]] }, { include_blank: '選択してください', selected: @item[:category_id] }, { class: 'form-select', id: 'category_id' } %>
     </div>
-    
+
     <div class="mb-3">
       <%= f.label :postage, "送料",class: 'form-label' %>
       <%=  f.text_field :postage, value: @item[:postage],class: 'form-control' %>
@@ -28,7 +28,7 @@
     </div>
     <div class="mb-3">
       <%= f.label :maji_flag, "おすすめ表示",class: 'form-label' %>
-      <%=  f.check_box :maji_flag %>
+      <%=  f.check_box :maji_flag, checked:  @item[:maji_flag] %>
     </div>
     <div class="mb-3">
       <%= f.label :description,"アピールコメント", class: 'form-label' %>

@@ -1,7 +1,8 @@
 import { trpc } from '../../utils/trpc';
 import React, { useState, useCallback, useRef, useEffect } from 'react'; // useCallbackをインポート
 import { useRouter } from "next/router";
-import Link from "next/link";
+import Payment from "../_component/paymentButton";
+import Sidebar from "../_component/sideBar";
 import { Card, Spinner } from 'flowbite-react';
 import { Autoplay, Navigation, Pagination, Thumbs, FreeMode, EffectFade } from "swiper/modules";
 import { Swiper, SwiperSlide, SwiperClass } from "swiper/react";
@@ -38,20 +39,7 @@ export default function Item() {
       fetchImageUrls();
     }
   }, [data]);
-
-  console.log("data", data);
-
-
-  const slideSettings = {
-    0: {
-      slidesPerView: 1,
-      spaceBetween: 10,
-    },
-    1024: {
-      slidesPerView: 2,
-      spaceBetween: 10,
-    },
-  };
+  2
 
   if (!data) {
     return <div className='flex fixed justify-center top-48'> <Spinner color="info" aria-label="Info spinner example" /></div>;
@@ -59,13 +47,13 @@ export default function Item() {
 
 
   return (
-    <div className='flex justify-around'>
+    <div className='flex pt-3 overflow-hidden'>
+      <Sidebar />
       <div className='item-container'>
         <Swiper
           modules={[Navigation, Pagination, Autoplay, Thumbs, EffectFade]}
           thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
-          slidesPerView={1} // ハイドレーションエラー対策
-          loop={true}
+          slidesPerView={1}
           effect={"fade"}
           fadeEffect={{ crossFade: true }}
           autoplay={{
@@ -83,6 +71,7 @@ export default function Item() {
             <SwiperSlide key={index} className='main-inner-slide'>
               <img src={src} />
             </SwiperSlide>
+
           ))}
         </Swiper>
         <Swiper
@@ -115,14 +104,29 @@ export default function Item() {
 
         </Swiper>
       </div>
-      <div className='item-description'>
+      <div className='item-description p-3'>
+        <div className="text-group mb-6">
+          <h2 className='text-white font-bold text-lg'>Name</h2>
+          <p className='text-white'>{data.name}</p>
+        </div>
         <div className="text-group mb-6">
           <h2 className='text-white font-bold text-lg'>Cmment</h2>
           <p className='text-white'>{data.description}</p>
         </div>
         <div className="text-group mb-6">
           <h2 className='text-white font-bold text-lg'>Price</h2>
-          <p className='text-white'>{data.price}</p>
+          <p className='text-white'>{data.price.toLocaleString()}円</p>
+        </div>
+        <div className="text-group mb-6">
+          <h2 className='text-white font-bold text-lg'>Category</h2>
+          <p className='text-white'>{data.category.name}</p>
+        </div>
+        <div className="text-group mb-6">
+          <h2 className='text-white font-bold text-lg'>在庫</h2>
+          <p className='text-white'>{data.inventory}個</p>
+        </div>
+        <div className="text-group mb-6">
+          <Payment />
         </div>
       </div>
     </div>

@@ -2,7 +2,7 @@ import { trpc } from '../../utils/trpc';
 import React, { useState, useEffect } from 'react';
 import { getImageUrl } from '../../pages/awsImageOperations';
 import Link from "next/link";
-import { SearchForm } from "../_component/searchForm";
+import Sidebar from "../_component/sideBar";
 import { useSearchParams } from "next/navigation";
 import { Card, Spinner, Badge } from 'flowbite-react';
 
@@ -39,26 +39,26 @@ export default function Items() {
   }
 
   return (
-    <>
-      <SearchForm />
-      <div className="grid gap-2 lg:grid-cols-4">
+    <div className='flex'>
+      <Sidebar />
+      <div className="grid gap-2 lg:grid-cols-4 ml-6">
         {items.data.map((item, idx) => (
           <Link href={`item/${item.id}`} key={item.id}>
             <Card
               className="max-w-sm"
             >
               <div className='text-center relative'>
-                <img src={imageUrls[idx]} alt="" className='h-48 object-contain w-full'/>
+                <img src={imageUrls[idx]} alt="" className='h-48 object-contain w-full' />
                 {item.maji_flag && (
-                <Badge color="pink" className='absolute bottom-0 p-2 border-gray-50 border-2 animate-bounce'>New</Badge>
+                  <Badge color="pink" className='absolute bottom-0 p-2 border-gray-50 border-2 animate-bounce'>New</Badge>
                 )}
               </div>
               <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
                 {item.name}
               </h5>
-              <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
+              <p className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white font-light text-base">
                 {item.description}
-              </h5>
+              </p>
               <div className="mb-5 mt-2.5 flex items-center">
               </div>
               <div className="flex items-center justify-between">
@@ -68,6 +68,6 @@ export default function Items() {
           </Link>
         ))}
       </div>
-    </>
+    </div>
   );
 }
