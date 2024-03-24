@@ -56,7 +56,7 @@ export default function Items() {
               <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
                 {item.name}
               </h5>
-              <p className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white font-light text-base">
+              <p className="tracking-tight text-gray-900 dark:text-white font-light text-base">
                 {item.description}
               </p>
               <div className="mb-5 mt-2.5 flex items-center">
