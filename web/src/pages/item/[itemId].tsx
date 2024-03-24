@@ -1,9 +1,9 @@
 import { trpc } from '../../utils/trpc';
-import React, { useState, useCallback, useRef, useEffect } from 'react'; // useCallbackをインポート
+import React, { useState, useEffect } from 'react'; // useCallbackをインポート
 import { useRouter } from "next/router";
 import Payment from "../_component/paymentButton";
 import Sidebar from "../_component/sideBar";
-import { Card, Spinner } from 'flowbite-react';
+import { Spinner } from 'flowbite-react';
 import { Autoplay, Navigation, Pagination, Thumbs, FreeMode, EffectFade } from "swiper/modules";
 import { Swiper, SwiperSlide, SwiperClass } from "swiper/react";
 import { getImageUrl } from '../../pages/awsImageOperations';
@@ -126,7 +126,7 @@ export default function Item() {
           <p className='text-white'>{data.inventory}個</p>
         </div>
         <div className="text-group mb-6">
-          <Payment />
+          <Payment item={data}/>
         </div>
       </div>
     </div>
