@@ -1,9 +1,11 @@
 import { trpc } from '../../utils/trpc';
-import React, { useState, useEffect } from 'react'; // useCallbackをインポート
+import React, { useState, useEffect } from 'react';
+import { useCart } from "../../hooks/useCart";
 import { useRouter } from "next/router";
 import Payment from "../_component/paymentButton";
 import Sidebar from "../_component/sideBar";
-import { Spinner } from 'flowbite-react';
+import { Spinner, Select, Button } from 'flowbite-react';
+import { CartItem } from '@/src/types';
 import { Autoplay, Navigation, Pagination, Thumbs, FreeMode, EffectFade } from "swiper/modules";
 import { Swiper, SwiperSlide, SwiperClass } from "swiper/react";
 import { getImageUrl } from '../../pages/awsImageOperations';
@@ -18,19 +20,22 @@ import "swiper/css/effect-fade";
 export default function Item() {
   const router = useRouter();
   const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [orderQuantity, setorderQuantity] = useState<number>(1);
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null);
-  const id = typeof router.query.itemId === 'string' ? parseInt(router.query.itemId, 10) : null;
-  const { data } = trpc.item.getItemById.useQuery({
-    id: id ?? 0, // idがnullの場合は0を使用
+  const itemId = typeof router.query.itemId === 'string' ? parseInt(router.query.itemId, 10) : null;
+  const { cart, addCart, removeCart } = useCart();
+
+  const { data } = trpc.item.getItemById.useQuery<CartItem>({
+    id: itemId ?? 0, // idがnullの場合は0を使用
   }, {
-    enabled: id !== null, // idがnullでない場合にのみクエリを実行
+    enabled: itemId !== null, // idがnullでない場合にのみクエリを実行
   });
+
   useEffect(() => {
-    if (data && id !== null) {
+    if (data && itemId !== null) {
       const fetchImageUrls = async () => {
         const imagesAry = [];
         for (let index = 0; index < data.image_count; index++) {
-
           const urls = await getImageUrl('maji-image', `item/${data.id}/item_image_${index}_${data.id}`, 3600);
           imagesAry.push(urls)
         }
@@ -39,10 +44,17 @@ export default function Item() {
       fetchImageUrls();
     }
   }, [data]);
-  2
+
+
+  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const quantity = parseInt(event.target.value, 10); //数値に変換
+    console.log(quantity);
+
+    setorderQuantity(quantity); // 選択された値をステートに設定
+  }
 
   if (!data) {
-    return <div className='flex fixed justify-center top-48'> <Spinner color="info" aria-label="Info spinner example" /></div>;
+    return <div className='flex fixed justify-center top-48 w-full'> <Spinner color="info" aria-label="Info spinner example" /></div>;
   }
 
 
@@ -82,25 +94,11 @@ export default function Item() {
           modules={[FreeMode, Navigation, Thumbs]}
           className="subSwiper"
         >
-          {/* なんかこうやんないとうまくいかん */}
-          <SwiperSlide >
-            <img src={imageUrls[0]} />
-          </SwiperSlide>
-          {data.image_count > 1 && (
-            <SwiperSlide >
-              <img src={imageUrls[1]} />
+          {imageUrls.map((src: string, index: number) => (
+            <SwiperSlide key={index}>
+              <img src={src} />
             </SwiperSlide>
-          )}
-          {data.image_count > 2 && (
-            <SwiperSlide >
-              <img src={imageUrls[2]} />
-            </SwiperSlide>
-          )}
-          {data.image_count > 3 && (
-            <SwiperSlide >
-              <img src={imageUrls[3]} />
-            </SwiperSlide>
-          )}
+          ))}
 
         </Swiper>
       </div>
@@ -119,14 +117,30 @@ export default function Item() {
         </div>
         <div className="text-group mb-6">
           <h2 className='text-white font-bold text-lg'>Category</h2>
-          <p className='text-white'>{data.category.name}</p>
+          <p className='text-white'>{data.categoryName}</p>
         </div>
         <div className="text-group mb-6">
           <h2 className='text-white font-bold text-lg'>在庫</h2>
           <p className='text-white'>{data.inventory}個</p>
         </div>
         <div className="text-group mb-6">
-          <Payment item={data}/>
+          <h2 className='text-white font-bold text-lg'>注文数</h2>
+          <Select id="countries" required value={orderQuantity} onChange={handleChange}>
+            {Array.from({ length: 10 }, (_, i) => i).map((number) => (
+              <option key={number}>{number + 1}</option>
+            ))}
+          </Select>
+        </div>
+        <div className="text-group mb-6">
+          <Payment item={data} quantity={orderQuantity} />
+        </div>
+        <div className="mt-2">
+          <Button color="blue" onClick={() => addCart(data, orderQuantity)}>
+            カートに入れる
+          </Button>
+          <Button onClick={() => router.push('/cart')}>
+            カートへ
+          </Button>
         </div>
       </div>
     </div>

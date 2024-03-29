@@ -2,6 +2,7 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Items from "./item/index";
+import Slider from "./_component/slider";
 import { Spinner } from "flowbite-react";
 
 
@@ -18,6 +19,7 @@ export default function IndexPage() {
     case "authenticated":
       return (
         <>
+        <Slider />
         <Items />
         </>
       );

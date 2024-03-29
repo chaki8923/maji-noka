@@ -28,9 +28,7 @@ export default function Items() {
   }, [items.data]);
 
   if (!items.data) {
-    return (
-      <Spinner color="info" aria-label="Info spinner example" />
-    )
+    return <div className='flex fixed justify-center top-48 w-full'> <Spinner color="info" aria-label="Info spinner example" /></div>;
   }
   if (keyword) {
     const result = items.data.filter((item) =>
@@ -42,13 +40,13 @@ export default function Items() {
     <div className='flex'>
       <Sidebar />
       <div className="grid gap-2 lg:grid-cols-4 ml-6">
-        {items.data.map((item, idx) => (
+        {items.data.map((item) => (
           <Link href={`item/${item.id}`} key={item.id}>
             <Card
               className="max-w-sm"
             >
               <div className='text-center relative'>
-                <img src={imageUrls[idx]} alt="" className='h-48 object-contain w-full' />
+                <img src={imageUrls[0]} alt="" className='h-48 object-contain w-full' />
                 {item.maji_flag && (
                   <Badge color="pink" className='absolute bottom-0 p-2 border-gray-50 border-2 animate-bounce'>New</Badge>
                 )}
