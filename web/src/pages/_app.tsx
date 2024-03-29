@@ -15,7 +15,7 @@ function MyApp({ Component, pageProps }: AppProps<{
   return (
     <SessionProvider session={pageProps.session}>
       <Header />
-      <div className="flex">
+      <div>
         <Component {...pageProps} />
       </div>
     </SessionProvider>

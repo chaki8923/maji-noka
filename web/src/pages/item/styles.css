@@ -2,6 +2,13 @@
   height: 100%;
 }
 
+.swiper-button-next::after{
+  color: rgb(20, 19, 19);
+}
+.swiper-button-prev::after{
+  color: rgb(20, 19, 19);
+}
+
 
 .swiper {
   width: 100%;
@@ -78,4 +85,10 @@
 
 .item-description{
   width: 20%;
+}
+
+.topSwiper{
+  width: 100%;
+  height: 460px;
+  margin-bottom: 24px;
 }

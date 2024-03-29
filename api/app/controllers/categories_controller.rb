@@ -1,7 +1,5 @@
 # frozen_string_literal: true
-
 class CategoriesController < ApplicationController # rubocop:disable Style/Documentation
-
   def index
     res = Category.index
     render json: res
@@ -9,3 +7,4 @@ class CategoriesController < ApplicationController # rubocop:disable Style/Docum
 
   private
 end
+
