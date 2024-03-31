@@ -32,6 +32,14 @@ model items {
   updated_at  DateTime                                  
 }
 
+model sliders {
+  id          Int       @id @default(autoincrement())
+  images  Json
+  deleted_at  DateTime?                                 
+  created_at  DateTime                                  
+  updated_at  DateTime  
+}
+
 model schedules {
   id          Int       @id @default(autoincrement())   // id (BIGSERIALに相当)
   title        String                                  // 商品名 (textに相当)

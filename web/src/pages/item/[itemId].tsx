@@ -16,7 +16,6 @@ import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 import "swiper/css/effect-fade";
 
-
 export default function Item() {
   const router = useRouter();
   const [imageUrls, setImageUrls] = useState<string[]>([]);
@@ -24,6 +23,7 @@ export default function Item() {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null);
   const itemId = typeof router.query.itemId === 'string' ? parseInt(router.query.itemId, 10) : null;
   const { cart, addCart, removeCart } = useCart();
+
 
   const { data } = trpc.item.getItemById.useQuery<CartItem>({
     id: itemId ?? 0, // idがnullの場合は0を使用
@@ -48,8 +48,6 @@ export default function Item() {
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const quantity = parseInt(event.target.value, 10); //数値に変換
-    console.log(quantity);
-
     setorderQuantity(quantity); // 選択された値をステートに設定
   }
 
