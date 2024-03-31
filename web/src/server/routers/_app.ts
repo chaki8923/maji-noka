@@ -2,11 +2,13 @@ import { procedure, router } from '../trpc';
 import {itemRouter} from './item'
 import {userRouter} from './user'
 import {categoryRouter} from './category'
+import {sliderRouter} from './slider'
 
 export const appRouter = router({
   item: itemRouter,
   category: categoryRouter,
-  user: userRouter
+  user: userRouter,
+  slider: sliderRouter
 });
 
 // export type definition of API

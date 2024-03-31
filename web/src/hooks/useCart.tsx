@@ -24,7 +24,7 @@ export const useCart = () => {
       });
       setCart(newCart);
     } else {
-      setCart([...cart, { ...addedItem, quantity: 1 }]);
+      setCart([...cart, { ...addedItem, quantity: quantity }]);
     }
   };
 

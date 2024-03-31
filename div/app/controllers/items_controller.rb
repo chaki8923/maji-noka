@@ -53,9 +53,6 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
     @item = get_item(item_params, @item_instance)
     category_instance = Category.new
     @categories = category_instance.index
-    ## TODO:あとで消す
-    Rails.logger.debug "maji_flag---------------------------------#{item_params['maji_flag']}"
-    Rails.logger.debug "'maji_flag---------------------------------#{item_params['maji_flag'].to_i}"
     res = @item_instance.update(item_params)
     ## TODO：あとで消す
     Rails.logger.debug "update_res---------------------------------#{res.class}"

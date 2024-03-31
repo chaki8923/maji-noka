@@ -14,7 +14,6 @@ type PaymentProps = {
     image_count: number,
     maji_flag: boolean,
     postage: number | null,
-    deleted_at: string | null
   },
   quantity: number
 };

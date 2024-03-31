@@ -24,6 +24,14 @@ Rails.application.routes.draw do
     delete '/delete/:id', to: 'items#delete', as: 'delete_item'
   end
 
+  scope 'slider' do
+    get '/new', to: 'slider#new', as: 'slider_new'
+    post '/create', to: 'slider#create'
+    get '/index', to: 'slider#index', as: 'slider_index'
+    post '/update', to: 'slider#update'
+    delete '/delete/:id', to: 'slider#delete', as: 'slider_item'
+  end
+
   scope 'schedule' do
     get '/new', to: 'schedules#new'
     post '/create', to: 'schedules#create'

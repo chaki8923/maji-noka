@@ -3,7 +3,18 @@ import prisma from "../../../lib/prismadb";
 import { procedure, router } from "../trpc";
 import { updateInput } from "../types/items";
 import { CartItem } from "@/src/types";
-// 新しいPrismaClientインスタンスを作成します。
+
+// Date型
+function instanceToPlain(instance: any): any {
+  const plainObject: any = {};
+  // インスタンスのプロパティを列挙して、プレーンなJavaScriptオブジェクトにコピーする
+  for (const key in instance) {
+    if (instance.hasOwnProperty(key)) {
+      plainObject[key] = instance[key];
+    }
+  }
+  return plainObject;
+}
 
 // 新しいrouterを作成します。
 export const itemRouter = router({
@@ -35,16 +46,16 @@ export const itemRouter = router({
       if (!item) {
         throw new Error("item not found");
       }
+ 
 
       // 取得したitemをCartItemに変換して返します。
       const cartItem: CartItem = {
         ...item,
         categoryName: item.category?.name ?? "Unknown" ,
-        quantity: 0, // ここで適切な数量を設定してください
+        quantity: 0,
       };
-
       // 取得したitemを返します。
-      return cartItem;
+      return instanceToPlain(cartItem);
     }),
   // 特定のIDのitemを取得するクエリです。
   getItemByKeyword: procedure
@@ -74,7 +85,6 @@ export const itemRouter = router({
     }),
 
   updateItem: procedure.input(updateInput).mutation(async ({ input }) => {
-    console.log("UPDATE!!!");
 
     const { id, inventory } = input;
     const item = await prisma.items.update({

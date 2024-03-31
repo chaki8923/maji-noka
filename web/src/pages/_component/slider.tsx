@@ -1,5 +1,5 @@
 import { Autoplay, Navigation, Pagination, Thumbs, EffectFade } from "swiper/modules";
-
+import { trpc } from '../../utils/trpc';
 import React, { useRef, useState } from 'react';
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -10,6 +10,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
 export default function Slider() {
+    const { data } = trpc.slider.getItemById.useQuery({id: 1});
     return (
         <>
             <Swiper
