@@ -2,6 +2,9 @@ import { useRouter } from "next/router";
 import { trpc } from '../../utils/trpc';
 import { Button } from 'flowbite-react';
 import AlertToast from "./alertToast";
+import { useSession } from "next-auth/react";
+import { createCustomerId } from "../../feature/stripe/stripe";
+
 
 type PaymentProps = {
   item: {
@@ -22,7 +25,15 @@ type PaymentProps = {
 const Checkout: React.FC<PaymentProps> = ({ item, quantity }) => {
   const router = useRouter();
   // createTodoエンドポイントに対するmutationを生成
-  const updateTodoMutation = trpc.item.updateItem.useMutation();
+  const updateItemMutation = trpc.item.updateItem.useMutation();
+  const updateUserMutation = trpc.user.updateUser.useMutation();
+  const { data: session, status }: any = useSession();
+
+  
+  // ここでユーザ情報取得してcutomerIdをチェックアウトに渡し
+  const {data: userData} = trpc.user.getUserById.useQuery({id: session.user.id})
+  console.log("userData", userData);
+  
   const id = item.id
   // 在庫 - 注文数
   const inventory = item.inventory! - quantity
@@ -38,18 +49,22 @@ const Checkout: React.FC<PaymentProps> = ({ item, quantity }) => {
             productId,
             title: item.name,
             price: item.price,
-            quantity: quantity
+            quantity: quantity,
+            customerId: userData!.customerId
           }),
         }
       );
+        
 
       const responseData = await response.json();
-      if (responseData && responseData.checkout_url) {
-        console.log("session_id", responseData.session_id);
-        
+      if (responseData && responseData.checkout_url) {        
         sessionStorage.setItem("stripeSessionId", responseData.session_id);
-        //チェックアウト後のURL遷移先
-        await updateTodoMutation.mutateAsync({ id, inventory });
+        const customer = await createCustomerId({ user: session.user });
+        console.log("customer", customer);
+        if (customer){
+          await updateItemMutation.mutateAsync({ id, inventory });
+          await updateUserMutation.mutateAsync({ id: session.user.id, customerId: customer!.id });
+        }
         router.push(responseData.checkout_url);
       } else if(inventory > 0) {
         return (
