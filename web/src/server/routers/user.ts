@@ -1,6 +1,5 @@
-import { PrismaClient } from "@prisma/client";
 import { z } from "zod";
-import { createInput } from "../types/user";
+import { createInput, updateInput } from "../types/user";
 import { procedure, router } from "../trpc";
 import prisma from '../../../lib/prismadb'
 
@@ -15,13 +14,13 @@ export const userRouter = router({
     .input(
       // 入力スキーマを指定します。IDは数値である必要があります。
       z.object({
-        email: z.string(),
+        id: z.string(),
       })
     )
     .query(async ({ input }) => {
       // 指定されたemailのuserをデータベースから取得します。
       const user = await prisma.user.findUnique({
-        where: { email: input.email },
+        where: { id: input.id },
       });
       
       // user
@@ -31,4 +30,13 @@ export const userRouter = router({
       // 取得したuserを返します。
       return user;
     }),
+    updateUser: procedure.input(updateInput).mutation(async ({ input }) => {
+      const { id, customerId } = input;
+      const user = await prisma.user.update({
+        where: { id },
+        data: { customerId },
+      });
+      return user;
+    }),
+
 });

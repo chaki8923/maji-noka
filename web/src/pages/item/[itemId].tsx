@@ -4,20 +4,28 @@ import { useCart } from "../../hooks/useCart";
 import { useRouter } from "next/router";
 import Payment from "../_component/paymentButton";
 import Sidebar from "../_component/sideBar";
-import { Spinner, Select, Button } from 'flowbite-react';
+import { Select, Button } from 'flowbite-react';
 import { CartItem } from '@/src/types';
 import { Autoplay, Navigation, Pagination, Thumbs, FreeMode, EffectFade } from "swiper/modules";
 import { Swiper, SwiperSlide, SwiperClass } from "swiper/react";
 import { getImageUrl } from '../../pages/awsImageOperations';
+import { createCustomerId } from "@/src/feature/stripe/stripe";
 
 import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 import "swiper/css/effect-fade";
+import Loading from '../_component/loading';
 
 
 export default function Item() {
+  try {
+    
+    // await createCustomerId({ user: session.user });
+  } catch (error) {
+    
+  }
   const router = useRouter();
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [orderQuantity, setorderQuantity] = useState<number>(1);
@@ -30,7 +38,6 @@ export default function Item() {
   }, {
     enabled: itemId !== null, // idがnullでない場合にのみクエリを実行
   });
-
   useEffect(() => {
     if (data && itemId !== null) {
       const fetchImageUrls = async () => {
@@ -45,7 +52,6 @@ export default function Item() {
     }
   }, [data]);
 
-
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const quantity = parseInt(event.target.value, 10); //数値に変換
     console.log(quantity);
@@ -54,7 +60,7 @@ export default function Item() {
   }
 
   if (!data) {
-    return <div className='flex fixed justify-center top-48 w-full'> <Spinner color="info" aria-label="Info spinner example" /></div>;
+    return <Loading />
   }
 
 

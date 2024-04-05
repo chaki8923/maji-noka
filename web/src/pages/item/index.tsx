@@ -5,6 +5,8 @@ import Link from "next/link";
 import Sidebar from "../_component/sideBar";
 import { useSearchParams } from "next/navigation";
 import { Card, Spinner, Badge } from 'flowbite-react';
+import Loading from '../_component/loading';
+import { getShippingByCustomerID } from "../../feature/stripe/stripe";
 
 
 
@@ -13,6 +15,15 @@ export default function Items() {
   const searchParams = useSearchParams();
   const keyword = searchParams?.get("keyword");
   const items = trpc.item.getItems.useQuery();
+  // 住所取得したい！
+  // try {
+    
+  //   const shipping = await getShippingByCustomerID({
+  //     customerId: user.customerId,
+  //   });
+  // } catch (error) {
+    
+  // }
 
 
   useEffect(() => {
@@ -28,7 +39,7 @@ export default function Items() {
   }, [items.data]);
 
   if (!items.data) {
-    return <div className='flex fixed justify-center top-48 w-full'> <Spinner color="info" aria-label="Info spinner example" /></div>;
+    return <Loading />
   }
   if (keyword) {
     const result = items.data.filter((item) =>

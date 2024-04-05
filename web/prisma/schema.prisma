@@ -20,7 +20,8 @@ model items {
   id          Int       @id @default(autoincrement())  
   name        String                                  
   price       Int                         
-  description String                                 
+  description String
+  purchases    Purchase[]                        
   category_id Int
   category    category  @relation(fields: [category_id], references: [id])
   image_count     Int                        
@@ -85,12 +86,14 @@ model Session {
 
 model User {
   id            String    @id @default(cuid())
+  customerId    String?         @unique //stripe連携用
   name          String?
   email         String?   @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
+  purchases     Purchase[]
 }
 
 model VerificationToken {
@@ -108,4 +111,18 @@ model category {
   deleted_at  DateTime?                                 
   created_at  DateTime                                 
   updated_at  DateTime                                  
+}
+
+model Purchase {
+  id                 String    @id @default(cuid())
+  userId             String    
+  itemId             Int  
+
+  @@unique([userId, itemId])
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  item items @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
