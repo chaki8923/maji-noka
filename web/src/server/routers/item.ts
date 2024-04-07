@@ -51,8 +51,8 @@ export const itemRouter = router({
       // 取得したitemをCartItemに変換して返します。
       const cartItem: CartItem = {
         ...item,
-        categoryName: item.category?.name ?? "Unknown" ,
-        quantity: 0,
+        categoryName: item.category?.name ?? "Unknown",
+        quantity: 0, // ここで適切な数量を設定してください
       };
       // 取得したitemを返します。
       return instanceToPlain(cartItem);
@@ -85,7 +85,6 @@ export const itemRouter = router({
     }),
 
   updateItem: procedure.input(updateInput).mutation(async ({ input }) => {
-
     const { id, inventory } = input;
     const item = await prisma.items.update({
       where: { id },

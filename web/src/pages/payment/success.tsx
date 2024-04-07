@@ -7,10 +7,9 @@ import { useRouter } from "next/router";
 
 export default function paymentSuccess() {
     const router = useRouter();
-
     const transitionItems = (event: React.MouseEvent<HTMLSpanElement>) => {
         // クリックされた要素のテキストを取得
-        router.push("/");
+        router.push("/address");
     };
 
     return (
