@@ -3,16 +3,17 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Items from "./item/index";
 import Slider from "./_component/slider";
-import { Spinner } from "flowbite-react";
+import Loading from "./_component/loading";
 
 
 export default function IndexPage() {
   const router = useRouter();
-  const { session, status }: any = useSession();
+  const { data: session, status }: any = useSession();
+  console.log("session", session);
   
   switch (status) {
     case "loading":
-      return (<div> <Spinner color="info" aria-label="Info spinner example" /></div>);
+      return (<Loading />);
     case "unauthenticated":
       router.push("/login");
       break;

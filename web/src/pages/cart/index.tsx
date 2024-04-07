@@ -24,7 +24,7 @@ const Cart: NextPage = () => {
   }, []);
 
   return (
-    <div>
+    <>
       <header className='px-8 py-4 shadow-md'>
         <h1>Cart Details</h1>
       </header>
@@ -39,13 +39,13 @@ const Cart: NextPage = () => {
           };
           return (
             <Card key={item.id} className='w-80'>
-              <div className='flex justify-between items-end'>
+              <p className='flex justify-between items-end'>
                 <h4 className="text-gray-800">{item.name}</h4>
-              </div>
-              <div className='mt-3 font-bold text-xl text-gray-800'>¥{item.price}</div>
-              <div className='relative h-52'>
+              </p>
+              <p className='mt-3 font-bold text-xl text-gray-800'>¥{item.price}</p>
+              <p className='relative h-52'>
                 <img src={imageUrls[0]} alt="" className='' />
-              </div>
+              </p>
               <p className='text-sm min-h-[60px]'>{item.description}</p>
 
               <Select id="countries" required value={quantity} onChange={handleChange}>
@@ -58,7 +58,7 @@ const Cart: NextPage = () => {
           );
         })}
       </div>
-    </div>
+    </>
   );
 };
 
