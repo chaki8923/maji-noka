@@ -13,10 +13,12 @@ AWS.config.update(credentials);
 const s3 = new AWS.S3();
 
 export const getImageUrl = async (bucketName: string, objectKey: string, expirationTimeInSeconds: number): Promise<string> => {
+  console.log("objectKey", objectKey);
+  
   const params = {
     Bucket: bucketName,
     Key: objectKey,
-    Expires: expirationTimeInSeconds // 期限切れの時間を指定します
+    Expires: expirationTimeInSeconds // 期限切れの時間
   };
   return new Promise((resolve, reject) => {
     s3.getSignedUrl('getObject', params, (err, url) => {

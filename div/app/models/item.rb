@@ -17,8 +17,6 @@ class Item < BaseModel # rubocop:disable Style/Documentation
                 :image4
 
   def create(params)
-    ## TODO：あとで消す
-    Rails.logger.debug "params---------------------------------#{params}"
     res = execute_api('item/create', params, method: 'post')
     convert_boolean(res)
   end

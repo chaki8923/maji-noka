@@ -2,8 +2,10 @@ import { trpc } from '../../utils/trpc';
 import React, { useState, useEffect } from 'react';
 import { getImageUrl } from '../../pages/awsImageOperations';
 import Link from "next/link";
+import { Card, Badge } from 'flowbite-react';
 import { SearchForm } from "../_component/searchForm";
 import { useSearchParams } from "next/navigation";
+import Sidebar from "../_component/sideBar";
 
 interface Keyword {
   keyword?: string | undefined;
@@ -41,30 +43,33 @@ export default function Items() {
   }
 
   return (
-    <>
-      <SearchForm />
-      <div className="grid gap-2 lg:grid-cols-4">
-        {items.data.map((item, idx) => (
-          <div className="w-full rounded-lg shadow-md lg:max-w-sm" key={item.id}>
-            <img
-              className="object-contain"
-              src={imageUrls[idx]}
-              alt="image"
-            />
-            <div className="p-4">
-              <h4 className="text-xl font-semibold text-blue-600">
+    <div className='lg:flex lg:flex-row-reverse'>
+      <div className="grid gap-2 lg:ml-6 lg:grid-cols-3 grid-cols-2 mb-24 justify-items-center">
+        {items.data.map((item, index) => (
+          <Link href={`/item/${item.id}`} key={item.id}>
+            <Card
+              className="max-w-[340px] min-w-[300px] max-h-[440px] min-h-[440px]"
+            >
+              <div className='text-center relative'>
+                <img src={imageUrls[index]} alt="" className='h-48 object-contain w-full' />
+                {item.maji_flag && (
+                  <Badge color="pink" className='absolute bottom-0 p-2 border-gray-50 border-2 animate-bounce'>New</Badge>
+                )}
+              </div>
+              <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
                 {item.name}
-              </h4>
-              <p className="mb-2 leading-normal">
-                {item.price}
+              </h5>
+              <p className="tracking-tight text-gray-900 dark:text-white font-light text-base index-description">
+                {item.description}
               </p>
-              <Link href={`/item/${item.id}`} className="px-4 py-2 text-sm text-blue-100 bg-blue-500 rounded shadow hover:bg-gray-600">
-                Read more
-              </Link>
-            </div>
-          </div>
+              <div className="flex items-center justify-between">
+                <span className="text-3xl font-bold text-gray-900 dark:text-white">{item.price.toLocaleString()}円</span>
+              </div>
+            </Card>
+          </Link>
         ))}
       </div>
-    </>
+      <Sidebar />
+    </div>
   );
 }

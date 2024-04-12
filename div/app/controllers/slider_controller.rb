@@ -1,18 +1,18 @@
 # frozen_string_literal: true
-
+# ここだけ特別にActiverecordを使用
 class SliderController < ApplicationController # rubocop:disable Style/Documentation
   def new
     @slide_instance = Slider.new
-    @sliders = Slider.find(1)
+    @sliders = Slider.find(1) if slide_exist?(Slider)
   end
 
   def create
     if slide_exist?(Slider)
-        slider = Slider.find(1)
-        slide_update(slider)
-      else
-        slider = Slider.new(slider_params)
-        slide_save(slider)
+      slider = Slider.find(1)
+      slide_update(slider)
+    else
+      slider = Slider.new(slider_params)
+      slide_save(slider)
     end
   end
 
@@ -59,9 +59,6 @@ class SliderController < ApplicationController # rubocop:disable Style/Documenta
 
   def slide_exist?(slide)
     all_slide = slide.all
-    ## TODO：あとで消す
-    Rails.logger.debug "all_slide---------------------------------#{all_slide.inspect}"
-    Rails.logger.debug "all_slide---------------------------------#{all_slide.count}"
     all_slide.count > 0
   end
 end

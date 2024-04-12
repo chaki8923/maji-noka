@@ -42,6 +42,8 @@ gem 'jquery-rails'
 gem 'fullcalendar-rails'
 gem 'momentjs-rails'
 
+# gem 'fog'
+gem 'fog-aws'
 gem 'carrierwave'
 gem 'mini_magick'
 

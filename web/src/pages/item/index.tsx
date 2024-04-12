@@ -4,10 +4,9 @@ import { getImageUrl } from '../../pages/awsImageOperations';
 import Link from "next/link";
 import Sidebar from "../_component/sideBar";
 import { useSearchParams } from "next/navigation";
-import { Card, Spinner, Badge } from 'flowbite-react';
+import { Card, Badge } from 'flowbite-react';
 import Loading from '../_component/loading';
-import { getShippingByCustomerID } from "../../feature/stripe/stripe";
-
+import { useWindowSize } from "../../hooks/useWindowSize";
 
 
 export default function Items() {
@@ -15,13 +14,14 @@ export default function Items() {
   const searchParams = useSearchParams();
   const keyword = searchParams?.get("keyword");
   const items = trpc.item.getItems.useQuery();
-
-
-
+  const [width, _] = useWindowSize();
+  
   useEffect(() => {
     if (items.data) {
-      const fetchImageUrls = async () => {
+        const fetchImageUrls = async () => {
         const urls = await Promise.all(items.data.map(async (item) => {
+          console.log("id", item.id);
+          
           return await getImageUrl('maji-image', `item/${item.id}/item_image_0_${item.id}`, 3600);
         }));
         setImageUrls(urls);
@@ -34,22 +34,29 @@ export default function Items() {
     return <Loading />
   }
   if (keyword) {
-    const result = items.data.filter((item) =>
+    items.data.filter((item) =>
       item.name.toLowerCase().includes(keyword.toLowerCase())
     );
   }
 
   return (
-    <div className='flex'>
-      <Sidebar />
-      <div className="grid gap-2 lg:grid-cols-4 ml-6">
-        {items.data.map((item) => (
-          <Link href={`item/${item.id}`} key={item.id}>
+    <div className='lg:flex lg:justify-start'>
+      {width > 1124 ? <Sidebar /> : null}
+      <div className="grid gap-2 lg:ml-6 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 mb-24 justify-items-center px-5 ">
+        {items.data.map((item, index) => (
+          <Link href={`item/${item.id}`} key={item.id} className='w-full'>
             <Card
-              className="max-w-sm"
+              className="
+                xl:max-w-[300px]
+                xl:min-w-[300px]
+                lg:max-h-[440px]
+                lg:min-h-[440px]
+                max-h-[440px]
+                min-h-[440px]
+                "
             >
               <div className='text-center relative'>
-                <img src={imageUrls[0]} alt="" className='h-48 object-contain w-full' />
+                <img src={imageUrls[index]} alt="" className='h-48 object-contain w-full' />
                 {item.maji_flag && (
                   <Badge color="pink" className='absolute bottom-0 p-2 border-gray-50 border-2 animate-bounce'>New</Badge>
                 )}
@@ -57,11 +64,9 @@ export default function Items() {
               <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
                 {item.name}
               </h5>
-              <p className="tracking-tight text-gray-900 dark:text-white font-light text-base">
+              <p className="tracking-tight text-gray-900 dark:text-white font-light text-base index-description">
                 {item.description}
               </p>
-              <div className="mb-5 mt-2.5 flex items-center">
-              </div>
               <div className="flex items-center justify-between">
                 <span className="text-3xl font-bold text-gray-900 dark:text-white">{item.price.toLocaleString()}円</span>
               </div>
@@ -69,6 +74,7 @@ export default function Items() {
           </Link>
         ))}
       </div>
+      {width < 1124 ? <Sidebar /> : null}
     </div>
   );
 }

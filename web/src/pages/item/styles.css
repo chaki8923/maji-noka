@@ -83,12 +83,36 @@
   width: 65%;
 }
 
-.item-description{
-  width: 20%;
-}
 
 .topSwiper{
   width: 100%;
   height: 460px;
   margin-bottom: 24px;
 }
+
+.text-group{
+  width: 200px;
+}
+
+.index-description{
+  display: -webkit-box; /* 必須 */
+  -webkit-box-orient: vertical; /* 必須 */
+  -webkit-line-clamp: 3; /* 行数を制限 */
+  overflow: hidden; /* はみ出た部分を非表示 */
+}
+
+@media (max-width: 1024px) { 
+  
+  .text-group{
+    width: 500px;
+  }
+  .mainSwiper{
+    width: 100%;
+  }
+  .subSwiper{
+    width: 100%;
+  }
+  .subSwiper .swiper-slide {
+    height: 70%;
+  }
+ }

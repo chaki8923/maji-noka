@@ -9,7 +9,6 @@ import Loading from "./_component/loading";
 export default function IndexPage() {
   const router = useRouter();
   const { data: session, status }: any = useSession();
-  console.log("session", session);
   
   switch (status) {
     case "loading":

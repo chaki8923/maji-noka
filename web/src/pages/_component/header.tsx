@@ -2,13 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { type Session } from "next-auth";
 import { signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import { SearchForm } from "./searchForm";
+import { useWindowSize } from "../../hooks/useWindowSize";
 
 const Header = () => {
 const { data: session }: any = useSession();
+const [width, _] = useWindowSize();
 
   return (
     <header className="flex items-center justify-between bg-white p-4 shadow-md mb-12">
