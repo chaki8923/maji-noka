@@ -3,11 +3,9 @@
 
 import { Sidebar } from 'flowbite-react';
 import {
-   HiArrowSmRight, 
    HiChartPie, 
    HiInbox, 
    HiShoppingBag, 
-   HiTable, 
    HiUser } from 'react-icons/hi';
 
 import { BiSolidCategoryAlt } from "react-icons/bi";
@@ -16,7 +14,7 @@ import { trpc } from '../../utils/trpc';
 const SidebarComponent = () => {
   const categories = trpc.category.getCategories.useQuery();
   return (
-    <Sidebar aria-label="Sidebar with multi-level dropdown example">
+    <Sidebar aria-label="Sidebar multi-level with dropdown example"  className='lg:w-60 w-full'>
       <Sidebar.Items>
         <Sidebar.ItemGroup>
           <Sidebar.Item href="#" icon={HiChartPie}>

@@ -2,14 +2,14 @@
 "use client";
 
 import { Toast } from "flowbite-react";
-import { HiCheck, HiExclamation, HiX } from "react-icons/hi";
+import { HiCheck } from "react-icons/hi";
 import { useRouter } from "next/router";
 
 export default function paymentSuccess() {
     const router = useRouter();
     const transitionItems = (event: React.MouseEvent<HTMLSpanElement>) => {
         // クリックされた要素のテキストを取得
-        router.push("/address");
+        router.push("/");
     };
 
     return (

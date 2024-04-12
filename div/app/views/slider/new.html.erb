@@ -20,10 +20,16 @@
 <% end %>
 
 <% if @sliders.present? %>
-  <p>現在のスライド画像</p>
-  <% @sliders.images.each do |image| %>
-    <%= image_tag image.url %>
-  <% end %>
+  <p class="text-center fs-3">現在のスライド画像</p>
+  <div class="container">
+    <div class="d-flex justify-content-evenly">
+      <% @sliders.images.each do |image| %>
+      <div class="row w-25">
+        <%= image_tag image.url %>
+      </div>
+      <% end %>
+    </div>
+  </div>
 <% else %>
   <p>現在スライド画像はありません</p>
 <% end %>

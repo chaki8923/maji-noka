@@ -5,9 +5,7 @@ const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY!, {
 });
 
 
-export const createCustomerId = async ({ user }: { user: Customer }) => {
-
-  console.log("createCustomer!");
+export const createCustomerId = async ({ user, productId, inventory}: { user: Customer, productId: number, inventory: number  }) => {
   try {
     if (!user) {
       throw new Error(`ユーザーが存在しません`);
@@ -31,6 +29,8 @@ export const createCustomerId = async ({ user }: { user: Customer }) => {
       preferred_locales: ["ja"],
       metadata: {
         userId,
+        productId,
+        inventory
       },
     });
 
@@ -47,8 +47,6 @@ export const getShippingByCustomerID = async ({
 }) => {
   try {
     const res = await stripe.customers.retrieve(customerId);
-    console.log("customerId", customerId);
-    console.log("res", res);
     // 顧客が削除されている場合は、customer.shippingが取得できないのでエラーにする
     if (res.deleted) {
       throw new Error("顧客が削除されています");

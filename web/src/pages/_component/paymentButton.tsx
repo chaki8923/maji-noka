@@ -3,8 +3,8 @@ import { trpc } from '../../utils/trpc';
 import { Button } from 'flowbite-react';
 import AlertToast from "./alertToast";
 import { useSession } from "next-auth/react";
-import { createCustomerId, getShippingByCustomerID } from "../../feature/stripe/stripe";
-
+import { createCustomerId } from "../../feature/stripe/stripe";
+import { RiMoneyCnyCircleLine } from "react-icons/ri";
 
 type PaymentProps = {
   item: {
@@ -24,80 +24,58 @@ type PaymentProps = {
 const Checkout: React.FC<PaymentProps> = ({ item, quantity }) => {
   const router = useRouter();
   // createTodoエンドポイントに対するmutationを生成
-  const updateItemMutation = trpc.item.updateItem.useMutation();
   const updateUserMutation = trpc.user.updateUser.useMutation();
-  const updateUserAddressMutation = trpc.user.updateUserAddress.useMutation();
-  const { data: session, status }: any = useSession();
-
-  const id = item.id
+  const { data: session }: any = useSession();
   // 在庫 - 注文数
   const inventory = item.inventory! - quantity
   //stripe checkout
-  const startCheckout = async (productId: number) => {    
+  const startCheckout = async (productId: number) => {
     try {
-      const customerId = await createCustomerId({ user: session.user });
-      const response = await fetch(
-        `http://localhost:3000/api/checkout`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            productId,
-            title: item.name,
-            price: item.price,
-            quantity: quantity,
-            customerId: customerId
-          }),
-        }
-      );
-        
-
-      const responseData = await response.json();
-      console.log("responseData.session_id", responseData.session_id);
-      console.log("responseData.checkout_url", responseData.checkout_url);
-      if (responseData && responseData.checkout_url) {        
-        sessionStorage.setItem("stripeSessionId", responseData.session_id);
-        
-        if (customerId){
-          await updateItemMutation.mutateAsync({ id, inventory });
-          await updateUserMutation.mutateAsync({ id: session.user.id, customerId: customerId });
-          const shipping = await getShippingByCustomerID({
-            customerId: customerId,
-          });
-          console.log("shipping", shipping);
-          if(shipping){
-            await updateUserAddressMutation.mutateAsync({
-              id: session.user.id, 
-              city: shipping.address?.city,
-              country: shipping.address?.country,
-              postal_code: shipping.address?.postal_code,
-              state: shipping.address?.state,
-              line1: shipping.address?.line1,
-              line2: shipping.address?.line2,
-            })
+      if(session){
+        const customerId = await createCustomerId({ user: session.user, productId, inventory});
+        const response = await fetch(
+          `http://localhost:3000/api/checkout`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              productId,
+              title: item.name,
+              price: item.price,
+              quantity: quantity,
+              customerId: customerId
+            }),
           }
-        }
-        router.push(responseData.checkout_url);
-      } else if(inventory > 0) {
-        return (
-          <AlertToast />
+        );
+        const responseData = await response.json();
+        if (responseData && responseData.checkout_url) {
+          sessionStorage.setItem("stripeSessionId", responseData.session_id);
+  
+          if (customerId) {
+            await updateUserMutation.mutateAsync({ id: session.user.id, customerId: customerId });
+          }
+          router.push(responseData.checkout_url);
+        } else if (inventory > 0) {
+          return (
+            <AlertToast />
           )
-      }else{
-        alert("エラーが発生しました")
+        } else {
+          alert("エラーが発生しました")
+        }
       }
+
     } catch (err) {
       console.error("Error in 決済！:", err);
     }
   };
-  console.log("購入前確認",session);
-  
-  if(!session){
+
+  if (!session) {
     return <div>...</div>
   }
   return (
     <div className="mt-2">
-      <Button color="blue" onClick={() => startCheckout(item.id)}>
-        購入する
+      <Button color="blue" onClick={() => startCheckout(item.id)} className="w-[180px]">
+        購入する　<RiMoneyCnyCircleLine />
       </Button>
     </div>
   )

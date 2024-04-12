@@ -1,16 +1,33 @@
 import { Autoplay, Navigation, Pagination, Thumbs, EffectFade } from "swiper/modules";
-import { trpc } from '../../utils/trpc';
-import React, { useRef, useState } from 'react';
-// Import Swiper React components
+import React, { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { getImageUrl } from '../../pages/awsImageOperations';
 
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
+import { trpc } from "@/src/utils/trpc";
 
 export default function Slider() {
-    const { data } = trpc.slider.getItemById.useQuery({id: 1});
+    const [imageUrls, setImageUrls] = useState<string[]>([]);
+    const { data: images } = trpc.slider.getItemById.useQuery({ id: 1 });
+    useEffect(() => {
+        const fetchImageUrls = async () => {
+            const imagesAry = [];
+            if (images) {
+                console.log("iamges", images);
+                for (let index = 0; index < images.images.length; index++) {
+                    const urls = await getImageUrl('maji-image', `uploads/slider/images/${images.id}/${images.images[index]}`, 3600);
+                    imagesAry.push(urls)
+                }
+                setImageUrls(imagesAry);
+            }
+        };
+        fetchImageUrls();
+    }, [images]);
+    console.log("imageUrls", imageUrls);
+
     return (
         <>
             <Swiper
@@ -18,27 +35,21 @@ export default function Slider() {
                 thumbs={{}}
                 slidesPerView={1}
                 autoplay={{
-                  delay: 3500,
-                  disableOnInteraction: false,
+                    delay: 3500,
+                    disableOnInteraction: false,
                 }}
                 speed={1500} // スライドが切り替わる時の速度
                 pagination={{
-                  clickable: true,
+                    clickable: true,
                 }} // ページネーション, クリックで対象のスライドに切り替わる
                 className="topSwiper"
             >
-                <SwiperSlide>
-                    <img src="https://swiperjs.com/demos/images/nature-1.jpg" />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <img src="https://swiperjs.com/demos/images/nature-2.jpg" />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <img src="https://swiperjs.com/demos/images/nature-3.jpg" />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <img src="https://swiperjs.com/demos/images/nature-4.jpg" />
-                </SwiperSlide>
+                {imageUrls.map((src: string, index: number) => (
+                    <SwiperSlide key={index}>
+                        <img src={src} />
+                    </SwiperSlide>
+
+                ))}
             </Swiper>
         </>
     );

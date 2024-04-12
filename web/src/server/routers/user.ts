@@ -43,11 +43,9 @@ export const userRouter = router({
     return user;
   }),
   updateUserAddress: procedure.input(updateAddressInput).mutation(async ({ input }) => {
-    
     const { id, city, country, state, postal_code, line1, line2 } = input;
-    console.log("住所更新", postal_code);
     const user = await prisma.user.update({
-      where: { id: id },
+      where: { id },
       data: { city, country, state, postal_code, line1, line2 },
     });
     // user
