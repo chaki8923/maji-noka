@@ -29,7 +29,7 @@ export default function Item() {
   const [orderQuantity, setorderQuantity] = useState<number>(1);
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null);
   const itemId = typeof router.query.itemId === 'string' ? parseInt(router.query.itemId, 10) : null;
-  const { addCart, removeCart } = useCart();
+  const { addCart } = useCart();
 
 
   const { data } = trpc.item.getItemById.useQuery<CartItem>({
