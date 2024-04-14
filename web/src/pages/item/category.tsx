@@ -1,27 +1,22 @@
 import { trpc } from '../../utils/trpc';
 import React, { useState, useEffect } from 'react';
-import { getImageUrl } from '../../pages/awsImageOperations';
+import { getImageUrl } from '../awsImageOperations';
 import Link from "next/link";
-import Sidebar from "../_component/sideBar";
-import { useSearchParams } from "next/navigation";
 import { Card, Badge } from 'flowbite-react';
-import Loading from '../_component/loading';
+import { useSearchParams } from "next/navigation";
+import Sidebar from "../_component/sideBar";
 import { useWindowSize } from "../../hooks/useWindowSize";
-
 
 export default function Items() {
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const searchParams = useSearchParams();
-  const keyword = searchParams?.get("keyword");
-  const items = trpc.item.getItems.useQuery();
+  const categoryId = searchParams?.get("categoryId") ?? 0; // もしnullなら空文字列をデフォルト値とする
+  const items = trpc.item.getItemByCategory.useQuery({ category_id: Number(categoryId) });
   const [width, _] = useWindowSize();
-  
   useEffect(() => {
     if (items.data) {
-        const fetchImageUrls = async () => {
+      const fetchImageUrls = async () => {
         const urls = await Promise.all(items.data.map(async (item) => {
-          console.log("id", item.id);
-          
           return await getImageUrl('maji-image', `item/${item.id}/item_image_0_${item.id}`, 3600);
         }));
         setImageUrls(urls);
@@ -29,14 +24,16 @@ export default function Items() {
       fetchImageUrls();
     }
   }, [items.data]);
-
   if (!items.data) {
-    return <Loading />
+    return <div>Loading...</div>;
   }
-  if (keyword) {
-    items.data.filter((item) =>
-      item.name.toLowerCase().includes(keyword.toLowerCase())
-    );
+
+  if (items.data.length === 0) {
+    return (
+      <>
+        <div>該当の商品はありません</div>
+      </>
+    )
   }
 
   return (
@@ -44,7 +41,7 @@ export default function Items() {
       {width > 1124 ? <Sidebar /> : null}
       <div className="grid gap-2 lg:ml-6 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 mb-24 justify-items-center px-5 ">
         {items.data.map((item, index) => (
-          <Link href={`item/${item.id}`} key={item.id} className=''>
+          <Link href={`/item/${item.id}`} key={item.id} className=''>
             <Card
               className="
                 xl:w-[300px]

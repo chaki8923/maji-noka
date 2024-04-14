@@ -3,7 +3,7 @@
 import cookie from 'js-cookie';
 import { useState, useEffect } from 'react';
 import { CartItem } from '../types';
-import { Items } from "../models/items"
+
 
 export const useCart = () => {
   const currentCartJson = cookie.get('cart') || '[]';
@@ -29,18 +29,9 @@ export const useCart = () => {
   };
 
   /* カートから削除 */
-  const removeCart = (removedItem: Items, quantity: number) => {
-    if (!cartItemIds.includes(removedItem.id)) return;
-    const newCart = cart
-      .map((item) => {
-        if (item.id === removedItem.id) {
-          return {
-            ...item,
-            quantity: quantity
-          };
-        }
-        return item;
-      }).filter((item) => quantity);
+  const removeCart = (removedItem: CartItem, quantity: number) => {
+    // if (!cartItemIds.includes(removedItem.id)) return;
+    const newCart = cart.filter(item => item.id !== removedItem.id);
 
     setCart(newCart);
   };

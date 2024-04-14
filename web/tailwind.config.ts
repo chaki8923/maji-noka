@@ -9,6 +9,7 @@ const config: Config = {
     "node_modules/flowbite-react/lib/esm/**/*.js",
   ],
   plugins: [require("flowbite/plugin")],
+  mode: "jit",
   theme: {
     screens: {
       sm: "640px",

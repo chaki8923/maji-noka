@@ -22,7 +22,7 @@ const SidebarComponent = () => {
           </Sidebar.Item>
           <Sidebar.Collapse icon={BiSolidCategoryAlt} label="category">
             {categories.data && categories.data.map((cat, idx) => (
-              <Sidebar.Item key={idx} href="#">{cat.name}</Sidebar.Item>
+              <Sidebar.Item key={idx} href={`/item/category?categoryId=${cat.id}`}>{cat.name}</Sidebar.Item>
             ))}
           </Sidebar.Collapse>
           <Sidebar.Item href="#" icon={HiInbox}>

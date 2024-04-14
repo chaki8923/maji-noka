@@ -26,7 +26,25 @@ $(function(){
   //アイデア登録画面の画像プレビュー
   //======================================================================
 
-  //グレーのエリアクリックしたらinput fileクリックした事にする
+  $(`.js-multi-image`).on('change', function (e) {
+    console.log('e', e);
+    const files = e.target.files
+    for(let i = 0; i < files.length; i++){
+      const file = files[i];
+      multiImagePreview(file, i)
+    }
+    
+  });
+  function multiImagePreview(file, index){
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      $(`.js-previewImage-${index + 1}`).attr('src', e.target.result);
+      $(`.js-previewImage-${index + 1}`).css('opacity', 1);
+    }
+    reader.readAsDataURL(file);
+  }
+
+
   
  
   function imagePreview(i, e){
@@ -48,14 +66,17 @@ $(function(){
         if(byte > 3000){
           $(`.js-byte-preview${i}`).css("color","red");
         }else{
-
+          
         }
+        console.log("e.target", e.target.files);
         reader.readAsDataURL(e.target.files[0]);
       };
 
   };
   // なんかfor文で上手くいかん
   $(`.js-input-1`).on('change', function (e) {
+    console.log('e', e);
+    
     imagePreview(1, e);
   });
   $(`.js-input-2`).on('change', function (e) {

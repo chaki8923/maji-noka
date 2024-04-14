@@ -1,15 +1,11 @@
 import React, { ChangeEvent, useEffect } from "react";
 import { useRouter } from 'next/router';
-import { Input, Button } from "@material-tailwind/react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 
 
 export const SearchForm = () => {
   const router = useRouter();
   const [keyword, setKeyword] = React.useState("");
-  const searchParams = useSearchParams();
-  const keywordValue = searchParams?.get("keyword") ?? ''; // もしnullなら空文字列をデフォルト値とする
   useEffect(() => {
     // URLからクエリパラメーターを取得して、キーワードを設定
     const { keyword: queryKeyword } = router.query;

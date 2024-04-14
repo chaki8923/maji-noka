@@ -13,8 +13,8 @@ function MyApp({ Component, pageProps }: AppProps<{
   
   return (
     <SessionProvider session={pageProps.session}>
-      <Header />
-      <div>
+      <Header/>
+      <div className="mt-20">
         <Component {...pageProps} />
       </div>
     </SessionProvider>
