@@ -5,7 +5,6 @@ import Link from "next/link";
 import { Card, Badge } from 'flowbite-react';
 import { SearchForm } from "../_component/searchForm";
 import { useSearchParams } from "next/navigation";
-import Sidebar from "../_component/sideBar";
 
 interface Keyword {
   keyword?: string | undefined;
@@ -69,7 +68,6 @@ export default function Items() {
           </Link>
         ))}
       </div>
-      <Sidebar />
     </div>
   );
 }

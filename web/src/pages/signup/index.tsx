@@ -34,14 +34,14 @@ const LoginPage = () => {
           type="button"
           className="w-full bg-red-500 text-white rounded-lg px-4 py-2"
         >
-          Googleでログイン
+          Googleで新規登録
         </button>
         <button
           onClick={handleLogin("twitter")}
           type="button"
           className="w-full bg-blue-500 text-white rounded-lg px-4 py-2"
         >
-          Twitterでログイン
+          Twitterで新規登録
         </button>
       </form>
     </div>

@@ -26,7 +26,6 @@ export default function Slider() {
         };
         fetchImageUrls();
     }, [images]);
-    console.log("imageUrls", imageUrls);
 
     return (
         <>

@@ -1,0 +1,35 @@
+.purchase-link {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  color: #f3f3f3;
+}
+
+.acordion{
+  width: 120px;
+  background-color: transparent!important;
+  border: none!important;
+  box-shadow: none!important;
+  padding: 0!important;
+}
+
+.nav-ul li{
+  border-bottom: 1px #767070 solid;
+  width: 100%;
+  text-align: end!important;
+  padding: 10px;
+}
+
+.panel2-header{
+  padding: 0!important;
+  padding-left: 10px!important;
+}
+.acodion-list{
+  display: flex;
+  justify-content: end;
+}
+@media (max-width: 768px) { 
+    .purchase-link {
+        color: #333;
+      }
+   }

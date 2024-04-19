@@ -4,13 +4,12 @@ import { useCart } from "../../hooks/useCart";
 import { useRouter } from "next/router";
 import Payment from "../_component/paymentButton";
 import Sidebar from "../_component/sideBar";
-import { Select, Button } from 'flowbite-react';
+import { Select, Button, Toast } from 'flowbite-react';
 import { CartItem } from '@/src/types';
 import { Autoplay, Navigation, Pagination, Thumbs, FreeMode, EffectFade } from "swiper/modules";
 import { Swiper, SwiperSlide, SwiperClass } from "swiper/react";
 import { getImageUrl } from '../../pages/awsImageOperations';
 import { FaCartArrowDown } from "react-icons/fa";
-import { Toast } from "flowbite-react";
 import { HiCheck } from "react-icons/hi";
 import { TbShoppingCartPin } from "react-icons/tb";
 
@@ -124,7 +123,7 @@ export default function Item() {
 
           </Swiper>
         </div>
-        <div className='lg:w-[240px]'>
+        <div className='lg:w-[240px] w-[340px] m-auto'>
           <div className="text-group mb-6">
             <h2 className='text-white font-bold text-lg'>Name</h2>
             <p className='text-white'>{data.name}</p>

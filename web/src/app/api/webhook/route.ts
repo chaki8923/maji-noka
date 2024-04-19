@@ -28,19 +28,26 @@ export async function POST(req: Request) {
     switch (event.type) {
       case "customer.updated": {
         const metadata = event.data.object.metadata;
-        console.log("metadata", metadata);
-        //商品の在庫更新
-        await prisma.items.update({
-          where: { id:  Number(metadata.productId)},
-          data: { inventory: Number(metadata.inventory) },
+        console.log("metadata情報", metadata);
+        // トランザクション
+        await prisma.$transaction(async (prisma) => {
+          //商品の在庫更新
+          await prisma.items.update({
+            where: { id: Number(metadata.productId) },
+            data: { inventory: Number(metadata.inventory) },
+          });
+          //購入履歴
+          await prisma.purchase.create({
+            data: {
+              userId: metadata.userId,
+              itemId: Number(metadata.productId),
+            },
+          });
         });
         break;
       }
       case "checkout.session.completed": {
         const session: Stripe.Checkout.Session = event.data.object;
-        console.log("session情報", session);
-        console.log("session.customer", session.customer);
-        console.log("住所情報", event.data.object.customer_details?.address);
         const shippingDetails = session.customer_details?.address;
 
         if (shippingDetails !== null) {
@@ -74,7 +81,6 @@ export async function POST(req: Request) {
 
         break;
       }
-      
     }
     return new NextResponse("OK", { status: 200 });
   } catch (error) {
