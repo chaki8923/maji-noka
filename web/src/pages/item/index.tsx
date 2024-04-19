@@ -15,14 +15,16 @@ export default function Items() {
   const keyword = searchParams?.get("keyword");
   const items = trpc.item.getItems.useQuery();
   const [width, _] = useWindowSize();
-  
+
   useEffect(() => {
     if (items.data) {
         const fetchImageUrls = async () => {
         const urls = await Promise.all(items.data.map(async (item) => {
-          console.log("id", item.id);
-          
-          return await getImageUrl('maji-image', `item/${item.id}/item_image_0_${item.id}`, 3600);
+          return await getImageUrl(
+            'maji-image',
+            `item/${item.id}/item_image_0_${item.id}`,
+            3600
+          );
         }));
         setImageUrls(urls);
       };
@@ -42,13 +44,13 @@ export default function Items() {
   return (
     <div className='lg:flex lg:justify-start'>
       {width > 1124 ? <Sidebar /> : null}
-      <div className="grid gap-2 lg:ml-6 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 mb-24 justify-items-center px-5 ">
+      <div className="grid gap-2 lg:ml-6 lg:grid-cols-3 sm:grid-cols-2 grid-cols-2 mb-24 justify-items-center px-5 ">
         {items.data.map((item, index) => (
-          <Link href={`item/${item.id}`} key={item.id} className=''>
+          <Link href={`item/${item.id}`} key={item.id} className='w-full flex justify-center lg:w-auto'>
             <Card
               className="
                 xl:w-[300px]
-                w-[300px]
+                w-full
                 h-[440px]
                 "
             >

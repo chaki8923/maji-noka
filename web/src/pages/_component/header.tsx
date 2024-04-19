@@ -1,102 +1,174 @@
-"use client";
+import * as React from 'react';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Menu from '@mui/material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
+import Container from '@mui/material/Container';
+import Avatar from '@mui/material/Avatar';
+import Tooltip from '@mui/material/Tooltip';
+import MenuItem from '@mui/material/MenuItem';
+import AdbIcon from '@mui/icons-material/Adb';
+import { useSession } from "next-auth/react";
+import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
 
-import Image from "next/image";
-import Link from "next/link";
-import { useState } from "react";
-import { type Session } from "next-auth";
-import { signOut } from "next-auth/react";
+const initialMenuList = 
+  [
+    { text: 'Login', path: '/login' }, 
+    { text: 'Logout', path: '/logout' },
+  ]
 
-const Header = ({ session }: { session: Session | null }) => {
-  const [isOpen, setOpen] = useState<boolean>(false);
-  const handleMenuOpen = () => {
-    setOpen(!isOpen);
-  };
-  console.log("headerSession", session);
+function ResponsiveAppBar() {
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const { data: session }: any = useSession();
+  const router = useRouter();
+
+  const [menuList, setMenuList] = useState(initialMenuList);
+  const pages = ['カテゴリー', 'Product']
+  useEffect(() => {
+    if(session && menuList.length < 4){
+      setMenuList(currentMenuList => [
+        ...currentMenuList,
+        { text: 'カート', path: '/cart' },
+        { text: '購入履歴', path: '/purchase' },
+      ]);
+    }
+  }, [session]);
+  console.log("session", session);
   
-  const handleMenuClose = () => {
-    setOpen(false);
+  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    console.log("event.currentTarget", event.currentTarget);
+
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
+
+  const handleCloseUserMenu = (path: string | null) => {
+    setAnchorElUser(null);
+    if(path){
+      router.push(`${path}`)
+    }
   };
 
   return (
-    <header className="w-full p-10 flex justify-between items-center z-50 top-0 fixed right-[0px] bg-black">
-      <Link className="z-50 fixed left-[0px]" href="/" onClick={handleMenuClose}>
-        <Image src="/sun.jpeg" width={40} height={40} alt="Tailwind CSS" />
-      </Link>
+    <AppBar position="static">
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <Typography
+            variant="h6"
+            noWrap
+            component="a"
+            href="/"
+            sx={{
+              mr: 2,
+              display: { xs: 'none', md: 'flex' },
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
+          >
+            LOGO
+          </Typography>
 
-      <nav
-        className={
-          isOpen
-            ? "z-40 bg-blue-100 fixed top-0 right-0 bottom-0 left-0 h-screen flex flex-col"
-            : "fixed right-[-100%] md:right-4"
-        }
-      >
-        <ul
-          className={
-            isOpen
-              ? "flex h-screen justify-center items-center flex-col gap-6 text-xl"
-              : "block md:flex md:gap-8"
-          }
-        >
-          {session ? (
-            <>
-              <li>
-                <Image
-                  src={session.user?.image ?? ""}
-                  alt={session.user?.name ?? ""}
-                  width={40}
-                  height={40}
-                  className="rounded-full"
-                />
-              </li>
-              <li>
-                <button
-                  onClick={() => signOut()}
-                  className="rounded-lg bg-blue-500 px-4 py-[7px] text-white hover:bg-gray-600"
-                >
-                  ログアウト
-                </button>
-              </li>
-            </>
-          ) : (
-            <li>
-              <Link href="/login">
-                <button className="rounded-lg bg-blue-500 px-4 py-[7px] text-white hover:bg-gray-600">
-                  ログイン
-                </button>
-              </Link>
-            </li>
-          )}
-          <li>
-            <Link onClick={handleMenuClose} href="/recruit">
-              Recruit
-            </Link>
-          </li>
-        </ul>
-      </nav>
-      <button className="z-50 space-y-2 md:hidden fixed right-0" onClick={handleMenuOpen}>
-        <span
-          className={
-            isOpen
-              ? "block w-8 h-0.5 bg-gray-600 translate-y-2.5 rotate-45 duration-300"
-              : "block w-8 h-0.5 bg-gray-600 duration-300"
-          }
-        />
-        <span
-          className={
-            isOpen ? "block opacity-0 duration-300" : "block w-8 h-0.5 bg-gray-600 duration-300"
-          }
-        />
-        <span
-          className={
-            isOpen
-              ? "block w-8 h-0.5 bg-gray-600 -rotate-45 duration-300"
-              : "block w-8 h-0.5 bg-gray-600 duration-300"
-          }
-        />
-      </button>
-    </header>
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', lg: 'none' } }}>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenNavMenu}
+              color="inherit"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{
+                display: { xs: 'block', md: 'none' },
+              }}
+            >
+            </Menu>
+          </Box>
+          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          <Typography
+            variant="h5"
+            noWrap
+            component="a"
+            href="/"
+            sx={{
+              mr: 2,
+              display: { xs: 'flex', md: 'none' },
+              flexGrow: 1,
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
+          >
+            LOGO
+          </Typography>
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          
+          </Box>
+
+          <Box sx={{ flexGrow: 0 }}>
+            <Tooltip title="OpenMenu">
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar alt="Remy Sharp" src={session ? session.user?.image : ""} />
+              </IconButton>
+            </Tooltip>
+            <Menu
+              sx={{ mt: '45px' }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={() => handleCloseUserMenu(null)}
+            >
+              {menuList.map((setting, index) => (
+                <MenuItem key={index} onClick={() => handleCloseUserMenu(setting.path)}>
+                  <Typography textAlign="center">{setting.text}</Typography>
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
+        </Toolbar>
+      </Container>
+    </AppBar>
   );
 }
-
-
-export default Header;
+export default ResponsiveAppBar;

@@ -7,15 +7,18 @@ import Loading from "./_component/loading";
 
 
 export default function IndexPage() {
-  const router = useRouter();
   const { data: session, status }: any = useSession();
   
   switch (status) {
     case "loading":
       return (<Loading />);
     case "unauthenticated":
-      router.push("/login");
-      break;
+      return (
+        <>
+        <Slider />
+        <Items />
+        </>
+      );
     case "authenticated":
       return (
         <>

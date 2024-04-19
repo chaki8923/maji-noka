@@ -66,6 +66,7 @@ const Checkout: React.FC<PaymentProps> = ({ item, quantity }) => {
 
     } catch (err) {
       console.error("Error in 決済！:", err);
+      alert(err)
     }
   };
 

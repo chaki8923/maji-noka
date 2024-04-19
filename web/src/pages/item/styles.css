@@ -104,7 +104,8 @@
 @media (max-width: 1024px) { 
   
   .text-group{
-    width: 500px;
+    width: 340px;
+    margin-bottom: 24px;
   }
   .mainSwiper{
     width: 100%;

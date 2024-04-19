@@ -131,8 +131,8 @@ model Purchase {
   id                 String    @id @default(cuid())
   userId             String    
   itemId             Int  
-
-  @@unique([userId, itemId])
+  // ユニーク外しとく
+  // @@unique([userId, itemId])
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   item items @relation(fields: [itemId], references: [id], onDelete: Cascade)

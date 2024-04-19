@@ -5,6 +5,7 @@ import type { AppProps, AppType } from 'next/app';
 import { trpc } from '../utils/trpc';
 import "../../styles/globals.css"
 import './item/styles.css';
+import './_component/styles.css';
 
 
 function MyApp({ Component, pageProps }: AppProps<{
@@ -14,7 +15,7 @@ function MyApp({ Component, pageProps }: AppProps<{
   return (
     <SessionProvider session={pageProps.session}>
       <Header/>
-      <div className="mt-20">
+      <div>
         <Component {...pageProps} />
       </div>
     </SessionProvider>
