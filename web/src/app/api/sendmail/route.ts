@@ -1,48 +1,46 @@
+import nodemailer from "nodemailer";
 import { NextApiRequest, NextApiResponse } from "next";
+import { NextResponse } from "next/server";
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {  
-  if(req.method === 'POST') {
-    const sgMail = require('@sendgrid/mail');
-    sgMail.setApiKey(process.env.SENDGRID_KEY); //SendGridのAPIキー
+export async function POST(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  console.log("apiメール");
+  
+  if (req.method === "POST") {
+    try {
+      const { name, email, message } = req.body;
 
-    const msgToManager = {
-      to: 'konkuriitonouenokareha128@gmail.com',
-      from: 'konkuriitonouenokareha128@gmail.com',
-      subject: 'ポートフォリオサイトからの問い合わせ',
-      text: req.body.name +'様からお問合せがありました。' + 'メッセージ：' + req.body.message + 'アドレス：' + req.body.email,
-      html: `
-        <p>【名前】</p>
-        <p>${req.body.name}</p>
-        <p>【メールアドレス】</p>
-        <p>${req.body.email}</p>
-        <p>【メッセージ内容】</p>
-        <p>${req.body.message}</p>
-      `,
-    };
-     
-    const msgToUser = {
-      to: req.body.email,
-      from: 'konkuriitonouenokareha128@gmail.com',
-      subject: 'お問合せありがとうございました。',
-      text: 'お問合せを受け付けました。回答をお待ちください。' + req.body.message,
-      html: `
-        <p>${req.body.name}様</p>
-        <p>お問合せを受け付けました。回答をお待ちください。</p><br/>
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.MAIL_ACCOUNT,
+          pass: process.env.MAIL_PASSWORD,
+        },
+      });
 
-        <p>【問い合わせ内容】</p>
-        <p>${req.body.message}</p>
-      `,
-    };
- 
-    (async () => {
-      try {
-        await sgMail.send(msgToManager);
-        await sgMail.send(msgToUser);
-        res.status(200).json(msgToUser);
-      } catch (error: any) {
-        console.error(error);
-        res.status(500).json(error);
-      }
-    })();
+      const mailOptions = {
+        from: process.env.MAIL_ACCOUNT,
+        to: email,
+        text: `${name}様\n\nお問い合わせありがとうございました。\n\n返信までしばらくお待ちください。\n\nお問い合わせ内容\n\n${message}`,
+      };
+
+      const info = await transporter.sendMail(mailOptions);
+      console.log("Email sent: " + info.response);
+      return NextResponse.json({
+        success_message: "メール送信成功",
+      });
+      // res.status(200).json({ message: "メールが送信されました。" });
+    } catch (error) {
+      console.error(error);
+      return NextResponse.json({
+        error_message: "メール送信失敗",
+      });
+      // res.status(500).json({ error: "メールの送信中にエラーが発生しました。" });
+    }
+  } else {
+    // res.status(405).json({ error: "POSTメソッドを使用してください。" });
   }
 }
+

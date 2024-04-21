@@ -107,7 +107,6 @@ model User {
   line2   String?
   accounts      Account[]
   sessions      Session[]
-  purchases     Purchase[]
 }
 
 model VerificationToken {
@@ -129,14 +128,32 @@ model category {
 
 model Purchase {
   id                 String    @id @default(cuid())
-  userId             String    
+  customerId         String    
   itemId             Int  
   // ユニーク外しとく
   // @@unique([userId, itemId])
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
   item items @relation(fields: [itemId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Customer {
+  id             String    @id @default(cuid())
+  customerId    String?         @unique //stripe連携用
+  name          String?
+  email         String?   @unique
+
+  country         String?
+  city         String?
+  state         String?
+  postal_code   String?
+  line1   String?
+  line2   String?        
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  purchases     Purchase[]
 }

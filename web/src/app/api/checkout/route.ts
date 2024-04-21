@@ -6,7 +6,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 });
 
 export async function POST(request: Request, response: Response) {
-  const { title, price, quantity, customerId } = await request.json();
+  const { title, price, quantity, customerId, productId } = await request.json();
 
   try {   
     const session = await stripe.checkout.sessions.create({
@@ -26,6 +26,9 @@ export async function POST(request: Request, response: Response) {
       ],
       // カード決済時の住所入力をstripeに任せます
       billing_address_collection: "auto",
+      metadata: {
+        productId
+      },
       shipping_address_collection: {
         allowed_countries: ["JP"],
       },

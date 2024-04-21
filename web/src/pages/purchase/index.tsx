@@ -11,7 +11,7 @@ export default function Purchase() {
     const deleteMuration = trpc.purchase.deletePurchase.useMutation();
 
     const { data: purchases } =
-        trpc.purchase.getPurchaseByUserId.useQuery({ userId: session?.user.id });
+        trpc.purchase.getPurchaseByUserId.useQuery({ customerId: session?.user.id });
     console.log("purchases", purchases);
 
     // ToDoを削除する処理
