@@ -17,13 +17,13 @@ export const purchaseRouter = router({
     .input(
       // 入力スキーマを指定します。IDは数値である必要があります。
       z.object({
-        userId: z.string(),
+        customerId: z.string(),
       }),
     )
     .query(async ({ input }) => {
       // 指定されたIDのitemをデータベースから取得します。
       const purchase = await prisma.purchase.findMany({
-        where: { userId: input.userId },
+        where: { customerId: input.customerId },
         include: {
           item: {
             include: {

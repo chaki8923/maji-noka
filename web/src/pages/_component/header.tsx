@@ -10,14 +10,15 @@ import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
+import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import { signOut } from "next-auth/react";
 
-const initialMenuList = 
+const initialMenuList =
   [
-    { text: 'Login', path: '/login' }, 
+    { text: 'Login', path: '/login' },
     { text: 'Logout', path: '/logout' },
   ]
 
@@ -30,7 +31,7 @@ function ResponsiveAppBar() {
   const [menuList, setMenuList] = useState(initialMenuList);
   const pages = ['カテゴリー', 'Product']
   useEffect(() => {
-    if(session && menuList.length < 4){
+    if (session && menuList.length < 4) {
       setMenuList(currentMenuList => [
         ...currentMenuList,
         { text: 'カート', path: '/cart' },
@@ -38,8 +39,6 @@ function ResponsiveAppBar() {
       ]);
     }
   }, [session]);
-  console.log("session", session);
-  
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -55,7 +54,11 @@ function ResponsiveAppBar() {
 
   const handleCloseUserMenu = (path: string | null) => {
     setAnchorElUser(null);
-    if(path){
+    if(path === "/logout"){
+      console.log("logout!!");
+      signOut();
+    }
+    if (path) {
       router.push(`${path}`)
     }
   };
@@ -64,7 +67,9 @@ function ResponsiveAppBar() {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <Link href="/">
+            <img src="/rogo_cut.jpg" alt="" className='sm:hidden md:flex w-[140px]' />
+          </Link>
           <Typography
             variant="h6"
             noWrap
@@ -80,7 +85,7 @@ function ResponsiveAppBar() {
               textDecoration: 'none',
             }}
           >
-            LOGO
+
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', lg: 'none' } }}>
@@ -114,7 +119,9 @@ function ResponsiveAppBar() {
             >
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          <Link href="/">
+            <img src="/rogo_cut.jpg" alt="" className='md:hidden sm:flex w-[140px]' />
+          </Link>
           <Typography
             variant="h5"
             noWrap
@@ -131,10 +138,9 @@ function ResponsiveAppBar() {
               textDecoration: 'none',
             }}
           >
-            LOGO
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-          
+
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>

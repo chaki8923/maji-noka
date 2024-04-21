@@ -5,30 +5,16 @@ const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY!, {
 });
 
 
-export const createCustomerId = async ({ user, productId, inventory}: { user: Customer, productId: number, inventory: number  }) => {
+export const createCustomerId = async ({ productId, inventory}: { productId: number, inventory: number  }) => {
   try {
-    if (!user) {
-      throw new Error(`ユーザーが存在しません`);
-    }
-
-    // すでに customerId が登録されている場合、何もしない
-    if (user.customerId) {
-      console.log("すでに存在");
-      return user.customerId;
-    }
-
-    const userId = user.id;
-    const userName = user.name!;
-    const userEmail = user.email!;
-
+    
     // customerを作成する
     const customer = await stripe.customers.create({
-      name: userName,
-      email: userEmail,
+      // name: userName,
+      // email: userEmail,
       // custmerの言語を日本語に設定します
       preferred_locales: ["ja"],
       metadata: {
-        userId,
         productId,
         inventory
       },
