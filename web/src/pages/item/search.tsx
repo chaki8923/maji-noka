@@ -1,10 +1,11 @@
 import { trpc } from '../../utils/trpc';
 import React, { useState, useEffect } from 'react';
-import { getImageUrl } from '../../pages/awsImageOperations';
+import {getImageUrl} from '../../hooks/awsImageOperations';
 import Link from "next/link";
 import { Card, Badge } from 'flowbite-react';
-import { SearchForm } from "../_component/searchForm";
+import SearchForm from "../_component/searchForm";
 import { useSearchParams } from "next/navigation";
+import Image from 'next/image';
 
 interface Keyword {
   keyword?: string | undefined;
@@ -50,7 +51,7 @@ export default function Items() {
               className="max-w-[340px] min-w-[300px] max-h-[440px] min-h-[440px]"
             >
               <div className='text-center relative'>
-                <img src={imageUrls[index]} alt="" className='h-48 object-contain w-full' />
+                <Image src={imageUrls[index]} alt="" className='h-48 object-contain w-full' layout="fill" />
                 {item.maji_flag && (
                   <Badge color="pink" className='absolute bottom-0 p-2 border-gray-50 border-2 animate-bounce'>New</Badge>
                 )}

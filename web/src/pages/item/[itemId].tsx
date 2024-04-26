@@ -8,10 +8,11 @@ import { Select, Button, Toast } from 'flowbite-react';
 import { CartItem } from '@/src/types';
 import { Autoplay, Navigation, Pagination, Thumbs, FreeMode, EffectFade } from "swiper/modules";
 import { Swiper, SwiperSlide, SwiperClass } from "swiper/react";
-import { getImageUrl } from '../../pages/awsImageOperations';
+import {getImageUrl} from '../../hooks/awsImageOperations';
 import { FaCartArrowDown } from "react-icons/fa";
 import { HiCheck } from "react-icons/hi";
 import { TbShoppingCartPin } from "react-icons/tb";
+import Image from 'next/image';
 
 import 'swiper/css';
 import 'swiper/css/free-mode';
@@ -48,7 +49,7 @@ export default function Item() {
       };
       fetchImageUrls();
     }
-  }, [data]);
+  }, [data, itemId]);
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const quantity = parseInt(event.target.value, 10); //数値に変換
@@ -100,9 +101,10 @@ export default function Item() {
             }} // ページネーション, クリックで対象のスライドに切り替わる
             className="mainSwiper"
           >
+            
             {imageUrls.map((src: string, index: number) => (
               <SwiperSlide key={index} className='main-inner-slide'>
-                <img src={src} />
+                <Image src={src} alt="商品画像" layout="fill" objectFit="cover" />
               </SwiperSlide>
 
             ))}
@@ -117,7 +119,7 @@ export default function Item() {
           >
             {imageUrls.map((src: string, index: number) => (
               <SwiperSlide key={index}>
-                <img src={src} />
+                <Image src={src} alt="商品画像" layout="fill" objectFit="cover" />
               </SwiperSlide>
             ))}
 

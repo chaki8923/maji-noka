@@ -1,46 +1,61 @@
 import nodemailer from "nodemailer";
-import { NextApiRequest, NextApiResponse } from "next";
 import { NextResponse } from "next/server";
 
 export async function POST(
-  req: NextApiRequest,
-  res: NextApiResponse
+  req: Request, res: Response
 ) {
-  console.log("apiメール");
+  console.log("apiメール",  process.env.GMAILUSER);
+  const { subject, email, name, message } = await req.json();
   
   if (req.method === "POST") {
     try {
-      const { name, email, message } = req.body;
 
       const transporter = nodemailer.createTransport({
-        service: "gmail",
+        host: "smtp.gmail.com",
+        port: 587,
         auth: {
-          user: process.env.MAIL_ACCOUNT,
-          pass: process.env.MAIL_PASSWORD,
+          user: process.env.MAJIUSER,
+          pass: process.env.MAJIPASSWORD,
         },
       });
 
-      const mailOptions = {
-        from: process.env.MAIL_ACCOUNT,
+      const mailOptions1 = {
+        from: process.env.GMAILUSER,
         to: email,
-        text: `${name}様\n\nお問い合わせありがとうございました。\n\n返信までしばらくお待ちください。\n\nお問い合わせ内容\n\n${message}`,
+        subject: subject,
+        text: `${name}様\n\nお問い合わせありがとうございました。\n\n返信までしばらくお待ちください。\n\nお問い合わせ内容\n\n
+        =================================================
+        ${message}
+        =================================================
+        `,
       };
 
-      const info = await transporter.sendMail(mailOptions);
-      console.log("Email sent: " + info.response);
+      const mailOptions2 = {
+        from: process.env.MAJIUSER, //　送信元メールアドレス
+        to: process.env.GMAILUSER, //　送信先メールアドレス
+        subject: 'お問合せがあります',
+        text: `下記アドレスよりお問合せがあります。\n\n${email} \nお問合せ内容\n${message}`,
+      }
+      // Promise.all([mailer.sendMail(mailOptions1), mailer.sendMail(mailOptions2)])
+      Promise.all([transporter.sendMail(mailOptions1), transporter.sendMail(mailOptions2)])
+      .then((respose) => {
+        console.log("Email sent: " + respose)
+      })
+      .catch((error) => {
+        console.log("Email sent Error: " + error)
+        return NextResponse.json({
+          error_message: "メール送信失敗",
+        });
+      });
       return NextResponse.json({
         success_message: "メール送信成功",
       });
-      // res.status(200).json({ message: "メールが送信されました。" });
     } catch (error) {
       console.error(error);
       return NextResponse.json({
         error_message: "メール送信失敗",
       });
-      // res.status(500).json({ error: "メールの送信中にエラーが発生しました。" });
     }
-  } else {
-    // res.status(405).json({ error: "POSTメソッドを使用してください。" });
   }
 }
 

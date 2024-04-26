@@ -15,6 +15,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { signOut } from "next-auth/react";
+import Image from 'next/image';
 
 const initialMenuList =
   [
@@ -38,7 +39,7 @@ function ResponsiveAppBar() {
         { text: '購入履歴', path: '/purchase' },
       ]);
     }
-  }, [session]);
+  }, [session, menuList]);
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -68,7 +69,7 @@ function ResponsiveAppBar() {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Link href="/">
-            <img src="/rogo_cut.jpg" alt="" className='sm:hidden md:flex w-[140px]' />
+            <Image src="/rogo_cut.jpg" alt="画像" className='hidden md:flex w-[140px]' width={140} height={40}/>
           </Link>
           <Typography
             variant="h6"
@@ -85,7 +86,6 @@ function ResponsiveAppBar() {
               textDecoration: 'none',
             }}
           >
-
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', lg: 'none' } }}>
@@ -97,7 +97,7 @@ function ResponsiveAppBar() {
               onClick={handleOpenNavMenu}
               color="inherit"
             >
-              <MenuIcon />
+              
             </IconButton>
             <Menu
               id="menu-appbar"
@@ -120,7 +120,7 @@ function ResponsiveAppBar() {
             </Menu>
           </Box>
           <Link href="/">
-            <img src="/rogo_cut.jpg" alt="" className='md:hidden sm:flex w-[140px]' />
+            <Image src="/rogo_cut.jpg" alt="" className='md:hidden sm:flex w-[140px]' width={140} height={40} />
           </Link>
           <Typography
             variant="h5"

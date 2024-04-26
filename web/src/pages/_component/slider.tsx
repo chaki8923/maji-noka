@@ -1,7 +1,8 @@
 import { Autoplay, Navigation, Pagination, Thumbs, EffectFade } from "swiper/modules";
 import React, { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { getImageUrl } from '../../pages/awsImageOperations';
+import {getImageUrl} from '../../hooks/awsImageOperations';
+import Image from "next/image";
 
 // Import Swiper styles
 import 'swiper/css';
@@ -45,7 +46,7 @@ export default function Slider() {
             >
                 {imageUrls.map((src: string, index: number) => (
                     <SwiperSlide key={index}>
-                        <img src={src} />
+                        <Image  src={src} alt="スライダー" layout="fill"/>
                     </SwiperSlide>
 
                 ))}

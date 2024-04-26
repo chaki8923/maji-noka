@@ -1,13 +1,13 @@
 import { trpc } from '../../utils/trpc';
 import React, { useState, useEffect } from 'react';
-import { getImageUrl } from '../../pages/awsImageOperations';
+import { getImageUrl } from '../../hooks/awsImageOperations';
 import Link from "next/link";
 import Sidebar from "../_component/sideBar";
 import { useSearchParams } from "next/navigation";
 import { Card, Badge } from 'flowbite-react';
 import Loading from '../_component/loading';
 import { useWindowSize } from "../../hooks/useWindowSize";
-
+import Image from 'next/image';
 
 export default function Items() {
   const [imageUrls, setImageUrls] = useState<string[]>([]);
@@ -18,7 +18,7 @@ export default function Items() {
 
   useEffect(() => {
     if (items.data) {
-        const fetchImageUrls = async () => {
+      const fetchImageUrls = async () => {
         const urls = await Promise.all(items.data.map(async (item) => {
           return await getImageUrl(
             'maji-image',
@@ -55,7 +55,12 @@ export default function Items() {
                 "
             >
               <div className='text-center relative'>
-                <img src={imageUrls[index]} alt="" className='h-48 object-contain w-full' />
+                <Image 
+                  src={imageUrls[index]} 
+                  alt=""
+                  width={420}
+                  height={380}
+                   />
                 {item.maji_flag && (
                   <Badge color="pink" className='absolute bottom-0 p-2 border-gray-50 border-2 animate-bounce'>New</Badge>
                 )}

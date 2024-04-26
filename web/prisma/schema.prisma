@@ -27,7 +27,7 @@ model items {
   image_count     Int                        
   maji_flag   Boolean   @default(false)
   postage     Int?
-  inventory   Int?
+  inventory   Int      @default(0)
   deleted_at  DateTime?                                 
   created_at  DateTime                                  
   updated_at  DateTime                                  
@@ -128,8 +128,10 @@ model category {
 
 model Purchase {
   id                 String    @id @default(cuid())
-  customerId         String    
-  itemId             Int  
+  customerId       String
+  itemId             Int
+  quantity           Int
+  support_flag      Boolean   @default(false)
   // ユニーク外しとく
   // @@unique([userId, itemId])
 
@@ -145,7 +147,6 @@ model Customer {
   customerId    String?         @unique //stripe連携用
   name          String?
   email         String?   @unique
-
   country         String?
   city         String?
   state         String?

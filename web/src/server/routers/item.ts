@@ -22,7 +22,7 @@ export const itemRouter = router({
   getItems: procedure.query(async () => {
     // 全てのitemをデータベースから取得します。
     const items = await prisma.items.findMany();
-
+    await prisma.$disconnect();
     // 取得したitemを返します。
     return items;
   }),
@@ -54,6 +54,7 @@ export const itemRouter = router({
         categoryName: item.category?.name ?? "Unknown",
         quantity: 0, // ここで適切な数量を設定してください
       };
+      await prisma.$disconnect();
       // 取得したitemを返します。
       return instanceToPlain(cartItem);
     }),

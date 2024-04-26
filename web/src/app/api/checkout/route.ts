@@ -27,7 +27,9 @@ export async function POST(request: Request, response: Response) {
       // カード決済時の住所入力をstripeに任せます
       billing_address_collection: "auto",
       metadata: {
-        productId
+        productId,
+        title,
+        quantity
       },
       shipping_address_collection: {
         allowed_countries: ["JP"],

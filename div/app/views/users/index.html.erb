@@ -2,7 +2,6 @@
 <table class="table table-dark table-striped">
 <thead>
   <tr>
-    <th scope="col">id</th>
     <th scope="col">お名前</th>
     <th scope="col">メールアドレス</th>
     <th scope="col">郵便番号</th>
@@ -14,9 +13,8 @@
 <% @customers.each do |customer| %>
   <tbody>
     <tr>
-      <th scope="row"><%= customer[:id] %></th>
       <td><%= customer[:name] %></td>
-      <td><%= customer[:email] %></td>
+      <td><a href="<%= customer[:email] %>"><%= customer[:email] %></a></td>
       <td><%= customer[:postal_code] %></td>
       <td><%= customer[:state] %></td>
       <td><%= customer[:line1] %></td>

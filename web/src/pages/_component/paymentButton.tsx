@@ -9,7 +9,7 @@ import { RiMoneyCnyCircleLine } from "react-icons/ri";
 type PaymentProps = {
   item: {
     id: number,
-    inventory: number | null,
+    inventory: number,
     name: string,
     price: number,
     description: string,
@@ -25,12 +25,13 @@ const Checkout: React.FC<PaymentProps> = ({ item, quantity }) => {
   const router = useRouter();
   // createTodoエンドポイントに対するmutationを生成
   const updateUserMutation = trpc.user.updateUser.useMutation();
+  const prevInventory = item ? item.inventory : 0;
   // 在庫 - 注文数
-  const inventory = item.inventory! - quantity
+  const inventory = prevInventory - quantity
   //stripe checkout
-  const startCheckout = async (productId: number) => {
+  const startCheckout = async (productId: number, itemName: string) => {
     try {
-        const customerId = await createCustomerId({ productId, inventory});
+        const customerId = await createCustomerId({ productId, inventory, itemName});
         const response = await fetch(
           `http://localhost:3000/api/checkout`,
           {
@@ -68,11 +69,11 @@ const Checkout: React.FC<PaymentProps> = ({ item, quantity }) => {
 
   return (
     <div className="mt-2">
-      <Button color="blue" onClick={() => startCheckout(item.id)} className="w-[180px]">
+      <Button color="blue" onClick={() => startCheckout(item.id, item.name)} className="w-[180px]">
         購入する　<RiMoneyCnyCircleLine />
       </Button>
     </div>
   )
 }
 
-export default Checkout
+export default Checkout;

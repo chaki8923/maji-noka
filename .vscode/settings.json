@@ -1,6 +1,8 @@
 {
   "rubyLsp.formatter": "rubocop",
-  "rubyLsp.rubyVersionManager": "none",
+  "rubyLsp.rubyVersionManager": {
+    "identifier": "none"
+  },
 
 
   "[javascriptreact]":{

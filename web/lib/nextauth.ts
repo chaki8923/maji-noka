@@ -23,9 +23,10 @@ export const nextAuthOptions: NextAuthOptions = ({
       }),
   
     ],
+    secret: process.env.SECRET,
     callbacks: {
       async session({ session, user, token }) {
-        session.user!.id = user.id
+        // session.user!.id = user.id
         return session;
       },
     },

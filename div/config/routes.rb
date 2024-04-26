@@ -40,8 +40,13 @@ Rails.application.routes.draw do
     post '/update', to: 'schedules#update'
     delete '/delete/:id', to: 'schedules#delete', as: 'schedule_item'
   end
+
   scope 'users' do
     get '/index', to: 'users#index'
+  end
+
+  scope 'purchase' do
+    get '/index', to: 'purchase#index'
   end
 
   get 'mail', to: 'sample_mail#mail'
