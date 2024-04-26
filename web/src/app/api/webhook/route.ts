@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import prisma from "../../../../lib/prismadb";
+import nodemailer from "nodemailer";
 
 const stripeWebhookSecret = process.env.STRIPE_WEBHOOK_SECRET as string;
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -28,15 +29,16 @@ export async function POST(req: Request) {
     switch (event.type) {
       case "customer.updated": {
         const metadata = event.data.object.metadata;
-        // console.log("metadata情報", metadata);
+        console.log("metadata情報", metadata);
         // トランザクション
         await prisma.$transaction(async (prisma) => {
           //商品の在庫更新
           await prisma.items.update({
             where: { id: Number(metadata.productId) },
             data: { inventory: Number(metadata.inventory) },
-          })
+          });
         });
+
         break;
       }
       case "checkout.session.completed": {
@@ -46,7 +48,7 @@ export async function POST(req: Request) {
         const email = session.customer_details?.email;
         const metadata = session.metadata;
         console.log("metadata", metadata!.productId);
-        console.log("session.customer_details", session.customer_details);
+        console.log("session.customer_details", session);
         if (shippingDetails !== null) {
           // stripeに保存
           await stripe.customers.update(session.customer as string, {
@@ -63,46 +65,104 @@ export async function POST(req: Request) {
             },
           });
 
-          const customer = await prisma.customer.findFirst({
-            where: { 
-              AND: [
-                {email: email as string},
-                {country: shippingDetails?.country},
-                {postal_code: shippingDetails?.postal_code},
-                {city: shippingDetails?.city},
-                {state: shippingDetails?.state},
-                {line1: shippingDetails?.line1},
-                {line2: shippingDetails?.line2},
-              ]
-            }
+          //購入履歴
+          console.log("customer_id", session.customer);
+          // メール送信
+          const transporter = nodemailer.createTransport({
+            host: "smtp.gmail.com",
+            port: 587,
+            auth: {
+              user: process.env.MAJIUSER,
+              pass: process.env.MAJIPASSWORD,
+            },
           });
-          //購入履歴
-          console.log("既存customer", customer);
-          // いなければ
-          if (!customer) {
-            await prisma.customer.create({
-              data: {
-                customerId: session.customer as string,
-                name: name,
-                email: email,
-                country: shippingDetails?.country,
-                postal_code: shippingDetails?.postal_code,
-                city: shippingDetails?.city,
-                state: shippingDetails?.state,
-                line1: shippingDetails?.line1,
-                line2: shippingDetails?.line2,
+          try {
+            const customer = await prisma.customer.findFirst({
+              where: {
+                email: email as string,
               },
             });
-          }
-          //購入履歴
-          if(customer){
-            await prisma.purchase.create({
-              data: {
-                customerId: customer.id as string,
-                itemId: Number(metadata!.productId),
-              },
+            console.log("既存カスタマー", customer);
+            let purchaseCustomer;
+            await prisma.$transaction(async (prisma) => {
+              if (!customer) {
+                purchaseCustomer = await prisma.customer.create({
+                  data: {
+                    customerId: session.customer as string,
+                    name: name,
+                    email: email,
+                    country: shippingDetails?.country,
+                    postal_code: shippingDetails?.postal_code,
+                    city: shippingDetails?.city,
+                    state: shippingDetails?.state,
+                    line1: shippingDetails?.line1,
+                    line2: shippingDetails?.line2,
+                  },
+                });
+              } else {
+                purchaseCustomer = await prisma.customer.update({
+                  where: { email: email as string },
+                  data: {
+                    name: name,
+                    country: shippingDetails?.country,
+                    postal_code: shippingDetails?.postal_code,
+                    city: shippingDetails?.city,
+                    state: shippingDetails?.state,
+                    line1: shippingDetails?.line1,
+                    line2: shippingDetails?.line2,
+                  },
+                });
+              }
+              //購入履歴
+              await prisma.purchase.create({
+                data: {
+                  customerId: purchaseCustomer.id as string,
+                  itemId: Number(metadata!.productId),
+                  quantity: Number(metadata!.quantity),
+                },
+              });
             });
+          } catch (error) {
+            const errorMailOptions = {
+              from: process.env.MAJILUSER,
+              to: process.env.GMAILUSER,
+              subject: "購入情報更新時にエラーが発生しました",
+              text: `購入情報をstripeで直接確認してください。エラーを確認してください=>${error}`,
+            };
+            const info = await transporter.sendMail(errorMailOptions);
+            console.log("Email sent: " + info.response);
+            console.error("トランザクションエラー", error);
+          } finally {
+            await prisma.$connect();
           }
+
+          const adminMailOptions = {
+            from: process.env.MAJILUSER,
+            to: process.env.GMAILUSER,
+            subject: "商品が購入されました！",
+            text: `商品が購入されました！\n\n「商品名」${metadata!.title}\n\n注文情報をご確認ください=>http://localhost3001/purchase/index`,
+          };
+          const customerMailOptions = {
+            from: process.env.MAJILUSER,
+            to: email as string,
+            subject: "商品のご購入ありがとうございます！",
+            text: `商品が購入されました！\n\n「商品名」${metadata!.title}`,
+          };
+
+          // Promise.all([mailer.sendMail(mailOptions1), mailer.sendMail(mailOptions2)])
+          Promise.all([
+            transporter.sendMail(adminMailOptions),
+            transporter.sendMail(customerMailOptions),
+          ])
+            .then((respose) => {
+              console.log("Email sent: " + respose);
+            })
+            .catch((error) => {
+              console.log("Email sent Error: " + error);
+              return NextResponse.json({
+                error_message: "メール送信失敗",
+              });
+            });
         }
 
         break;
@@ -112,7 +172,7 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error(error);
     return new NextResponse("イベントのハンドルに失敗しました", {
-      status: 400,
+      status: 500,
     });
   }
 }

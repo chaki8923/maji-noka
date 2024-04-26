@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import Link from "next/link";
 
 
-export const SearchForm = () => {
+export default function SearchForm(){
   const router = useRouter();
   const [keyword, setKeyword] = React.useState("");
   useEffect(() => {

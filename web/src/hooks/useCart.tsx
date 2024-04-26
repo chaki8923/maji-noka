@@ -4,7 +4,6 @@ import cookie from 'js-cookie';
 import { useState, useEffect } from 'react';
 import { CartItem } from '../types';
 
-
 export const useCart = () => {
   const currentCartJson = cookie.get('cart') || '[]';
   const [cart, setCart] = useState<CartItem[]>(JSON.parse(currentCartJson));
@@ -29,10 +28,11 @@ export const useCart = () => {
   };
 
   /* カートから削除 */
-  const removeCart = (removedItem: CartItem, quantity: number) => {
+  const removeCart = (removedItem: CartItem) => {
     // if (!cartItemIds.includes(removedItem.id)) return;
     const newCart = cart.filter(item => item.id !== removedItem.id);
-
+    console.log("newCart", newCart);
+    
     setCart(newCart);
   };
 

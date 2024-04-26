@@ -9,6 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.556.0",
+    "@aws-sdk/client-s3": "^3.556.0",
+    "@aws-sdk/s3-request-presigner": "^3.556.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@hookform/resolvers": "^3.3.4",
@@ -26,7 +29,6 @@
     "@trpc/server": "^10.45.1",
     "@types/bcrypt": "^5.0.2",
     "@types/date-fns": "^2.6.0",
-    "aws-sdk": "^2.1569.0",
     "bcrypt": "^5.1.1",
     "class-transformer": "^0.5.1",
     "flowbite-react": "^0.7.3",

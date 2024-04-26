@@ -5,7 +5,7 @@ import { Toast } from "flowbite-react";
 import { HiCheck } from "react-icons/hi";
 import { useRouter } from "next/router";
 
-export default function paymentSuccess() {
+export default function PaymentSuccess() {
     const router = useRouter();
     const transitionItems = (event: React.MouseEvent<HTMLSpanElement>) => {
         // クリックされた要素のテキストを取得

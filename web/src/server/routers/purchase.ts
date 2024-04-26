@@ -1,15 +1,14 @@
 import { z } from "zod";
 import prisma from "../../../lib/prismadb";
 import { procedure, router } from "../trpc";
-import { updateInput } from "../types/items";
 
 
 // 新しいrouterを作成します。
 export const purchaseRouter = router({
   getItems: procedure.query(async () => {
-    const purchases = await prisma.purchase.findMany();
+    const purchase = await prisma.purchase.findMany();
 
-    return purchases;
+    return purchase;
   }),
 
   // 特定のIDのitemを取得するクエリです。

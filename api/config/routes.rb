@@ -32,7 +32,12 @@ Rails.application.routes.draw do
   scope 'categories' do
     get '/index', to: 'categories#index'
   end
+
   scope 'users' do
     get '/index', to: 'users#index'
+  end
+
+  scope 'purchase' do
+    get '/index', to: 'purchase#index'
   end
 end
