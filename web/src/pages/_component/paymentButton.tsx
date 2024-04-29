@@ -69,7 +69,7 @@ const Checkout: React.FC<PaymentProps> = ({ item, quantity }) => {
 
   return (
     <div className="mt-2">
-      <Button color="blue" onClick={() => startCheckout(item.id, item.name)} className="w-[180px]">
+      <Button color="blue" onClick={() => startCheckout(item.id, item.name)} className="xl:w-[180px] w-full">
         購入する　<RiMoneyCnyCircleLine />
       </Button>
     </div>

@@ -5,7 +5,6 @@ import Items from "./item/index";
 import Slider from "./_component/slider";
 import Loading from "./_component/loading";
 
-
 export default function IndexPage() {
   const { data: session, status }: any = useSession();
   

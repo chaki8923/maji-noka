@@ -5,10 +5,17 @@ import { useState, useEffect } from 'react';
 import { CartItem } from '../types';
 
 export const useCart = () => {
-  const currentCartJson = cookie.get('cart') || '[]';
-  const [cart, setCart] = useState<CartItem[]>(JSON.parse(currentCartJson));
-  const cartItemIds = cart.map((item) => item.id);
 
+  const [cart, setCart] = useState<CartItem[]>([]);
+  useEffect(() => {
+    const currentCartJson = cookie.get('cart') || '[]';
+    console.log("currentCartJson", currentCartJson);
+    
+    setCart(JSON.parse(currentCartJson));
+  }, []); // 
+
+  const cartItemIds = cart.map((item) => item.id);
+  
   /* カートへ追加 */
   const addCart = (addedItem: CartItem, quantity: number) => {
     if (cartItemIds.includes(addedItem.id)) {
@@ -31,14 +38,19 @@ export const useCart = () => {
   const removeCart = (removedItem: CartItem) => {
     // if (!cartItemIds.includes(removedItem.id)) return;
     const newCart = cart.filter(item => item.id !== removedItem.id);
-    console.log("newCart", newCart);
-    
+
     setCart(newCart);
   };
 
+  console.log("クッキー入れる前", cart);
+  console.log("クッキー入れる前個数", cart.length);
+  
+  if(cart && JSON.stringify(cart).length !== 0){
   useEffect(() => {
-    cookie.set('cart', JSON.stringify(cart), { expires: 1 });
-  }, [cart]);
+      cookie.set('cart', JSON.stringify(cart), { expires: 3600 });
+    }, [cart]);
+  }
+
 
   return {
     cart,

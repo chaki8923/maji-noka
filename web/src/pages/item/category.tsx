@@ -4,7 +4,6 @@ import {getImageUrl}  from '../../hooks/awsImageOperations';
 import Link from "next/link";
 import { Card, Badge } from 'flowbite-react';
 import { useSearchParams } from "next/navigation";
-import Sidebar from "../_component/sideBar";
 import { useWindowSize } from "../../hooks/useWindowSize";
 import Image from 'next/image';
 
@@ -39,7 +38,6 @@ export default function Items() {
 
   return (
     <div className='lg:flex lg:justify-start'>
-      {width > 1124 ? <Sidebar /> : null}
       <div className="grid gap-2 lg:ml-6 lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 mb-24 justify-items-center px-5 ">
         {items.data.map((item, index) => (
           <Link href={`/item/${item.id}`} key={item.id} className=''>
@@ -69,7 +67,6 @@ export default function Items() {
           </Link>
         ))}
       </div>
-      {width < 1124 ? <Sidebar /> : null}
     </div>
   );
 }
