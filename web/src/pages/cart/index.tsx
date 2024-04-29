@@ -8,11 +8,14 @@ import { useRouter } from 'next/router';
 import { TbArrowBackUp } from "react-icons/tb";
 import Image from 'next/image';
 
-const Cart: NextPage = () => {
+function Cart() {
   const router = useRouter();
   const { cart, removeCart } = useCart();
   const [imageUrls, setImageUrls] = useState<string[]>([]);
+  // const cart = [{id: 1, name: "hoge", price: 200, quantity: 5}, {id: 1, name: "hoge", price: 200, quantity: 5}, {id: 1, name: "hoge", price: 200, quantity: 5}]
   const [quantities, setQuantities] = useState(cart.map(item => item.quantity));
+  console.log("カート", cart);
+  console.log("カート数", cart.length);
 
   const handleChange = (index: number, selectedQuantity: number) => {
     setQuantities(prevQuantities => {
@@ -34,6 +37,20 @@ const Cart: NextPage = () => {
     router.back();
   };
 
+  if (cart.length === 0) {
+    return (
+      <div className="flex justify-center self-center">
+        <div className="mt-[260px]">
+          <div>何もカートに入ってまへん。</div>
+          <Button color="blue" onClick={() => handleBack()} className="w-[180px] mt-2">
+            <TbArrowBackUp />戻る
+          </Button>
+        </div>
+      </div>
+
+    )
+  }
+
   useEffect(() => {
     if (cart.length > 0) {
       const fetchImageUrls = async () => {
@@ -46,42 +63,36 @@ const Cart: NextPage = () => {
     }
   }, [cart]);
 
-  if (cart.length === 0) {
-    return (
-      <>
-        <div>何もカートに入ってまへん。</div>
-        <Button color="blue" onClick={() => handleBack()} className="w-[180px] mt-2">
-          <TbArrowBackUp />商品ページに戻る
-        </Button>
-      </>
-
-    )
-  }
-
   return (
-    <div className='flex gap-4 p-8'>
-      {cart.map((item, index) => (
-        <Card key={item.id} className='w-80'>
-          <p className='flex justify-between items-end'>
-            <h4 className="text-gray-800">{item.name}</h4>
-          </p>
-          <p className='mt-3 font-bold text-xl text-gray-800'>¥{item.price}</p>
-          <p className='relative h-52'>
-            <Image src={imageUrls[index]} alt="" className='' layout="fill" />
-          </p>
-          <p className='text-sm min-h-[60px]'>{item.description}</p>
-
-          <Select id="countries" required value={quantities[index]} onChange={(e) => handleChange(index, parseInt(e.target.value))}>
-            {Array.from({ length: 10 }, (_, i) => i).map((number) => (
-              <option key={number}>{number + 1}</option>
-            ))}
-          </Select>
-          <Payment item={item} quantity={quantities[index]} />
-          <Button color="failure" onClick={() => { removeCart(item); deleteQuantities(index); }} className="w-[180px] mt-2">
-            削除する
-          </Button>
-        </Card>
-      ))}
+    <div className='flex gap-4 p-8 flex-wrap sm:justify-normal justify-center'>
+      {cart ? (
+        cart.map((item, index) => (
+          <Card key={item.id} className='w-80'>
+            <p className='flex justify-between items-end text-gray-800'>
+              {item.name}
+            </p>
+            <p className='font-bold text-xl text-gray-800'>¥{item.price}</p>
+            <p className='relative h-52'>
+              {imageUrls ? (
+                <Image src={imageUrls[index]} alt="" className='' layout="fill" />
+              ) : null}
+            </p>
+            <Select id="countries" required value={quantities[index]} onChange={(e) => handleChange(index, parseInt(e.target.value))}>
+              {Array.from({ length: 10 }, (_, i) => i).map((number) => (
+                <option key={number}>{number + 1}</option>
+              ))}
+            </Select>
+            <div className="xl:px-9 px-0">
+              <Payment item={item} quantity={quantities[index]} />
+              <Button color="failure" onClick={() => { removeCart(item); deleteQuantities(index); }} className="xl:w-[180px] mt-2 w-full">
+                削除する
+              </Button>
+            </div>
+          </Card>
+        ))
+      ) : (
+        <div></div>
+      )}
     </div>
   );
 };

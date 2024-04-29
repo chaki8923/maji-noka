@@ -6,6 +6,7 @@ import { trpc } from '../utils/trpc';
 import "../../styles/globals.css"
 import './item/styles.css';
 import './_component/styles.css';
+import FooterComponent from "./_component/footer";
 
 
 function MyApp({ Component, pageProps }: AppProps<{
@@ -15,9 +16,10 @@ function MyApp({ Component, pageProps }: AppProps<{
   return (
     <SessionProvider session={pageProps.session}>
       <Header/>
-      <div>
+      <div className="min-h-[640px]">
         <Component {...pageProps} />
       </div>
+      <FooterComponent />
     </SessionProvider>
   )
 }

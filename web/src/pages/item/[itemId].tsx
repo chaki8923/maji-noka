@@ -3,12 +3,11 @@ import React, { useState, useEffect } from 'react';
 import { useCart } from "../../hooks/useCart";
 import { useRouter } from "next/router";
 import Payment from "../_component/paymentButton";
-import Sidebar from "../_component/sideBar";
 import { Select, Button, Toast } from 'flowbite-react';
 import { CartItem } from '@/src/types';
 import { Autoplay, Navigation, Pagination, Thumbs, FreeMode, EffectFade } from "swiper/modules";
 import { Swiper, SwiperSlide, SwiperClass } from "swiper/react";
-import {getImageUrl} from '../../hooks/awsImageOperations';
+import { getImageUrl } from '../../hooks/awsImageOperations';
 import { FaCartArrowDown } from "react-icons/fa";
 import { HiCheck } from "react-icons/hi";
 import { TbShoppingCartPin } from "react-icons/tb";
@@ -72,18 +71,18 @@ export default function Item() {
 
 
   return (
-    <div className='lg:flex lg:flex-row-reverse pt-3 overflow-hidden w-full justify-end pb-10'>
-      {isCart ? 
-      <Toast className='fixed top-2/4 left-1/3 z-50 py-9'>
-        <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200">
-          <HiCheck className="h-5 w-5" />
-        </div>
-        <div className="ml-3 text-sm font-normal">カートに追加しましまた</div>
-        <Toast.Toggle onClick={closeModal} />
-      </Toast> : null}
+    <div className='lg:flex pt-3 overflow-hidden w-full justify-center pb-10'>
+      {isCart ?
+        <Toast className='fixed top-2/4 left-1/3 z-50 py-9'>
+          <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200">
+            <HiCheck className="h-5 w-5" />
+          </div>
+          <div className="ml-3 text-sm font-normal">カートに追加しましまた</div>
+          <Toast.Toggle onClick={closeModal} />
+        </Toast> : null}
 
-      <div className='lg:w-3/5 lg:flex w-full'>
-        <div className='lg:w-[95%] w-full'>
+      <div className='lg:flex w-full'>
+        <div className='lg:w-[70%] w-full'>
           <Swiper
             modules={[Navigation, Pagination, Autoplay, Thumbs, EffectFade]}
             thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
@@ -101,7 +100,7 @@ export default function Item() {
             }} // ページネーション, クリックで対象のスライドに切り替わる
             className="mainSwiper"
           >
-            
+
             {imageUrls.map((src: string, index: number) => (
               <SwiperSlide key={index} className='main-inner-slide'>
                 <Image src={src} alt="商品画像" layout="fill" objectFit="cover" />
@@ -125,49 +124,52 @@ export default function Item() {
 
           </Swiper>
         </div>
-        <div className='lg:w-[240px] w-[340px] m-auto'>
-          <div className="text-group mb-6">
-            <h2 className='text-white font-bold text-lg'>Name</h2>
-            <p className='text-white'>{data.name}</p>
+        <div className='lg:w-[30%] w-full xl:m-auto flex justify-between lg:block item-info'>
+          <div className='w-[50%] lg:w-auto p-10 xl:p-0 item-info__inner'>
+            <div className="text-group mb-6">
+              <h2 className='text-white font-bold text-lg'>Name</h2>
+              <p className='text-white'>{data.name}</p>
+            </div>
+            <div className="text-group mb-6">
+              <h2 className='text-white font-bold text-lg'>Cmment</h2>
+              <p className='text-white'>{data.description}</p>
+            </div>
+            <div className="text-group mb-6">
+              <h2 className='text-white font-bold text-lg'>Price</h2>
+              <p className='text-white'>{data.price.toLocaleString()}円</p>
+            </div>
+            <div className="text-group mb-6">
+              <h2 className='text-white font-bold text-lg'>Category</h2>
+              <p className='text-white'>{data.categoryName}</p>
+            </div>
+            <div className="text-group mb-6">
+              <h2 className='text-white font-bold text-lg'>在庫</h2>
+              <p className='text-white'>{data.inventory}個</p>
+            </div>
           </div>
-          <div className="text-group mb-6">
-            <h2 className='text-white font-bold text-lg'>Cmment</h2>
-            <p className='text-white'>{data.description}</p>
-          </div>
-          <div className="text-group mb-6">
-            <h2 className='text-white font-bold text-lg'>Price</h2>
-            <p className='text-white'>{data.price.toLocaleString()}円</p>
-          </div>
-          <div className="text-group mb-6">
-            <h2 className='text-white font-bold text-lg'>Category</h2>
-            <p className='text-white'>{data.categoryName}</p>
-          </div>
-          <div className="text-group mb-6">
-            <h2 className='text-white font-bold text-lg'>在庫</h2>
-            <p className='text-white'>{data.inventory}個</p>
-          </div>
-          <div className="text-group mb-6">
-            <h2 className='text-white font-bold text-lg'>注文数</h2>
-            <Select className="w-[180px]" id="categories" required value={orderQuantity} onChange={handleChange}>
-              {Array.from({ length: 10 }, (_, i) => i).map((number) => (
-                <option key={number} >{number + 1}</option>
-              ))}
-            </Select>
-          </div>
-          <div className="text-group mb-6 w-3">
-            <Payment item={data} quantity={orderQuantity} />
-          </div>
-          <div className="mt-2">
-            <Button color="blue" onClick={() => insertCart(data, orderQuantity)} className="w-[180px] mb-4">
-              カートに入れる　<FaCartArrowDown />
-            </Button>
-            <Button onClick={() => router.push('/cart')} className="w-[180px]">
-              カートへ行く　<TbShoppingCartPin />
-            </Button>
+          <div className='w-[50%] lg:w-auto p-10 xl:p-0 item-info__inner'>
+            <div className="text-group mb-6">
+              <h2 className='text-white font-bold text-lg'>注文数</h2>
+              <Select className="xl:w-[180px] w-full" id="categories" required value={orderQuantity} onChange={handleChange}>
+                {Array.from({ length: 10 }, (_, i) => i).map((number) => (
+                  <option key={number} >{number + 1}</option>
+                ))}
+              </Select>
+            </div>
+            <div className="text-group mb-6 w-3">
+              <Payment item={data} quantity={orderQuantity} />
+            </div>
+            <div className="mt-2">
+              <Button color="blue" onClick={() => insertCart(data, orderQuantity)} className="xl:w-[180px] mb-4 w-full">
+                カートに入れる　<FaCartArrowDown />
+              </Button>
+              <Button onClick={() => router.push('/cart')} className="xl:w-[180px] w-full">
+                カートへ行く　<TbShoppingCartPin />
+              </Button>
+            </div>
           </div>
         </div>
       </div>
-      <Sidebar />
     </div>
   );
 }
