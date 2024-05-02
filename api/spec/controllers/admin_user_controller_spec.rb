@@ -38,5 +38,19 @@ RSpec.describe AdminUserController, type: :controller  do
       _, err_message = auth.check(admin_user_params)
       expect(err_message).to_not be_present
     end
+
+    it "emailが違うとログインできない事" do
+      admin_user_params = {email: "fugafuga222@gmail.com", password: '123456'}
+      auth = Auth.new
+      _, err_message = auth.check(admin_user_params)
+      expect(err_message).to be_present
+    end
+
+    it "パスワードが違うとログインできない事" do
+      admin_user_params = {email: "fugafuga2@gmail.com", password: '1234567'}
+      auth = Auth.new
+      _, err_message = auth.check(admin_user_params)
+      expect(err_message).to be_present
+    end
   end
 end

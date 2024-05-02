@@ -13,9 +13,9 @@ class Auth # rubocop:disable Style/Documentation
     Rails.logger.debug "hash_pass---------------------------------#{hash_pass}"
     # return nil, SystemMessage::AUTH_ERR if hash_pass.blank?
     return nil, "ハッシュパスがない" if hash_pass.blank?
-    return nil, "メールが登録されてない" if adq.check_mail(value['email']).nil?
+    return nil, "メールが登録されてない" if adq.check_mail(value[:email]).nil?
     # return nil, SystemMessage::AUTH_ERR if adq.check_mail(value['email']).nil?
-    return nil, "パスワードが違う" unless BCrypt::Password.new(hash_pass[:password]) == value['password']
+    return nil, "パスワードが違う" unless BCrypt::Password.new(hash_pass[:password]) == value[:password]
     # return nil, SystemMessage::AUTH_ERR unless BCrypt::Password.new(hash_pass[:password]) == value['password']
 
     return nil, errors.join(', ') unless errors.blank?
