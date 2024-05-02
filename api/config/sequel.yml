@@ -2,6 +2,6 @@
 development:
   db: "postgresql://postgres:password@maji-noka_db_1/web_development"
 test:
-  db: "postgresql://postgres:password@maji-noka-test_db-1/web_development"
+  db: "postgresql://postgres:password@maji-noka-test_db-1/postgres"
 production:
   db: 1000
