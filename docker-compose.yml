@@ -16,6 +16,22 @@ services:
     ports:
       - 5434:5432
     restart: always
+  test_db:
+    image: postgres
+    # dbのユーザー名とパスワードでこれが無いとdbが起動できなかった
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      TZ: "Asia/Tokyo"
+    # 無くても動くけど指定しておくとdocker-composeを停止してもdbの内容が永続化されるため、指定することが多いと思われる
+    # https://matsuand.github.io/docs.docker.jp.onthefly/storage/volumes/
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data
+    # 無くても動くが指定しておくとコンテナ停止時にサービスが再起動してくれる
+    # https://docs.docker.jp/v19.03/config/container/start-containers-automatically.html
+    ports:
+      - 5435:5432
+    restart: always
   div:
     platform: linux/amd64
     build:

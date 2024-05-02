@@ -11,7 +11,7 @@ import { getImageUrl } from '../../hooks/awsImageOperations';
 import { FaCartArrowDown } from "react-icons/fa";
 import { HiCheck } from "react-icons/hi";
 import { TbShoppingCartPin } from "react-icons/tb";
-import Image from 'next/image';
+import Image from "next/legacy/image";
 
 import 'swiper/css';
 import 'swiper/css/free-mode';

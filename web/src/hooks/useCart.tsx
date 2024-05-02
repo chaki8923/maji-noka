@@ -8,14 +8,14 @@ export const useCart = () => {
 
   const [cart, setCart] = useState<CartItem[]>([]);
   useEffect(() => {
-    const currentCartJson = cookie.get('cart') || '[]';
-    console.log("currentCartJson", currentCartJson);
-    
-    setCart(JSON.parse(currentCartJson));
-  }, []); // 
+    const currentCartJson = cookie.get('cart');
+    if (currentCartJson) {
+      setCart(JSON.parse(currentCartJson));
+    }
+  }, []);
 
   const cartItemIds = cart.map((item) => item.id);
-  
+
   /* カートへ追加 */
   const addCart = (addedItem: CartItem, quantity: number) => {
     if (cartItemIds.includes(addedItem.id)) {
@@ -36,21 +36,18 @@ export const useCart = () => {
 
   /* カートから削除 */
   const removeCart = (removedItem: CartItem) => {
-    // if (!cartItemIds.includes(removedItem.id)) return;
     const newCart = cart.filter(item => item.id !== removedItem.id);
 
     setCart(newCart);
   };
-
-  console.log("クッキー入れる前", cart);
-  console.log("クッキー入れる前個数", cart.length);
   
-  if(cart && JSON.stringify(cart).length !== 0){
   useEffect(() => {
+    if (cart.length > 0) {
       cookie.set('cart', JSON.stringify(cart), { expires: 3600 });
-    }, [cart]);
-  }
-
+    } else {
+      cookie.remove('cart');
+    }
+  }, [cart]);
 
   return {
     cart,

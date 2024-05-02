@@ -107,6 +107,13 @@
   /* はみ出た部分を非表示 */
 }
 
+
+.item-image{
+  min-height: 280px!important;
+  object-fit: cover;
+  top: 0;
+}
+
 @media screen and (max-width: 640px) {
 .item-info{
   display: block;

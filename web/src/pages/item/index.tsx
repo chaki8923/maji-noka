@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { Card, Badge } from 'flowbite-react';
 import Loading from '../_component/loading';
 import { useWindowSize } from "../../hooks/useWindowSize";
-import Image from 'next/image';
+import Image from "next/image";
 
 export default function Items() {
   const [imageUrls, setImageUrls] = useState<string[]>([]);

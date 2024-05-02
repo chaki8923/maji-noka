@@ -1,37 +1,42 @@
 require 'rails_helper'
+require 'faker'
+require 'securerandom'
 
-RSpec.describe YourController, type: :controller do
-  describe '#signup' do
-    let(:valid_params) { { admin_user: { username: 'testuser', password: 'password' } } }
+RSpec.describe AdminUserController, type: :controller  do
 
-    context 'when valid parameters are provided' do
-      it 'creates a new admin user' do
-        expect {
-          post :signup, params: valid_params
-        }.to change(AdminUsers, :count).by(1)
-      end
+  # 初回のみ
+  # admin_user_params = {email: "fugafuga2@gmail.com", password: "123456"}
+  # admin_user, err_message = AdminUsers.new(admin_user_params)
+  # admin_user.create(admin_user)
 
-      it 'returns a success JSON response' do
-        post :signup, params: valid_params
-        expect(response).to have_http_status(:ok)
-        expect(JSON.parse(response.body)).to eq({ 'value' => nil, 'success_message' => SystemMessage::API_SUCCESS })
-      end
-    end
+  context 'SignUpのテスト' do
+   it '登録できること' do
+    admin_user_params = {email: Faker::Internet.email, password: BCrypt::Password.create('password')}
+    admin_user, err_message = AdminUsers.new(admin_user_params)
+    expect(admin_user.create(admin_user)).to be_integer
+   end
 
-    context 'when invalid parameters are provided' do
-      let(:invalid_params) { { admin_user: { username: '', password: 'password' } } }
+   it 'パスワードが6桁未満は登録できないこと' do
+    admin_user_params = {email: Faker::Internet.email, password: '1234'}
+    admin_user, err_message = AdminUsers.new(admin_user_params)
 
-      it 'does not create a new admin user' do
-        expect {
-          post :signup, params: invalid_params
-        }.not_to change(AdminUsers, :count)
-      end
+    expect(err_message).to be_present
+   end
 
-      it 'returns an error JSON response' do
-        post :signup, params: invalid_params
-        expect(response).to have_http_status(:internal_server_error)
-        expect(JSON.parse(response.body)).to include('value' => nil)
-      end
+   it '同じemailは登録できないこと' do
+    admin_user_params = {email: "fugafuga@gmail.com", password: BCrypt::Password.create('password')}
+    admin_user, err_message = AdminUsers.new(admin_user_params)
+
+    expect(err_message).to be_present
+   end
+  end
+
+  context "ログインのテスト" do
+    it "ログインできる事" do
+      admin_user_params = {email: "fugafuga2@gmail.com", password: '123456'}
+      auth = Auth.new
+      _, err_message = auth.check(admin_user_params)
+      expect(err_message).to_not be_present
     end
   end
 end
