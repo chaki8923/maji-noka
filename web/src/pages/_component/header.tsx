@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from 'next/router';
 import { signOut } from "next-auth/react";
 import { Navbar } from "flowbite-react";
-import Image from 'next/image';
+import Image from "next/legacy/image";
 
 
 

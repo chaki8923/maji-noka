@@ -11,11 +11,11 @@ class Auth # rubocop:disable Style/Documentation
     hash_pass = adq.get_hash_password(value)
     ## TODO：あとで消す
     Rails.logger.debug "hash_pass---------------------------------#{hash_pass}"
-    raise SystemMessage::AUTH_ERR if hash_pass.blank?
-    raise SystemMessage::AUTH_ERR if adq.check_mail(value['email']).nil?
-    raise SystemMessage::AUTH_ERR unless BCrypt::Password.new(hash_pass[:password]) == value['password']
+    return nil, SystemMessage::AUTH_ERR if hash_pass.blank?
+    return nil, SystemMessage::AUTH_ERR if adq.check_mail(value['email']).nil?
+    return nil, SystemMessage::AUTH_ERR unless BCrypt::Password.new(hash_pass[:password]) == value['password']
 
-    raise errors.join(', ') unless errors.blank?
-    { value: nil, success_message: SystemMessage::API_SUCCESS }
+    return nil, errors.join(', ') unless errors.blank?
+    return SystemMessage::API_SUCCESS, nil
   end
 end

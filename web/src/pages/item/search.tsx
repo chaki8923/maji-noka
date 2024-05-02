@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Card, Badge } from 'flowbite-react';
 import SearchForm from "../_component/searchForm";
 import { useSearchParams } from "next/navigation";
-import Image from 'next/image';
+import Image from "next/legacy/image";
 
 interface Keyword {
   keyword?: string | undefined;

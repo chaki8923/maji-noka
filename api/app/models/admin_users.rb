@@ -21,7 +21,7 @@ class AdminUsers # rubocop:disable Style/Documentation
     errors.push(err) unless email
     password, err = Password.new(value: value[:password])
     errors.push(err) unless password
-    raise errors.join(', ') unless errors.blank?
+    return nil, errors.join(', ') unless errors.blank?
     super(email: email, password: password)
   end
 
