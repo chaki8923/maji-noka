@@ -5,15 +5,15 @@ require 'securerandom'
 RSpec.describe AdminUserController, type: :controller  do
 
   # 初回のみFakerに直したい。登録されてたら登録しない
-  # admin_user_params = {email: "fugafuga2@gmail.com", password: "123456"}
-  # admin_user, err_message = AdminUsers.new(admin_user_params)
-  # admin_user.create(admin_user)
+  admin_user_params = {email: "fugafuga2@gmail.com", password: "123456"}
+  admin_user, err_message = AdminUsers.new(admin_user_params)
+  admin_user.create(admin_user)
 
   context 'SignUpのテスト' do
    it '登録できること' do
-    # admin_user_params = {email: Faker::Internet.email, password: BCrypt::Password.create('password')}
-    # admin_user, err_message = AdminUsers.new(admin_user_params)
-    # expect(admin_user.create(admin_user)).to be_integer
+    admin_user_params = {email: Faker::Internet.email, password: BCrypt::Password.create('password')}
+    admin_user, err_message = AdminUsers.new(admin_user_params)
+    expect(admin_user.create(admin_user)).to be_integer
    end
 
    it 'パスワードが6桁未満は登録できないこと' do

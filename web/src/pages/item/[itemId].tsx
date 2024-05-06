@@ -12,6 +12,7 @@ import { FaCartArrowDown } from "react-icons/fa";
 import { HiCheck } from "react-icons/hi";
 import { TbShoppingCartPin } from "react-icons/tb";
 import Image from "next/legacy/image";
+import { useShoppingCart } from 'use-shopping-cart'
 
 import 'swiper/css';
 import 'swiper/css/free-mode';
@@ -29,9 +30,10 @@ export default function Item() {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null);
   const itemId = typeof router.query.itemId === 'string' ? parseInt(router.query.itemId, 10) : null;
   const { addCart } = useCart();
+  const { addItem } = useShoppingCart()
 
 
-  const { data } = trpc.item.getItemById.useQuery<CartItem>({
+  const { data } = trpc.item.getItemById.useQuery({
     id: itemId ?? 0, // idがnullの場合は0を使用
   }, {
     enabled: itemId !== null, // idがnullでない場合にのみクエリを実行
@@ -160,6 +162,16 @@ export default function Item() {
               <Payment item={data} quantity={orderQuantity} />
             </div>
             <div className="mt-2">
+              <Button onClick={() => addItem({
+                name: data.name,
+                description: data.description,
+                id: `id_${data.id}`,
+                price: data.price,
+                currency: 'JPY',
+                image: imageUrls[0]
+              })}>
+                カートに追加する
+              </Button>
               <Button color="blue" onClick={() => insertCart(data, orderQuantity)} className="xl:w-[180px] mb-4 w-full">
                 カートに入れる　<FaCartArrowDown />
               </Button>

@@ -48,7 +48,7 @@ export async function POST(req: Request) {
         const email = session.customer_details?.email;
         const metadata = session.metadata;
         console.log("metadata", metadata!.productId);
-        console.log("session.customer_details", session);
+        console.log("session", session);
         if (shippingDetails !== null) {
           // stripeに保存
           await stripe.customers.update(session.customer as string, {
@@ -124,7 +124,7 @@ export async function POST(req: Request) {
             });
           } catch (error) {
             const errorMailOptions = {
-              from: process.env.MAJILUSER,
+              from: `田中本気農家<${process.env.GMAILUSER}>`,
               to: process.env.GMAILUSER,
               subject: "購入情報更新時にエラーが発生しました",
               text: `購入情報をstripeで直接確認してください。エラーを確認してください=>${error}`,
@@ -137,13 +137,13 @@ export async function POST(req: Request) {
           }
 
           const adminMailOptions = {
-            from: process.env.MAJILUSER,
+            from: `田中本気農家<${process.env.GMAILUSER}>`,
             to: process.env.GMAILUSER,
             subject: "商品が購入されました！",
             text: `商品が購入されました！\n\n「商品名」${metadata!.title}\n\n注文情報をご確認ください=>http://localhost3001/purchase/index`,
           };
           const customerMailOptions = {
-            from: process.env.MAJILUSER,
+            from: `田中本気農家<${process.env.GMAILUSER}>`,
             to: email as string,
             subject: "商品のご購入ありがとうございます！",
             text: `商品が購入されました！\n\n「商品名」${metadata!.title}`,
@@ -151,8 +151,8 @@ export async function POST(req: Request) {
 
           // Promise.all([mailer.sendMail(mailOptions1), mailer.sendMail(mailOptions2)])
           Promise.all([
-            transporter.sendMail(adminMailOptions),
-            transporter.sendMail(customerMailOptions),
+            // transporter.sendMail(adminMailOptions),
+            // transporter.sendMail(customerMailOptions),
           ])
             .then((respose) => {
               console.log("Email sent: " + respose);

@@ -43,9 +43,10 @@
     "react-dom": "^18",
     "react-hook-form": "^7.51.3",
     "reflect-metadata": "^0.2.2",
-    "stripe": "^14.22.0",
+    "stripe": "^14.25.0",
     "swiper": "^11.0.7",
     "tw-elements-react": "^1.0.0-alpha2",
+    "use-shopping-cart": "^3.2.0",
     "yup": "^1.4.0",
     "zod": "^3.22.4"
   },

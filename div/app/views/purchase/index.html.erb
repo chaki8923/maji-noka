@@ -1,3 +1,5 @@
+<%= render 'layouts/error', model: @data %>
+<%= render partial: 'layouts/flash_message' %>
 <h2 class="mt-5">注文一覧</h2>
 <table class="table table-dark table-striped">
 <thead>
@@ -7,16 +9,62 @@
     <th scope="col">注文個数</th>
     <th scope="col">注文日</th>
     <th scope="col">対応</th>
+    <th scope="col">発送日</th>
   </tr>
 </thead>
 <tbody>
-<% @purchase.each do |p| %>
+<% @purchase.each_with_index do |p, idx| %>
     <tr>
       <td><%= p[:customer_name] %></td>
       <td><%= p[:item_name] %></td>
       <td><%= p[:quantity] %></td>
-      <td><%= p[:createdAt] %></td>
-      <td><button>対応</button></td>
+      <td><%= format_date(p[:createdAt]) %></td>
+      <td>
+      <!-- Button trigger modal -->
+      <% if p[:support_flag] %>
+        <button type="button" class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#staticBackdrop<%= idx %>"  disabled >
+          発送済み
+        </button>
+      <% else %>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop<%= idx %>" >
+          ステータス変更
+        </button>
+
+      <% end %>
+
+        <!-- Modal -->
+        <div class="modal fade" id="staticBackdrop<%= idx %>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" style="color: #333;" id="staticBackdropLabel">Modal title</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body" style="color: #333;">
+                <%= p[:customer_name] %>様に配送した旨のメールをお送りします。
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                 <%= form_with(model: @data ,url: mail_path, html:{class: 'form-group'}) do |f| %>
+                      <%= f.hidden_field :state,class: 'form-control', value: "#{p[:state]}" %>
+                      <%= f.hidden_field :country,class: 'form-control', value: "#{p[:country]}" %>
+                      <%= f.hidden_field :postal_code,class: 'form-control', value: "#{p[:postal_code]}" %>
+                      <%= f.hidden_field :line1,class: 'form-control', value: "#{p[:line1]}" %>
+                      <%= f.hidden_field :line2,class: 'form-control', value: "#{p[:line2]}" %>
+                      <%= f.hidden_field :purchase_id,class: 'form-control', value: "#{p[:purchase_id]}" %>
+                      <%= f.hidden_field :email,class: 'form-control', value: "#{p[:email]}" %>
+                      <%= f.hidden_field :item,class: 'form-control', value: "#{p[:item_name]}" %>
+                      <%= f.submit "送信", class: 'btn btn-primary' %>
+                  <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </td>
+      <td>
+      <% if p[:support_flag] %><%= format_date(p[:updatedAt]) %><% else %>-<% end %>
+      </td>
     </tr>
 <% end %>
 </tbody>

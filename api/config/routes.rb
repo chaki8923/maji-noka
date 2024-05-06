@@ -37,6 +37,10 @@ Rails.application.routes.draw do
     get '/index', to: 'users#index'
   end
 
+  scope 'mail' do
+    post '/send_mail', to: 'send_mail#send_mail'
+  end
+
   scope 'purchase' do
     get '/index', to: 'purchase#index'
   end

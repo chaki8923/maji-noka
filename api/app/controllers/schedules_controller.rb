@@ -7,7 +7,6 @@ class SchedulesController < ApplicationController # rubocop:disable Style/Docume
     schedule.create(schedule)
     render json: { value: nil, success_message: SystemMessage::API_SUCCESS }
   rescue => err_message
-    Rails.logger.debug "err_message---------------------------------#{err_message}"
     render json: {
              value: nil,
              err_message: err_message
