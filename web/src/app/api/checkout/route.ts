@@ -6,10 +6,12 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 });
 
 export async function POST(request: Request, response: Response) {
-  const { title, price, quantity, customerId, productId } = await request.json();
+  const { title, price, quantity, customerId, productId, items } = await request.json();
 
   try {   
+    console.log("paypay", items);
     const session = await stripe.checkout.sessions.create({
+      
       payment_method_types: ["card"],
       customer: customerId,
       line_items: [
@@ -22,6 +24,16 @@ export async function POST(request: Request, response: Response) {
             unit_amount: price,
           },
           quantity: quantity,
+        },
+        {
+          price_data: {
+            currency: "jpy",
+            product_data: {
+              name: "まめ",
+            },
+            unit_amount: 8000,
+          },
+          quantity: 19,
         },
       ],
       // カード決済時の住所入力をstripeに任せます

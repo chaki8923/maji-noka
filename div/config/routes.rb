@@ -46,12 +46,12 @@ Rails.application.routes.draw do
   end
 
   scope 'purchase' do
-    get '/index', to: 'purchase#index'
+    get '/index', to: 'purchase#index', as: 'purchase_index'
   end
 
-  get 'mail', to: 'sample_mail#mail'
-  get 'mail_comp', to: 'sample_mail#mail_comp'
-  post 'mail', to: 'sample_mail#send_mail'
+  get 'mail', to: 'send_mail#mail'
+  get 'mail_comp', to: 'send_mail#mail_comp'
+  post 'mail', to: 'send_mail#send_mail'
 
   scope 'calendar' do
     get '/get', to: 'admin_user#get_calender'

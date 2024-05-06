@@ -1,6 +1,6 @@
-class SampleMailer < ApplicationMailer
+class SendMailer < ApplicationMailer
 
-  def sample_email
+  def send_email
     @email = params[:email]
     @subject = params[:subject]
     @body = params[:body]
@@ -13,6 +13,6 @@ class SampleMailer < ApplicationMailer
   end
 
   def mukimuki
-    
+
   end
 end

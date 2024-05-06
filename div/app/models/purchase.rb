@@ -11,8 +11,6 @@ class Purchase < BaseModel # rubocop:disable Style/Documentation
 
   def index
     purchase = execute_api('purchase/index', method: 'get')
-    ## TODO:Chakiあとで消す
-   Rails.logger.debug "purchase---------------------------------#{purchase}"
     make_list(purchase)
   end
 end

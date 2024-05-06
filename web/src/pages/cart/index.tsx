@@ -7,24 +7,27 @@ import Payment from "../_component/paymentButton";
 import { useRouter } from 'next/router';
 import { TbArrowBackUp } from "react-icons/tb";
 import Image from "next/legacy/image";
+import { useShoppingCart } from 'use-shopping-cart'
 
 function Cart() {
   const router = useRouter();
   const { cart, removeCart } = useCart();
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [quantities, setQuantities] = useState(cart.map(item => item.quantity));
+  const { cartDetails, redirectToCheckout, cartCount, removeItem } = useShoppingCart();
+  const items = Object.values(cartDetails ?? {}).map((entry) => entry);
 
   useEffect(() => {
-    if (cart) {
+    if (items) {
       const fetchImageUrls = async () => {
-        const urls = await Promise.all(cart.map(async (item) => {
+        const urls = await Promise.all(items.map(async (item) => {
           return await getImageUrl('maji-image', `item/${item.id}/item_image_0_${item.id}`, 3600);
         }));
         setImageUrls(urls);
       };
       fetchImageUrls();
     }
-  }, [cart]);
+  }, []);
 
   const handleChange = (index: number, selectedQuantity: number) => {
     setQuantities(prevQuantities => {
@@ -46,9 +49,7 @@ function Cart() {
     router.back();
   };
 
-  console.log("カート", cart);
-  
-  if (cart.length === 0) {
+  if (items.length === 0) {
     return (
       <div className="flex justify-center self-center">
         <div className="mt-[260px]">
@@ -63,7 +64,7 @@ function Cart() {
 
   return (
     <div className='flex gap-4 p-8 flex-wrap sm:justify-normal justify-center'>
-      {cart.map((item, index) => (
+      {items.map((item, index) => (
         <Card key={item.id} className='w-80'>
           <p className='flex justify-between items-end text-gray-800'>
             {item.name}
@@ -80,13 +81,25 @@ function Cart() {
             ))}
           </Select>
           <div className="xl:px-9 px-0">
-            <Payment item={item} quantity={quantities[index]} />
-            <Button color="failure" onClick={() => { removeCart(item); deleteQuantities(index); }} className="xl:w-[180px] mt-2 w-full">
-              削除する
-            </Button>
+
+            <Button color="failure" onClick={() => removeItem(item.id)}>削除</Button>
           </div>
         </Card>
       ))}
+      <Button
+        color="blue"
+        disabled={cartCount! < 1}
+        onClick={async () => {
+          try {
+            const result = await redirectToCheckout()
+            if (result.error) throw new Error(result.error)
+          } catch (err: any) {
+            window.alert(err.message);
+          }
+        }}
+      >
+        注文する
+      </Button>
     </div>
   );
 };

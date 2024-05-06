@@ -1,5 +1,5 @@
 require "active_support/core_ext/integer/time"
-require 'carrierwave/orm/activerecord' 
+require 'carrierwave/orm/activerecord'
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -63,7 +63,19 @@ Rails.application.configure do
 
   # メール送信設定
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = { address: 'mailcatcher', port: 1025 }
+  # config.action_mailer.smtp_settings = { address: 'mailcatcher', port: 1025 }
+
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    port:                 587,
+    address:              'smtp.gmail.com',
+    domain:               'gmail.com',
+    user_name:            '<YOUR EMAIL ADDRESS>',
+    password:             '<YOUR EMAIL PASSWORD>',
+    authentication:       'login',
+    enable_starttls_auto: true
+  }
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
 

@@ -5,21 +5,6 @@ require 'sequel'
 class ScheduleCommand # rubocop:disable Style/Documentation
   DB = Sequel.connect(Rails.configuration.x.sequel[:db])
 
-  # 新規作成
-  def create_db(schedule)
-    DB[:schedules]
-      .returning(:id)
-      .insert(
-        title: schedule.title.value,
-        start_time: schedule.start_time.value,
-        end_time: schedule.end_time.value,
-        schedule_date: schedule.schedule_date.value,
-        memo: schedule.memo.value,
-        updated_at: 'NOW()',
-        created_at: 'NOW()'
-      )
-  end
-
   def update_db(schedule)
     DB[:schedules]
       .returning(:id)
