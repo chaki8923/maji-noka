@@ -11,7 +11,6 @@ export default function PaymentSuccess() {
     const { clearCart } = useShoppingCart()
     const transitionItems = (event: React.MouseEvent<HTMLSpanElement>) => {
         clearCart();
-        // クリックされた要素のテキストを取得
         router.push("/");
     };
 

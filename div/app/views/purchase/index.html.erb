@@ -10,6 +10,7 @@
     <th scope="col">注文日</th>
     <th scope="col">対応</th>
     <th scope="col">発送日</th>
+    <th scope="col"></th>
   </tr>
 </thead>
 <tbody>
@@ -46,15 +47,15 @@
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                  <%= form_with(model: @data ,url: mail_path, html:{class: 'form-group'}) do |f| %>
-                      <%= f.hidden_field :state,class: 'form-control', value: "#{p[:state]}" %>
-                      <%= f.hidden_field :country,class: 'form-control', value: "#{p[:country]}" %>
-                      <%= f.hidden_field :postal_code,class: 'form-control', value: "#{p[:postal_code]}" %>
-                      <%= f.hidden_field :line1,class: 'form-control', value: "#{p[:line1]}" %>
-                      <%= f.hidden_field :line2,class: 'form-control', value: "#{p[:line2]}" %>
-                      <%= f.hidden_field :purchase_id,class: 'form-control', value: "#{p[:purchase_id]}" %>
-                      <%= f.hidden_field :email,class: 'form-control', value: "#{p[:email]}" %>
-                      <%= f.hidden_field :item,class: 'form-control', value: "#{p[:item_name]}" %>
-                      <%= f.submit "送信", class: 'btn btn-primary' %>
+                    <%= f.hidden_field :state,class: 'form-control', value: "#{p[:state]}" %>
+                    <%= f.hidden_field :country,class: 'form-control', value: "#{p[:country]}" %>
+                    <%= f.hidden_field :postal_code,class: 'form-control', value: "#{p[:postal_code]}" %>
+                    <%= f.hidden_field :line1,class: 'form-control', value: "#{p[:line1]}" %>
+                    <%= f.hidden_field :line2,class: 'form-control', value: "#{p[:line2]}" %>
+                    <%= f.hidden_field :purchase_id,class: 'form-control', value: "#{p[:purchase_id]}" %>
+                    <%= f.hidden_field :email,class: 'form-control', value: "#{p[:email]}" %>
+                    <%= f.hidden_field :item,class: 'form-control', value: "#{p[:item_name]}" %>
+                    <%= f.submit "送信", class: 'btn btn-primary' %>
                   <% end %>
               </div>
             </div>
@@ -65,7 +66,21 @@
       <td>
       <% if p[:support_flag] %><%= format_date(p[:updatedAt]) %><% else %>-<% end %>
       </td>
+      <td>
+        <%= check_box_tag "item_ids[]", p[:id] %>
+      </td>
+
     </tr>
+    <%= form_with(model: @data ,url: mail_path, html:{class: 'form-group'}) do |f| %>
+      <%= f.hidden_field :state, class: 'form-control', value: "#{p[:state]}", disabled: true %>
+      <%= f.hidden_field :country,class: 'form-control', value: "#{p[:country]}" %>
+      <%= f.hidden_field :postal_code,class: 'form-control', value: "#{p[:postal_code]}" %>
+      <%= f.hidden_field :line1,class: 'form-control', value: "#{p[:line1]}" %>
+      <%= f.hidden_field :line2,class: 'form-control', value: "#{p[:line2]}" %>
+      <%= f.hidden_field :purchase_id,class: 'form-control', value: "#{p[:purchase_id]}" %>
+      <%= f.hidden_field :email,class: 'form-control', value: "#{p[:email]}" %>
+      <%= f.hidden_field :item,class: 'form-control', value: "#{p[:item_name]}" %>
+    <% end %>
 <% end %>
 </tbody>
 </table>
