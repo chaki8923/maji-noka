@@ -5,9 +5,9 @@ const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY!, {
 });
 
 
-export const createCustomerId = async ({ productId, inventory, itemName}: { productId: number, inventory: number, itemName: string  }) => {
+export const createCustomerId = async ({ items}: { items: any  }) => {
   try {
-    
+    console.log("createCustomerIdの中", items);
     // customerを作成する
     const customer = await stripe.customers.create({
       // name: userName,
@@ -15,9 +15,11 @@ export const createCustomerId = async ({ productId, inventory, itemName}: { prod
       // custmerの言語を日本語に設定します
       preferred_locales: ["ja"],
       metadata: {
-        productId,
-        inventory,
-        itemName
+        items: JSON.stringify(items.map((item: any) => ({
+          productId: item.id,
+          title: item.name,
+          quantity: item.quantity
+        })))
       },
     });
 

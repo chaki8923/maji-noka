@@ -3,12 +3,12 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import prisma from "../../../../lib/prismadb";
 import nodemailer from "nodemailer";
+import { CustomerService } from './CustomerService';
 
 const stripeWebhookSecret = process.env.STRIPE_WEBHOOK_SECRET as string;
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16",
 });
-
 export async function POST(req: Request) {
   // リクエストの検証
   const body = await req.text();
@@ -28,16 +28,7 @@ export async function POST(req: Request) {
   try {
     switch (event.type) {
       case "customer.updated": {
-        const metadata = event.data.object.metadata;
-        console.log("metadata情報", metadata);
-        // トランザクション
-        await prisma.$transaction(async (prisma) => {
-          //商品の在庫更新
-          await prisma.items.update({
-            where: { id: Number(metadata.productId) },
-            data: { inventory: Number(metadata.inventory) },
-          });
-        });
+
 
         break;
       }
@@ -47,8 +38,10 @@ export async function POST(req: Request) {
         const name = session.customer_details?.name;
         const email = session.customer_details?.email;
         const metadata = session.metadata;
-        console.log("metadata", metadata!.productId);
-        console.log("session", session);
+        var itemsArray = JSON.parse(metadata!.items);
+
+        console.log("completeのmetadata!!", metadata);
+
         if (shippingDetails !== null) {
           // stripeに保存
           await stripe.customers.update(session.customer as string, {
@@ -66,7 +59,6 @@ export async function POST(req: Request) {
           });
 
           //購入履歴
-          console.log("customer_id", session.customer);
           // メール送信
           const transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
@@ -82,45 +74,44 @@ export async function POST(req: Request) {
                 email: email as string,
               },
             });
-            console.log("既存カスタマー", customer);
-            let purchaseCustomer;
+            let purchaseCustomer: any;
             await prisma.$transaction(async (prisma) => {
-              if (!customer) {
-                purchaseCustomer = await prisma.customer.create({
-                  data: {
-                    customerId: session.customer as string,
-                    name: name,
-                    email: email,
-                    country: shippingDetails?.country,
-                    postal_code: shippingDetails?.postal_code,
-                    city: shippingDetails?.city,
-                    state: shippingDetails?.state,
-                    line1: shippingDetails?.line1,
-                    line2: shippingDetails?.line2,
-                  },
-                });
-              } else {
-                purchaseCustomer = await prisma.customer.update({
-                  where: { email: email as string },
-                  data: {
-                    name: name,
-                    country: shippingDetails?.country,
-                    postal_code: shippingDetails?.postal_code,
-                    city: shippingDetails?.city,
-                    state: shippingDetails?.state,
-                    line1: shippingDetails?.line1,
-                    line2: shippingDetails?.line2,
-                  },
-                });
-              }
-              //購入履歴
-              await prisma.purchase.create({
-                data: {
-                  customerId: purchaseCustomer.id as string,
-                  itemId: Number(metadata!.productId),
-                  quantity: Number(metadata!.quantity),
-                },
+              
+              const customerService = new CustomerService(prisma);
+              purchaseCustomer = await customerService.handleCustomer({
+                customer: customer,
+                session: session,
+                name: name,
+                email: email,
+                shippingDetails: shippingDetails
               });
+              
+              // Promiseの配列を生成
+              var promises = itemsArray.map(async function (item: any) {
+                await prisma.purchase.create({
+                  data: {
+                    customerId: purchaseCustomer.id as string,
+                    itemId: Number(item.productId),
+                    quantity: Number(item.quantity),
+                  },
+                });
+
+                const itemId = item.productId; // 商品IDを取得
+                // 商品情報を取得
+                const itemData = await prisma.items.findUnique({
+                  where: { id: itemId },
+                });
+                console.log("更新前アイテム", itemData);
+                // 在庫を更新
+                await prisma.items.update({
+                  where: { id: itemId },
+                  data: { inventory: Number(itemData?.inventory) - item.quantity },
+                });
+
+              });
+
+              // Promise.all()で非同期処理を待機
+              await Promise.all(promises);
             });
           } catch (error) {
             const errorMailOptions = {
@@ -129,27 +120,37 @@ export async function POST(req: Request) {
               subject: "購入情報更新時にエラーが発生しました",
               text: `購入情報をstripeで直接確認してください。エラーを確認してください=>${error}`,
             };
-            const info = await transporter.sendMail(errorMailOptions);
-            console.log("Email sent: " + info.response);
+            // const info = await transporter.sendMail(errorMailOptions);
             console.error("トランザクションエラー", error);
           } finally {
             await prisma.$connect();
           }
 
+          // メール本文の初期化
+          var mailText = "商品が購入されました！\n\n";
+
+          // 各商品のタイトルをメール本文に追加
+          itemsArray.forEach(function (item: any) {
+            mailText += `${item.title}\n`; // 各商品のタイトルを追加
+          });
+
+          // 最後に注文情報のURLを追加
+          mailText +=
+            "\n注文情報をご確認ください=>http://localhost3001/purchase/index";
+
           const adminMailOptions = {
             from: `田中本気農家<${process.env.GMAILUSER}>`,
             to: process.env.GMAILUSER,
             subject: "商品が購入されました！",
-            text: `商品が購入されました！\n\n「商品名」${metadata!.title}\n\n注文情報をご確認ください=>http://localhost3001/purchase/index`,
+            text: mailText,
           };
           const customerMailOptions = {
             from: `田中本気農家<${process.env.GMAILUSER}>`,
             to: email as string,
             subject: "商品のご購入ありがとうございます！",
-            text: `商品が購入されました！\n\n「商品名」${metadata!.title}`,
+            text: mailText,
           };
 
-          // Promise.all([mailer.sendMail(mailOptions1), mailer.sendMail(mailOptions2)])
           Promise.all([
             // transporter.sendMail(adminMailOptions),
             // transporter.sendMail(customerMailOptions),

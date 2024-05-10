@@ -30,14 +30,14 @@ export default function Item() {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null);
   const itemId = typeof router.query.itemId === 'string' ? parseInt(router.query.itemId, 10) : null;
   const { addCart } = useCart();
-  const { addItem } = useShoppingCart()
-
+  const { addItem,decrementItem, incrementItem, removeItem } = useShoppingCart();
 
   const { data } = trpc.item.getItemById.useQuery({
     id: itemId ?? 0, // idがnullの場合は0を使用
   }, {
     enabled: itemId !== null, // idがnullでない場合にのみクエリを実行
   });
+
   useEffect(() => {
     if (data && itemId !== null) {
       const fetchImageUrls = async () => {
@@ -57,8 +57,7 @@ export default function Item() {
     setorderQuantity(quantity); // 選択された値をステートに設定
   }
 
-  const insertCart = (data: CartItem, orderQuantity: number) => {
-    addCart(data, orderQuantity);
+  const insertCart = () => {
     setIsCart(true)
 
   }
@@ -159,21 +158,21 @@ export default function Item() {
               </Select>
             </div>
             <div className="text-group mb-6 w-3">
-              <Payment item={data} quantity={orderQuantity} />
+              <Payment items={data} quantity={orderQuantity} />
             </div>
             <div className="mt-2">
-              <Button onClick={() => addItem({
-                name: data.name,
-                description: data.description,
-                id: `id_${data.id}`,
-                price: data.price,
-                currency: 'JPY',
-                image: imageUrls[0]
-              })}>
+              <Button onClick={() => {
+                addItem({
+                  name: data.name,
+                  description: data.description,
+                  id: data.id,
+                  price: data.price,
+                  currency: 'JPY',
+                  image: imageUrls[0],
+                },{count: orderQuantity});
+                insertCart();
+              }}>
                 カートに追加する
-              </Button>
-              <Button color="blue" onClick={() => insertCart(data, orderQuantity)} className="xl:w-[180px] mb-4 w-full">
-                カートに入れる　<FaCartArrowDown />
               </Button>
               <Button onClick={() => router.push('/cart')} className="xl:w-[180px] w-full">
                 カートへ行く　<TbShoppingCartPin />
