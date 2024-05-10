@@ -4,6 +4,7 @@ import type { NextPage } from 'next';
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import { getImageUrl } from '../../hooks/awsImageOperations';
 import Payment from "../_component/paymentButton";
+import CartPayment from "../_component/cartPaymentButton";
 import { useRouter } from 'next/router';
 import { TbArrowBackUp } from "react-icons/tb";
 import Image from "next/legacy/image";
@@ -11,10 +12,9 @@ import { useShoppingCart } from 'use-shopping-cart'
 
 function Cart() {
   const router = useRouter();
-  const { cart, removeCart } = useCart();
+  const { cart } = useCart();
   const [imageUrls, setImageUrls] = useState<string[]>([]);
-  const [quantities, setQuantities] = useState(cart.map(item => item.quantity));
-  const { cartDetails, redirectToCheckout, cartCount, removeItem } = useShoppingCart();
+  const { addItem, cartDetails, removeItem } = useShoppingCart();
   const items = Object.values(cartDetails ?? {}).map((entry) => entry);
 
   useEffect(() => {
@@ -27,23 +27,13 @@ function Cart() {
       };
       fetchImageUrls();
     }
-  }, []);
+  }, [cartDetails]);
 
-  const handleChange = (index: number, selectedQuantity: number) => {
-    setQuantities(prevQuantities => {
-      const newQuantities = [...prevQuantities];
-      newQuantities[index] = selectedQuantity;
-      return newQuantities;
-    });
+  const handleChange = (item: any, selectedQuantity: number) => {
+    //一度消してから更新
+    removeItem(item.id);
+    addItem(item,{count: selectedQuantity})
   };
-
-  const deleteQuantities = (index: number) => {
-    setQuantities(prevQuantities => {
-      const newQuantities = [...prevQuantities];
-      newQuantities.splice(index, 1);
-      return newQuantities;
-    });
-  }
 
   const handleBack = () => {
     router.back();
@@ -75,31 +65,18 @@ function Cart() {
               <Image src={imageUrls[index]} alt="" className='' layout="fill" />
             )}
           </p>
-          <Select id="countries" required value={quantities[index]} onChange={(e) => handleChange(index, parseInt(e.target.value))}>
+          <Select id="countries" required value={item.quantity} onChange={(e) => handleChange(item, parseInt(e.target.value))}>
             {Array.from({ length: 10 }, (_, i) => i).map((number) => (
               <option key={number}>{number + 1}</option>
             ))}
           </Select>
           <div className="xl:px-9 px-0">
-
+            <Payment items={item} quantity={item.quantity} />
             <Button color="failure" onClick={() => removeItem(item.id)}>削除</Button>
           </div>
         </Card>
       ))}
-      <Button
-        color="blue"
-        disabled={cartCount! < 1}
-        onClick={async () => {
-          try {
-            const result = await redirectToCheckout()
-            if (result.error) throw new Error(result.error)
-          } catch (err: any) {
-            window.alert(err.message);
-          }
-        }}
-      >
-        注文する
-      </Button>
+       <CartPayment />
     </div>
   );
 };

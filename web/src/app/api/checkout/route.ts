@@ -2,46 +2,49 @@ import Stripe from "stripe";
 import { NextResponse } from "next/server";
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2023-10-16"
+  apiVersion: "2023-10-16",
 });
 
 export async function POST(request: Request, response: Response) {
-  const { title, price, quantity, customerId, productId, items } = await request.json();
 
-  try {   
-    console.log("paypay", items);
+  const { checkoutAry } = await request.json();
+  interface LineItem {
+    title: string;
+    price: number;
+    quantity: number;
+    description: number;
+    images: string;
+  }
+
+  try {
+    console.log("try手前", checkoutAry);
+    const line_items = checkoutAry.map((item: LineItem) => ({
+      price_data: {
+        currency: "jpy",
+        product_data: {
+          name: item.title,
+          images: [item.images],
+          description: item.description,
+        },
+        unit_amount: item.price,
+      },
+      quantity: item.quantity,
+    }));
+    console.log("line_items", line_items);
     const session = await stripe.checkout.sessions.create({
-      
       payment_method_types: ["card"],
-      customer: customerId,
+      customer: checkoutAry[0].customerId,
       line_items: [
-        {
-          price_data: {
-            currency: "jpy",
-            product_data: {
-              name: title,
-            },
-            unit_amount: price,
-          },
-          quantity: quantity,
-        },
-        {
-          price_data: {
-            currency: "jpy",
-            product_data: {
-              name: "まめ",
-            },
-            unit_amount: 8000,
-          },
-          quantity: 19,
-        },
+       ...line_items
       ],
       // カード決済時の住所入力をstripeに任せます
       billing_address_collection: "auto",
       metadata: {
-        productId,
-        title,
-        quantity
+        items: JSON.stringify(checkoutAry.map((item: any) => ({
+          productId: item.productId,
+          title: item.title,
+          quantity: item.quantity
+        })))
       },
       shipping_address_collection: {
         allowed_countries: ["JP"],

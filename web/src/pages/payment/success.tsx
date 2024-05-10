@@ -4,10 +4,13 @@
 import { Toast } from "flowbite-react";
 import { HiCheck } from "react-icons/hi";
 import { useRouter } from "next/router";
+import { useShoppingCart } from 'use-shopping-cart'
 
 export default function PaymentSuccess() {
     const router = useRouter();
+    const { clearCart } = useShoppingCart()
     const transitionItems = (event: React.MouseEvent<HTMLSpanElement>) => {
+        clearCart();
         // クリックされた要素のテキストを取得
         router.push("/");
     };
