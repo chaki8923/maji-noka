@@ -17,6 +17,19 @@ class SendMailController < ApplicationController # rubocop:disable Style/Documen
 
   end
 
+  def bulk_send_mail
+    @send_mail = SendMail.new(mail_params)
+    ## TODO：あとで消す
+    Rails.logger.debug "bulk_params---------------------------------#{params}"
+    res = @send_mail.bulk_send(mail_params)
+    if res
+      redirect_to purchase_index_path, notice: '発送済みメールを送信しました'
+    else
+      redirect_to purchase_index_path, alert: 'エラー発生。メールが送信されていません'
+    end
+
+  end
+
   def mail_comp
     render('send_mailer/mail_comp')
   end
@@ -26,6 +39,24 @@ class SendMailController < ApplicationController # rubocop:disable Style/Documen
   def mail_params
     params
     .require(:send_mail)
-    .permit(:email, :item, :purchase_id, :state, :country, :postal_code, :line1, :line2)
+    .permit(
+      :email,
+      :item,
+      :purchase_id,
+      :state,
+      :country,
+      :postal_code,
+      :line1,
+      :line2,
+      email: [],
+      item: [],
+      purchase_id: [],
+      state: [],
+      country: [],
+      postal_code: [],
+      line1: [],
+      line2: [],
+      customer_id: [],
+    )
   end
 end

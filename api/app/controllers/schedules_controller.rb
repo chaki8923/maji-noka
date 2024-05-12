@@ -37,10 +37,13 @@ class SchedulesController < ApplicationController # rubocop:disable Style/Docume
   end
 
   def delete
-    delete_schedule = Item.find(params["id"])
-    res = Item.delete(delete_item[:id])
+    delete_schedule = Schedule.find(params["id"])
+    Rails.logger.debug "delete_schedule---------------------------------#{delete_schedule}"
+    res = Schedule.delete(delete_schedule[:id])
     render json: res[0]
   rescue => err_message
+    ## TODO：あとで消す
+    Rails.logger.debug "err_message---------------------------------#{err_message}"
     render json: {
              value: nil,
              err_message: err_message

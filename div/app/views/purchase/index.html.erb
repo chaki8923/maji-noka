@@ -67,20 +67,48 @@
       <% if p[:support_flag] %><%= format_date(p[:updatedAt]) %><% else %>-<% end %>
       </td>
       <td>
-        <%= check_box_tag "item_ids[]", p[:id] %>
+        <% unless p[:support_flag] %>
+          <%= check_box_tag "item_ids[]", nil, false, class: 'js-form-select', data: { index: idx } %>
+        <% end %>
       </td>
 
     </tr>
-    <%= form_with(model: @data ,url: mail_path, html:{class: 'form-group'}) do |f| %>
-      <%= f.hidden_field :state, class: 'form-control', value: "#{p[:state]}", disabled: true %>
-      <%= f.hidden_field :country,class: 'form-control', value: "#{p[:country]}" %>
-      <%= f.hidden_field :postal_code,class: 'form-control', value: "#{p[:postal_code]}" %>
-      <%= f.hidden_field :line1,class: 'form-control', value: "#{p[:line1]}" %>
-      <%= f.hidden_field :line2,class: 'form-control', value: "#{p[:line2]}" %>
-      <%= f.hidden_field :purchase_id,class: 'form-control', value: "#{p[:purchase_id]}" %>
-      <%= f.hidden_field :email,class: 'form-control', value: "#{p[:email]}" %>
-      <%= f.hidden_field :item,class: 'form-control', value: "#{p[:item_name]}" %>
-    <% end %>
-<% end %>
-</tbody>
+  <% end %>
+  </tbody>
 </table>
+<!-- Modal -->
+<div class="modal fade" id="checkBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="checkBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" style="color: #333;" id="staticBackdropLabel">Modal title</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" style="color: #333;">
+        メールをお送りします。
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <%= form_with(url: bulk_mail_path, html:{class: 'form-group'}) do |f| %>
+            <% @purchase.each_with_index do |p, idx| %>
+              <%= f.hidden_field 'send_mail[state][]', class: 'form-control', id: "state_field#{idx}", value: "#{p[:state]}", disabled: true %>
+              <%= f.hidden_field 'send_mail[country][]',class: 'form-control', id: "country_field#{idx}", value: "#{p[:country]}", disabled: true %>
+              <%= f.hidden_field 'send_mail[postal_code][]',class: 'form-control', id: "postal_field#{idx}", value: "#{p[:postal_code]}", disabled: true %>
+              <%= f.hidden_field 'send_mail[line1][]',class: 'form-control', id: "line1_field#{idx}", value: "#{p[:line1]}", disabled: true %>
+              <%= f.hidden_field 'send_mail[line2][]',class: 'form-control',id: "line2_field#{idx}",  value: "#{p[:line2]}", disabled: true %>
+              <%= f.hidden_field 'send_mail[purchase_id][]',class: 'form-control',id: "purchase_field#{idx}",  value: "#{p[:purchase_id]}", disabled: true %>
+              <%= f.hidden_field 'send_mail[email][]',class: 'form-control', id: "email_field#{idx}",  value: "#{p[:email]}", disabled: true %>
+              <%= f.hidden_field 'send_mail[item][]',class: 'form-control',id: "item_field#{idx}",  value: "#{p[:item_name]}", disabled: true %>
+              <%= f.hidden_field 'send_mail[customer_id][]',class: 'form-control',id: "customer_id_field#{idx}",  value: "#{p[:customer_id]}", disabled: true %>
+            <% end %>
+            <%= f.submit "一括ステータス変更", class: 'btn btn-primary js-check-submit', disabled: true %>
+          <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="d-flex justify-content-end">
+  <button type="button" class="btn btn-info js-check-submit" data-bs-toggle="modal" data-bs-target="#checkBackdrop" >
+    一括ステータス変更
+  </button>
+</div>

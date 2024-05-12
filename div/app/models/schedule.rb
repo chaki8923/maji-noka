@@ -32,6 +32,8 @@ class Schedule < BaseModel # rubocop:disable Style/Documentation
   end
 
   def delete # rubocop:disable Lint/DuplicateMethods
+    ## TODO：あとで消す
+    Rails.logger.debug "@id---------------------------------#{@id}"
     execute_api('schedule/delete', {id: @id}, method: 'post')
   end
 

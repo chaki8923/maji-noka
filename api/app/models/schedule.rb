@@ -75,7 +75,7 @@ class Schedule # rubocop:disable Style/Documentation
       schedule = sdq.find(id)
 
       raise "スケジュール#{SystemMessage::NOTFOUND}" if schedule.nil?
-      item
+      schedule
     end
 
     def delete(id)
