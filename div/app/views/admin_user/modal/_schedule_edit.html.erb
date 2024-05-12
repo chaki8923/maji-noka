@@ -39,6 +39,10 @@
             <%= submit_tag "編集",class: "btn btn-primary mb-5" %>
           </div>
         <% end %>
+        <%= form_for @schedule_instance, url: "/schedule/delete", multipart: true do |f| %>
+          <%= f.hidden_field :id, class: 'form-control date-form', id: "del_schedule_id" %>
+          <%= button_to "削除", schedule_delete_path, { method: :delete, form: { data: { turbo_confirm: "本当に削除しますか？" } }, class: 'btn btn-danger delete-button' } %>
+        <% end %>
       </div>
     </div>
   </div>

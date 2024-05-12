@@ -125,6 +125,7 @@ if (document.getElementById("calendar") != null) {
             var endTime = timeFormat(e.event.end);
 
             $("#schedule_id").val(e.event.id);
+            $("#del_schedule_id").val(e.event.id);
             $(".edit_start_time").val(startTime);
             $(".edit_end_time").val(endTime);
             $(".edit_title").val(e.event.title);

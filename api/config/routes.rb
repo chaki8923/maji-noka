@@ -39,6 +39,7 @@ Rails.application.routes.draw do
 
   scope 'mail' do
     post '/send_mail', to: 'send_mail#send_mail'
+    post '/bulk_send_mail', to: 'send_mail#bulk_send_mail'
   end
 
   scope 'purchase' do

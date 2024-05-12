@@ -42,6 +42,11 @@ class Purchase # rubocop:disable Style/Documentation
       pdq.find(id: id)
     end
 
+    def find_by_user(customer_id:, purchase_id:)
+      pdq = PurchaseQuery.new
+      pdq.find_by_user(customer_id: customer_id, purchase_id: purchase_id)
+    end
+
     def delete(id)
     end
   end

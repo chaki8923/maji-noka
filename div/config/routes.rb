@@ -37,8 +37,8 @@ Rails.application.routes.draw do
     post '/create', to: 'schedules#create'
     get '/index', to: 'schedules#index', as: 'schedule_index'
     get '/edit/:id', to: 'schedules#edit'
+    delete '/delete', to: 'schedules#delete', as: 'schedule_delete'
     post '/update', to: 'schedules#update'
-    delete '/delete/:id', to: 'schedules#delete', as: 'schedule_item'
   end
 
   scope 'users' do
@@ -52,6 +52,7 @@ Rails.application.routes.draw do
   get 'mail', to: 'send_mail#mail'
   get 'mail_comp', to: 'send_mail#mail_comp'
   post 'mail', to: 'send_mail#send_mail'
+  post 'bulk_mail', to: 'send_mail#bulk_send_mail'
 
   scope 'calendar' do
     get '/get', to: 'admin_user#get_calender'

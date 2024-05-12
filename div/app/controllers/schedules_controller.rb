@@ -36,6 +36,15 @@ class SchedulesController < ApplicationController # rubocop:disable Style/Docume
   end
 
   def delete
+    ## TODO：あとで消す
+    Rails.logger.debug "params---------------------------------#{params}"
+    @schedule_instance = Schedule.new(schedule_params)
+    res =  @schedule_instance.delete
+    if res.key?('id')
+      redirect_to index_path, notice: '予定が削除されました'
+    else
+      redirect_to index_path, alert: res["err_message"]
+    end
 
   end
 

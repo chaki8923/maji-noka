@@ -149,9 +149,12 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
       image_upload(image, file_name)
       # 画像圧縮
       compress_image("public/images/#{file_name}")
+      content_type = image.content_type
+      ## TODO：あとで消す
+      Rails.logger.debug "content_type---------------------------------#{content_type}"
       # s3へアップロード
       s3_key = "item/#{item_id}/#{file_name}"
-      s3_upload(s3resource, s3_key, file_path)
+      s3_upload(s3resource, s3_key, file_path, content_type)
       # ローカルのデータは消す
       image_delete(file_path)
     end
@@ -164,9 +167,9 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
     File.binwrite(output_path, file.read)
   end
 
-  def s3_upload(s3resource, key, file_path)
+  def s3_upload(s3resource, key, file_path, content_type)
     image_data = File.binread(file_path)
-    s3resource.bucket(BUCKET).object(key).upload_file(file_path)
+    s3resource.bucket(BUCKET).object(key).upload_file(file_path, content_type: content_type)
   end
 
   def s3_delete(s3resource, key)
