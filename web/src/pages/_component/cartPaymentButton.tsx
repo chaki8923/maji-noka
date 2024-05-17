@@ -77,8 +77,8 @@ const Checkout: React.FC<Partial<PaymentProps>> = () => {
 
   return (
     <div className="mt-2">
-      <Button color="blue" onClick={() => startCheckout()} className="xl:w-[180px] w-full">
-        まとめて購入する　<RiMoneyCnyCircleLine />
+      <Button color="blue" onClick={() => startCheckout()} className="w-full rounded-none p-6 total-buy">
+        まとめて購入　<RiMoneyCnyCircleLine />
       </Button>
     </div>
   )

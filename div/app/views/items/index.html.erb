@@ -1,14 +1,17 @@
 <%= render partial: 'layouts/flash_message' %>
 <div class="container mt-5">
     <h2>商品一覧</h2>
-    
-    <% @items.each do |it| %>
-    <div class="card w-25">
-      <p><%= it[:name] %></p>
-      <p><%= it[:id] %></p>
-      <img src="<%= it[:image][0] %>" alt="" class="item_image">
-      <%= link_to "編集", "edit/#{it[:id]}",class: 'btn btn-info' %>
-      <%= button_to "削除", delete_item_path(it[:id]), { method: :delete, form: { data: { turbo_confirm: "本当に削除しますか？" } }, class: 'btn btn-danger delete-button' } %>
+
+    <div class="item-container">
+      <% @items.each do |it| %>
+        <a href="<%= edit_item_path(it[:id]) %>" class="card item-card" style="width: 18rem;">
+          <img src="<%= it[:image][0] %>" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title"><%= it[:name] %></h5>
+            <%= button_to "削除", delete_item_path(it[:id]), { method: :delete, form: { data: { turbo_confirm: "本当に削除しますか？" } }, class: 'btn btn-secondary delete-button' } %>
+          </div>
+        </a>
+      <% end %>
     </div>
-    <% end %>
+    <%= paginate @items, theme: 'twitter-bootstrap-4' %>
 </div>

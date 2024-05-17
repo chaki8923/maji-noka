@@ -31,12 +31,13 @@ export default function Slider() {
     return (
         <>
             <Swiper
-                modules={[Autoplay, EffectFade]}
-                thumbs={{}}
+                modules={[Autoplay]}
                 slidesPerView={1}
+                loop={true}
                 autoplay={{
                     delay: 3500,
                     disableOnInteraction: false,
+                    
                 }}
                 speed={1500} // スライドが切り替わる時の速度
                 pagination={{

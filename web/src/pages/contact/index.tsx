@@ -1,11 +1,9 @@
-import { useRef, FormEvent, useState } from "react";
+import { useState } from "react";
 import { Toast } from 'flowbite-react';
 import { HiCheck } from "react-icons/hi";
 import { ContactFormSchema, ContactFormType } from '@/schemas/ContactFormSchema';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FormInput } from "../_component/FormInput";
-import { FormErrorMessage } from "@chakra-ui/react";
 
 function Contact() {
   const [isSuccess, setIsSuccess] = useState<Boolean>(false);
@@ -33,14 +31,12 @@ function Contact() {
   const messageLength = messageValue.length
 
   const onSubmit = async (params: FormData) => {
-    console.log("params", params);
     let data = {
       name: params.name,
       email: params.email,
       subject: params.subject,
       message: params.message,
     };
-    console.log("data", data);
 
     await fetch("/api/sendmail", {
       method: "POST",
@@ -88,6 +84,7 @@ function Contact() {
                 {...register('subject')}
                 className="form-control text-gray-800 w-full"
                 id="subject"
+                placeholder="購入商品に関して"
               />
                {errors.subject && (
                 <span className="self-start text-xs text-red-500">{errors.subject.message}</span>
@@ -95,13 +92,14 @@ function Contact() {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-600">
-                名前
+                お名前
               </label>
               <input
                 type="text"
                 {...register('name')}
                 className="form-control text-gray-800 w-full"
                 id="name"
+                placeholder="田中太郎"
               />
               {errors.name && (
                 <span className="self-start text-xs text-red-500">{errors.name.message}</span>
@@ -116,6 +114,7 @@ function Contact() {
                 className="form-control text-gray-800 w-full"
                 id="email"
                 {...register('email')}
+                placeholder="example@gmail.com"
               />
               {errors.email && (
                 <span className="self-start text-xs text-red-500">{errors.email.message}</span>

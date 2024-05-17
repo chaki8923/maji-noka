@@ -1,7 +1,6 @@
-import { useCart } from "../../hooks/useCart";
 import { Button, Card, Select } from 'flowbite-react';
-import type { NextPage } from 'next';
-import React, { useState, useEffect, ChangeEvent } from 'react';
+import React, { useState, useEffect } from 'react';
+import Link from "next/link";
 import { getImageUrl } from '../../hooks/awsImageOperations';
 import Payment from "../_component/paymentButton";
 import CartPayment from "../_component/cartPaymentButton";
@@ -12,10 +11,15 @@ import { useShoppingCart } from 'use-shopping-cart'
 
 function Cart() {
   const router = useRouter();
-  const { cart } = useCart();
   const [imageUrls, setImageUrls] = useState<string[]>([]);
-  const { addItem, cartDetails, removeItem } = useShoppingCart();
+  const { addItem, cartDetails, removeItem, formattedTotalPrice, cartCount, totalPrice } = useShoppingCart();
   const items = Object.values(cartDetails ?? {}).map((entry) => entry);
+  const itemTotalPrice = totalPrice!.toLocaleString();
+  const totalPriceVharacters = [...itemTotalPrice];
+  totalPriceVharacters.forEach((char, index) => {
+    console.log(`Character at index ${index}: ${char}`);
+  });
+
 
   useEffect(() => {
     if (items) {
@@ -32,7 +36,7 @@ function Cart() {
   const handleChange = (item: any, selectedQuantity: number) => {
     //一度消してから更新
     removeItem(item.id);
-    addItem(item,{count: selectedQuantity})
+    addItem(item, { count: selectedQuantity })
   };
 
   const handleBack = () => {
@@ -53,30 +57,49 @@ function Cart() {
   }
 
   return (
-    <div className='flex gap-4 p-8 flex-wrap sm:justify-normal justify-center'>
-      {items.map((item, index) => (
-        <Card key={item.id} className='w-80'>
-          <p className='flex justify-between items-end text-gray-800'>
-            {item.name}
-          </p>
-          <p className='font-bold text-xl text-gray-800'>¥{item.price}</p>
-          <p className='relative h-52'>
-            {imageUrls[index] && (
-              <Image src={imageUrls[index]} alt="" className='' layout="fill" />
-            )}
-          </p>
-          <Select id="countries" required value={item.quantity} onChange={(e) => handleChange(item, parseInt(e.target.value))}>
-            {Array.from({ length: 10 }, (_, i) => i).map((number) => (
-              <option key={number}>{number + 1}</option>
-            ))}
-          </Select>
-          <div className="xl:px-9 px-0">
-            <Payment items={item} quantity={item.quantity} />
-            <Button color="failure" onClick={() => removeItem(item.id)}>削除</Button>
+    <div className='flex gap-4 sm:p-8 p-2 flex-wrap ls:justify-normal justify-between'>
+      <div className='md:w-[60%] w-full'>
+        {items.map((item, index) => (
+          <div key={item.id} className='cart-content p-2'>
+            <Link href={`item/${item.id}`} className='cart-item'>
+              {imageUrls[index] && (
+                <Image src={imageUrls[index]} alt="" className="min-h-[160px] max-h-[180px] object-cover" width={180} height={200} />
+              )}
+              <p className='item-name'>{item.name}</p>
+            </Link>
+            <div className="px-0 w-[180px]">
+              <Select id="countries" className='quantity-select' required value={item.quantity} onChange={(e) => handleChange(item, parseInt(e.target.value))}>
+                {Array.from({ length: 10 }, (_, i) => i).map((number) => (
+                  <option key={number}>{number + 1}</option>
+                ))}
+              </Select>
+              <Payment items={item} quantity={item.quantity} />
+              <Button
+                className='rounded-none 
+                        xl:w-[180px] 
+                        w-full 
+                        delete-button
+                        mt-2'
+                onClick={() => removeItem(item.id)}>削除</Button>
+            </div>
           </div>
-        </Card>
-      ))}
-       <CartPayment />
+        ))}
+      </div>
+      <div className='md:w-[340px] w-full total-content'>
+        <div className='flex justify-between items-baseline'>
+          <p className='font-bold'>商品合計</p>
+          <p className='text-red-600 total-text'>{cartCount}点</p>
+        </div>
+        <div className='flex justify-between items-baseline'>
+          <p className='font-bold'>合計金額</p>
+          <p className='text-red-600 total-price'>
+            {totalPriceVharacters.map((price, index) => (
+              <span key={index}>{price}</span>
+            ))}円
+          </p>
+        </div>
+        <CartPayment />
+      </div>
     </div>
   );
 };

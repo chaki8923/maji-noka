@@ -13,3 +13,19 @@
   inline-size: 1.5rem;
   block-size: 1.5rem;
 }
+
+.item-card{
+  transition: .3s;
+  width: calc(25% - 22px); /* margin padding分を引く */
+  margin: 1px;
+  padding: 10px;
+}
+.item-card:hover{
+  opacity: .8;
+  transition: .3s;
+}
+
+.item-container {
+  display: flex; /* flexbox */
+  flex-wrap: wrap; /* 折返し指定 */
+}

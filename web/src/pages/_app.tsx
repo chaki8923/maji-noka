@@ -5,6 +5,7 @@ import type { AppProps, AppType } from 'next/app';
 import { trpc } from '../utils/trpc';
 import "../../styles/globals.css"
 import './item/styles.css';
+import './policy/styles.css';
 import './_component/styles.css';
 import FooterComponent from "./_component/footer";
 import { CartProvider } from 'use-shopping-cart'
