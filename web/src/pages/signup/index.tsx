@@ -9,6 +9,8 @@ import { useSession } from "next-auth/react";
 const LoginPage = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
+  // MEMO:現状会員機能不要とのことでホームへ遷移
+  router.push("/");
   useEffect(() => {
     // ログイン済みの場合はTOPページにリダイレクト
     if (status === "authenticated") {

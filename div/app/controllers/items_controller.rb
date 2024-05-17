@@ -11,9 +11,6 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
     @item_instance = Item.new
     category_instance = Category.new
     @categories = category_instance.index
-    ## TODO：あとで消す
-    Rails.logger.debug "@categories---------------------------------#{@categories.class}"
-    Rails.logger.debug "@categories---------------------------------#{category_instance.class}"
     @prm = {
       file_name: nil,
       ctype: nil
@@ -36,7 +33,8 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
 
   def index
     data = Item.new
-    @items = data.index
+    # @items = data.index.page(params[:page])
+    @items = Kaminari.paginate_array(data.index).page(params[:page])
   end
 
   def edit

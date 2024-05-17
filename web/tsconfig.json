@@ -5,6 +5,7 @@
       "dom.iterable",
       "esnext"
     ],
+    "target": "es2015",
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -32,7 +33,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-, "src/pages/item/[itemId].tsx"  ],
+, "src/pages/item/[itemId].tsx", "src/pages/policy/index.jsx"  ],
   "exclude": [
     "node_modules"
   ]

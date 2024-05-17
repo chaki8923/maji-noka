@@ -1,3 +1,8 @@
+body {
+  background-color: #fffcfc;
+  font-style: italic;
+  font-family: OpenSans;
+}
 .purchase-link {
   display: flex;
   justify-content: end;
@@ -33,3 +38,9 @@
         color: #333;
       }
    }
+
+.x-icon{
+  font-size: 18px;
+  align-self: center;
+  align-items: center;
+}

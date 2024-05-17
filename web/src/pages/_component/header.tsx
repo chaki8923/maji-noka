@@ -16,7 +16,6 @@ function ResponsiveAppBar() {
     <Navbar fluid rounded>
       <Navbar.Brand href="/">
         <Image src="/rogo_cut.jpg" alt="画像" className='' width={140} height={60}/>
-        <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">Flowbite React</span>
       </Navbar.Brand>
       <Navbar.Toggle />
       <Navbar.Collapse>

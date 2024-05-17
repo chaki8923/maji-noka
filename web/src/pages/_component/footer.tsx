@@ -1,15 +1,17 @@
 
 'use client';
 import { Footer } from "flowbite-react";
+import { FaSquareXTwitter } from "react-icons/fa6";
 
 const FooterComponent = () => {
   return (
     <Footer container>
       <Footer.Copyright href="#" by="田中本気農家™" year={2024} />
       <Footer.LinkGroup>
-        <Footer.Link href="/about">About</Footer.Link>
-        <Footer.Link href="/policy">Privacy Policy</Footer.Link>
-        <Footer.Link href="/contact">Contact</Footer.Link>
+        <Footer.Link href="https://twitter.com/noka_tmn" target="_blank"><FaSquareXTwitter className="x-icon"/></Footer.Link>
+        <Footer.Link href="/rule">特定商取引法／返品について</Footer.Link>
+        <Footer.Link href="/policy">プライバシーポリシー</Footer.Link>
+        <Footer.Link href="/contact">お問い合わせ</Footer.Link>
       </Footer.LinkGroup>
     </Footer>
   );

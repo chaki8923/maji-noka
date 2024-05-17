@@ -5,10 +5,13 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { signIn } from "next-auth/react"
 import { useSession } from "next-auth/react";
+import Loading from '../_component/loading';
 
 const LoginPage = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
+
+  // MEMO:現状会員機能不要とのことでホームへ遷移
   useEffect(() => {
     // ログイン済みの場合はTOPページにリダイレクト
     if (status === "authenticated") {

@@ -19,14 +19,30 @@ function instanceToPlain(instance: any): any {
 // 新しいrouterを作成します。
 export const itemRouter = router({
   // 全てのitemを取得するクエリです。
-  getItems: procedure.query(async () => {
+  getItems: procedure.input(
+    // 入力スキーマを指定します。IDは数値である必要があります。
+    z.object({
+      limit: z.number(),
+      offset: z.number(),
+    }),
+  ).query(async ({ input }) => {
+    const { limit, offset } = input;
     // 全てのitemをデータベースから取得します。
-    const items = await prisma.items.findMany();
+    const items = await prisma.items.findMany({
+      take: limit,
+      skip: offset
+    });
     await prisma.$disconnect();
     // 取得したitemを返します。
     return items;
   }),
-
+  allItemsCount: procedure.query(async () => {
+    // 全てのitemをデータベースから取得します。
+    const count = await prisma.items.count();
+    await prisma.$disconnect();
+    // カウントを返します。
+    return count;
+  }),
   // 特定のIDのitemを取得するクエリです。
   getItemById: procedure
     .input(

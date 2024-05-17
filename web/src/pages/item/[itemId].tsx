@@ -8,7 +8,6 @@ import { CartItem } from '@/src/types';
 import { Autoplay, Navigation, Pagination, Thumbs, FreeMode, EffectFade } from "swiper/modules";
 import { Swiper, SwiperSlide, SwiperClass } from "swiper/react";
 import { getImageUrl } from '../../hooks/awsImageOperations';
-import { FaCartArrowDown } from "react-icons/fa";
 import { HiCheck } from "react-icons/hi";
 import { TbShoppingCartPin } from "react-icons/tb";
 import Image from "next/legacy/image";
@@ -29,9 +28,7 @@ export default function Item() {
   const [orderQuantity, setorderQuantity] = useState<number>(1);
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null);
   const itemId = typeof router.query.itemId === 'string' ? parseInt(router.query.itemId, 10) : null;
-  const { addCart } = useCart();
-  const { addItem,decrementItem, incrementItem, removeItem } = useShoppingCart();
-
+  const { addItem, cartDetails } = useShoppingCart();
   const { data } = trpc.item.getItemById.useQuery({
     id: itemId ?? 0, // idがnullの場合は0を使用
   }, {
@@ -58,12 +55,13 @@ export default function Item() {
   }
 
   const insertCart = () => {
-    setIsCart(true)
-
+    setIsCart(true);
+    console.log("カート中身", cartDetails);
+    
   }
 
   const closeModal = (event: React.MouseEvent<HTMLSpanElement>) => {
-    setIsCart(false)
+    setIsCart(false);
   };
 
   if (!data) {
@@ -128,30 +126,26 @@ export default function Item() {
         <div className='lg:w-[30%] w-full xl:m-auto flex justify-between lg:block item-info'>
           <div className='w-[50%] lg:w-auto p-10 xl:p-0 item-info__inner'>
             <div className="text-group mb-6">
-              <h2 className='text-white font-bold text-lg'>Name</h2>
-              <p className='text-white'>{data.name}</p>
+              <h2 className='font-bold text-lg'>Name</h2>
+              <p className='text-gray-900'>{data.name}</p>
             </div>
             <div className="text-group mb-6">
-              <h2 className='text-white font-bold text-lg'>Cmment</h2>
-              <p className='text-white'>{data.description}</p>
+              <h2 className='font-bold text-lg'>Cmment</h2>
+              <p className='text-gray-900'>{data.description}</p>
             </div>
             <div className="text-group mb-6">
-              <h2 className='text-white font-bold text-lg'>Price</h2>
-              <p className='text-white'>{data.price.toLocaleString()}円</p>
+              <h2 className='font-bold text-lg'>Price</h2>
+              <p className='text-gray-900'>{data.price.toLocaleString()}円</p>
             </div>
             <div className="text-group mb-6">
-              <h2 className='text-white font-bold text-lg'>Category</h2>
-              <p className='text-white'>{data.categoryName}</p>
-            </div>
-            <div className="text-group mb-6">
-              <h2 className='text-white font-bold text-lg'>在庫</h2>
-              <p className='text-white'>{data.inventory}個</p>
+              <h2 className='font-bold text-lg'>在庫</h2>
+              <p className='text-gray-900'>{data.inventory}個</p>
             </div>
           </div>
           <div className='w-[50%] lg:w-auto p-10 xl:p-0 item-info__inner'>
             <div className="text-group mb-6">
-              <h2 className='text-white font-bold text-lg'>注文数</h2>
-              <Select className="xl:w-[180px] w-full" id="categories" required value={orderQuantity} onChange={handleChange}>
+              <h2 className='text-lg'>注文数:</h2>
+              <Select className="xl:w-[110px] quantity-select" id="categories" required value={orderQuantity} onChange={handleChange}>
                 {Array.from({ length: 10 }, (_, i) => i).map((number) => (
                   <option key={number} >{number + 1}</option>
                 ))}
@@ -161,20 +155,35 @@ export default function Item() {
               <Payment items={data} quantity={orderQuantity} />
             </div>
             <div className="mt-2">
-              <Button onClick={() => {
-                addItem({
-                  name: data.name,
-                  description: data.description,
-                  id: data.id,
-                  price: data.price,
-                  currency: 'JPY',
-                  image: imageUrls[0],
-                },{count: orderQuantity});
-                insertCart();
-              }}>
+              <Button className='rounded-none 
+                                mb-2
+                                xl:w-[180px] 
+                                w-full 
+                                text-black 
+                                bg-white 
+                                cart-button 
+                                hover:text-white'
+                onClick={() => {
+                  addItem({
+                    name: data.name,
+                    description: data.description,
+                    id: data.id,
+                    price: data.price,
+                    currency: 'JPY',
+                    image: imageUrls[0],
+                  }, { count: orderQuantity });
+                  insertCart();
+                }}>
                 カートに追加する
               </Button>
-              <Button onClick={() => router.push('/cart')} className="xl:w-[180px] w-full">
+              <Button onClick={() => router.push('/cart')} 
+              className="xl:w-[180px] 
+                          w-full 
+                          rounded-none 
+                          text-black 
+                          bg-white 
+                          cart-button 
+                          hover:text-white">
                 カートへ行く　<TbShoppingCartPin />
               </Button>
             </div>
