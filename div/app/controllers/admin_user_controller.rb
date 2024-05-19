@@ -14,7 +14,7 @@ class AdminUserController < ApplicationController # rubocop:disable Style/Docume
       session[:limit] = Time.now + Settings.session_limit.to_i
       admin_user = @admin_user.get_admin_user(admin_user_params)
       session[:user] = admin_user
-      redirect_to index_path
+      redirect_to home_path
     else
       render action: 'new'
     end

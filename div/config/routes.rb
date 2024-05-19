@@ -12,8 +12,10 @@ Rails.application.routes.draw do
     get '/login', to: 'auth#new'
     post '/login', to: 'auth#login'
     get '/index', to: 'admin_user#index'
-    delete '/logout', to: 'admin_user#logout'
+    delete '/logout', to: 'auth#logout', as: 'logout'
   end
+
+  get '/home', to: 'admin_user#index', as: 'home'
 
   scope 'item' do
     get '/new', to: 'items#new'

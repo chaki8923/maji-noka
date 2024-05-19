@@ -110,6 +110,15 @@ $(function () {
     }
   });
 
+  $('.logout-button').on('click',function (e) {
+    e.preventDefault(); // デフォルトのイベントをキャンセルする
+    var result = confirm("ログアウトしますか？");
+    if (result) {
+      // OKボタンがクリックされた場合、DELETEリクエストを送信
+      $(this).closest('form').submit();
+    }
+  });
+
   var noneChecked = $('.js-form-select:checked').length === 0;
   $(".js-check-submit").prop('disabled', noneChecked);
 

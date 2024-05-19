@@ -24,7 +24,6 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
     item_params['maji_flag'] = item_params['maji_flag'].to_i == 1
     res = @item_instance.create(item_params)
     if res == true
-      Rails.logger.debug "イメージアップロード処理---------------------------------#{item_params}"
       redirect_to item_index_path, notice: '商品が登録されました'
     else
       render action: 'new'
@@ -52,8 +51,6 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
     category_instance = Category.new
     @categories = category_instance.index
     res = @item_instance.update(item_params)
-    ## TODO：あとで消す
-    Rails.logger.debug "update_res---------------------------------#{res.class}"
     if res == true
       redirect_to item_index_path, notice: '商品が編集されました'
     else

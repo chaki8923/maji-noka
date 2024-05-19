@@ -26,7 +26,7 @@
   <div class="container">
     <div class="d-flex justify-content-evenly">
       <% @sliders.images.each do |image| %>
-      <div class="row w-25">
+      <div class="slide-content">
         <%= image_tag image.url %>
       </div>
       <% end %>
