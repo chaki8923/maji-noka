@@ -29,3 +29,11 @@
   display: flex; /* flexbox */
   flex-wrap: wrap; /* 折返し指定 */
 }
+
+.slide-content{
+  width: 25%;
+}
+.slide-content img{
+  width: 100%;
+  object-fit: contain;
+}

@@ -9,14 +9,14 @@ import Image from "next/image";
 import { Pagination } from "flowbite-react";
 import { Items } from '@/src/types';
 
-export default function Items() {
+export default function Page() {
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   const [products, setProducts] = useState<any>([]);
   const searchParams = useSearchParams();
   const keyword = searchParams?.get("keyword");
-  const limit = 1
+  const limit = 1;
 
   const allItemsCount = trpc.item.allItemsCount.useQuery();
   const items = trpc.item.getItems.useQuery({ limit: limit, offset: currentPage - 1 });
@@ -103,12 +103,14 @@ export default function Items() {
           ))}
         </div>
       </div>
-      <Pagination
-        className='text-center mb-4'
-        totalPages={totalPage}
-        currentPage={currentPage}
-        onPageChange={handlePageChange}
-      />
+      {allItemsCount.data! > limit ? (
+        <Pagination
+          className="text-center mb-4"
+          totalPages={totalPage}
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
+        />
+      ) : null}
     </>
   );
 }
