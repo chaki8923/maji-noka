@@ -23,15 +23,15 @@ export async function POST(
         to: email,
         subject: subject,
         text: `${name}様\n\nお問い合わせありがとうございました。\n\n返信までしばらくお待ちください。\n\nお問い合わせ内容\n\n
-        =================================================
+        =========================
         ${message}
-        =================================================
+        =========================
         `,
       };
 
       const mailOptions2 = {
-        from: `田中本気農家<${process.env.GMAILUSER}>`, //　送信元メールアドレス
-        to: process.env.GMAILUSER, //　送信先メールアドレス
+        from: `田中本気農家<${process.env.MAJIUSER}>`, //　送信元メールアドレス
+        to: process.env.MAJIUSER, //　送信先メールアドレス
         subject: 'お問合せがあります',
         text: `下記アドレスよりお問合せがあります。\n\n${email} \nお問合せ内容\n${message}`,
       }
