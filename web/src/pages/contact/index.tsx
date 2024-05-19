@@ -56,7 +56,8 @@ function Contact() {
   };
 
   const closeModal = (event: React.MouseEvent<HTMLSpanElement>) => {
-    setIsSuccess(false)
+    setIsSuccess(false);
+    reset();
   };
 
   return (
