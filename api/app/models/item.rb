@@ -77,14 +77,37 @@ class Item # rubocop:disable Style/Documentation
     )
   end
 
-  def create(params)
-    @idc.create_db(params)
+  def create
+    @idc.create_db(
+      {
+      name: @name,
+      price: @price,
+      description: @description,
+      images: @images,
+      postage: @postage,
+      category_id: @category_id,
+      inventory: @inventory,
+      maji_flag: @maji_flag,
+      action: @action
+      }
+    )
   rescue StandardError => e
     raise e
   end
 
-  def update(params)
-    @idc.update_db(params)
+  def update
+    @idc.update_db(
+      id: @id,
+      name: @name,
+      price: @price,
+      description: @description,
+      images: @images,
+      postage: @postage,
+      category_id: @category_id,
+      inventory: @inventory,
+      maji_flag: @maji_flag,
+      action: @action
+    )
   rescue StandardError => e
     raise e
   end
@@ -105,15 +128,12 @@ class Item # rubocop:disable Style/Documentation
     def find(id)
       idq = ItemQuery.new
       item = idq.find(id)
-      ## TODO：あとで消す
-      Rails.logger.debug "item---------------------------------#{item}"
       raise "商品#{SystemMessage::NOTFOUND}" if item.nil?
       item
     end
 
     def delete(id)
       idc = ItemCommand.new
-      Rails.logger.debug "deleteparams---------------------------------#{id}"
       idc.delete_db(id)
     rescue StandardError => e
       raise e

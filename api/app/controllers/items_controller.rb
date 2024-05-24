@@ -12,11 +12,11 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
   def create
     item = Item.new(item_params)
     s3resource = get_s3_resource(ACCESS_KEY, SECRET_KEY, REGION)
-    # エラーの場合はオブジェクトではなくArrayで返ってくる
-    res = item.create(item)
+    res = item.create
     item_images_upload(item_params, s3resource, res.first[:id])
     render json: { value: nil, success_message: SystemMessage::API_SUCCESS }
   rescue => err_message
+    ## TODO:Chakiあとで消す
     Rails.logger.debug "err_message---------------------------------#{err_message}"
     render json: {value: nil, err_message: err_message}, status: :internal_server_error
   end
@@ -25,12 +25,13 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
     item = Item.new(item_params)
     s3resource = get_s3_resource(ACCESS_KEY, SECRET_KEY, REGION)
 
-    res = item.update(item)
+    res = item.update
     item_images_upload(item_params, s3resource, res.first[:id])
     image_count = object_count(res.first[:id])
     item.update_image_count(res.first[:id], image_count)
     render json: { value: nil, success_message: SystemMessage::API_SUCCESS }
   rescue => err_message
+    ## TODO:Chakiあとで消す
     Rails.logger.debug "err_message---------------------------------#{err_message}"
     render json: {value: nil, err_message: err_message}, status: :internal_server_error
   end
@@ -70,8 +71,6 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
     delete_item = Item.find(params['id'])
     res = Item.delete(delete_item[:id])
     s3_delete(s3resource, object_key)
-    ## TODO：あとで消す
-    Rails.logger.debug "削除後res---------------------------------#{res}"
     render json: res[0]
   rescue => err_message
     render json: {value: nil, err_message: err_message}, status: :internal_server_error
@@ -80,7 +79,6 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
   private
 
   def item_params
-    #  params.permit(:name, :price, :description,  file: [:file_name, :ctype])
     params.permit(
       :id,
       :name,
@@ -150,8 +148,6 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
       # 画像圧縮
       compress_image("public/images/#{file_name}")
       content_type = image.content_type
-      ## TODO：あとで消す
-      Rails.logger.debug "content_type---------------------------------#{content_type}"
       # s3へアップロード
       s3_key = "item/#{item_id}/#{file_name}"
       s3_upload(s3resource, s3_key, file_path, content_type)

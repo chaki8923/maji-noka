@@ -9,10 +9,8 @@ class Auth # rubocop:disable Style/Documentation
     adq = AdminQuery.new
     errors = []
     hash_pass = adq.get_hash_password(value)
-    ## TODO：あとで消す
-    Rails.logger.debug "hash_pass---------------------------------#{hash_pass}"
     # return nil, SystemMessage::AUTH_ERR if hash_pass.blank?
-    return nil, "ハッシュパスがない" if hash_pass.blank?
+    return nil, "登録されていないパスワード" if hash_pass.blank?
     return nil, "メールが登録されてない" if adq.check_mail(value[:email]).nil?
     # return nil, SystemMessage::AUTH_ERR if adq.check_mail(value['email']).nil?
     return nil, "パスワードが違う" unless BCrypt::Password.new(hash_pass[:password]) == value[:password]
