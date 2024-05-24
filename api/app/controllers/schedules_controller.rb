@@ -16,14 +16,10 @@ class SchedulesController < ApplicationController # rubocop:disable Style/Docume
 
   def update
     convert_params = format_date(schedule_params)
-    ## TODO：あとで消す
-    Rails.logger.debug "convert_params---------------------------------#{convert_params}"
     schedule = Schedule.new(convert_params)
     res = schedule.update(schedule)
     render json: { value: nil, success_message: SystemMessage::API_SUCCESS }
   rescue => err_message
-    ## TODO：あとで消す
-    Rails.logger.debug "err_message---------------------------------#{err_message}"
     render json: {
              value: nil,
              err_message: err_message
@@ -38,12 +34,9 @@ class SchedulesController < ApplicationController # rubocop:disable Style/Docume
 
   def delete
     delete_schedule = Schedule.find(params["id"])
-    Rails.logger.debug "delete_schedule---------------------------------#{delete_schedule}"
     res = Schedule.delete(delete_schedule[:id])
     render json: res[0]
   rescue => err_message
-    ## TODO：あとで消す
-    Rails.logger.debug "err_message---------------------------------#{err_message}"
     render json: {
              value: nil,
              err_message: err_message
@@ -73,6 +66,8 @@ class SchedulesController < ApplicationController # rubocop:disable Style/Docume
     new_end_datetime = "#{year_month_day}T#{only_end_time}"
     schedule_params[:start_time] = new_start_datetime
     schedule_params[:end_time] = new_end_datetime
+    ## TODO:Chakiあとで消す
+    Rails.logger.debug "schedule_params---------------------------------#{schedule_params}"
     schedule_params
   end
 end

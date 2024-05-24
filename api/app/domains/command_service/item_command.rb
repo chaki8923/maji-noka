@@ -6,30 +6,63 @@ class ItemCommand # rubocop:disable Style/Documentation
   DB = Sequel.connect(Rails.configuration.x.sequel[:db])
 
   # 新規作成
-  def create_db(item)
+  def create_db(
+    name:,
+    price:,
+    description:,
+    images:,
+    postage:,
+    category_id:,
+    inventory:,
+    maji_flag:,
+    action:
+  )
+  Rails.logger.debug "iten_command---------------------------------#{name.value}"
     DB[:items]
       .returning(:id)
       .insert(
-        name: item.name.value,
-        price: item.price.value,
-        description: item.description.value,
-        postage: item.postage.value,
-        inventory: item.inventory.value,
-        image_count: item.images.value.count,
-        category_id: item.category_id.value,
-        maji_flag: item.maji_flag.value,
+        name: name.value,
+        price: price.value,
+        description: description.value,
+        postage: postage.value,
+        inventory: inventory.value,
+        image_count: images.value.count,
+        category_id: category_id.value,
+        maji_flag: maji_flag.value,
         updated_at: 'NOW()',
         created_at: 'NOW()'
       )
   end
 
-  def update_db(item)
+  def update_db(
+    id:,
+    name:,
+    price:,
+    description:,
+    images:,
+    postage:,
+    category_id:,
+    inventory:,
+    maji_flag:,
+    action:
+  )
     DB[:items]
       .returning(:id)
       .where(
-        id: item.id
+        id: id
       )
-      .update(update_params(item))
+      .update(update_params(
+        name: name,
+        price: price,
+        description: description,
+        images: images,
+        postage: postage,
+        category_id: category_id,
+        inventory: inventory,
+        maji_flag: maji_flag,
+        action: action
+        )
+      )
   end
 
   def delete_db(id)
@@ -51,15 +84,25 @@ class ItemCommand # rubocop:disable Style/Documentation
 
   private
 
-  def update_params(item)
+  def update_params(
+    name:,
+    price:,
+    description:,
+    images:,
+    postage:,
+    category_id:,
+    inventory:,
+    maji_flag:,
+    action:
+  )
     {
-      name: item.name.value,
-      price: item.price.value,
-      description: item.description.value,
-      postage: item.postage.value,
-      inventory: item.inventory.value,
-      maji_flag: item.maji_flag.value,
-      category_id: item.category_id.value,
+      name: name.value,
+      price: price.value,
+      description: description.value,
+      postage: postage.value,
+      inventory: inventory.value,
+      maji_flag: maji_flag.value,
+      category_id: category_id.value,
       updated_at: 'NOW()',
       created_at: 'NOW()'
     }

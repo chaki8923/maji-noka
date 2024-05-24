@@ -10,7 +10,6 @@ class SendMailController < ApplicationController # rubocop:disable Style/Documen
       purchase.toggle_support_flag(purchase_id: purchase.purchase_id, support_flag: support_flag)
       render json: { value: nil, success_message: SystemMessage::API_SUCCESS }
     rescue => err_message
-      Rails.logger.debug "err_message---------------------------------#{err_message}"
       render json: {value: nil, err_message: err_message}, status: :internal_server_error
     end
   end
@@ -27,19 +26,15 @@ class SendMailController < ApplicationController # rubocop:disable Style/Documen
             customer_id: mail_params_to_json["customer_id"][idx],
             purchase_id: mail_params_to_json["purchase_id"]
           )
-        Rails.logger.debug "purchase_per_user---------------------------------#{purchase_per_user}"
         SendMailer.with(purchase_per_user).bulk_send_email.deliver_now
       end
       mail_params_to_json["purchase_id"].each do |prms|
-        ## TODO：あとで消す
-    	  Rails.logger.debug "prms---------------------------------#{prms}"
         purchase = Purchase.new({purchase_id: prms})
         support_flag = check_and_toggle_support_flag(id: prms)
         purchase.toggle_support_flag(purchase_id: purchase.purchase_id, support_flag: support_flag)
       end
       render json: { value: nil, success_message: SystemMessage::API_SUCCESS }
     rescue => err_message
-      Rails.logger.debug "err_message---------------------------------#{err_message}"
       render json: {value: nil, err_message: err_message}, status: :internal_server_error
     end
   end

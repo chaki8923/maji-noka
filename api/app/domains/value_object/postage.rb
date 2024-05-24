@@ -5,7 +5,7 @@ class Postage
   end
 
   def self.new(value:)
-    return nil, 'postage is must be a Integer' unless value.to_i.is_a?(Integer)
+    return nil, 'postage is must be a Integer' if value.to_i == 0 && value != "0"
     super(value: value)
   end
 end
