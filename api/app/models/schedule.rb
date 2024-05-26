@@ -51,18 +51,30 @@ class Schedule # rubocop:disable Style/Documentation
     )
   end
 
-  def create(params)
-    @sdc.create_db(params)
+  def create
+    @sdc.create_db(
+      title: @title,
+      start_time: @start_time,
+      end_time: @end_time,
+      schedule_date: @schedule_date,
+      memo: @memo
+    )
   rescue StandardError => e
     raise e
   end
 
-  def update(params)
-    @sdc.update_db(params)
+
+  def update
+    @sdc.update_db(
+      id: @id,
+      title: @title,
+      start_time: @start_time,
+      end_time: @end_time,
+      schedule_date: @schedule_date,
+      memo: @memo)
   rescue StandardError => e
     raise e
   end
-
 
   class << self
     def index
@@ -80,7 +92,7 @@ class Schedule # rubocop:disable Style/Documentation
 
     def delete(id)
       sdc = ScheduleCommand.new
-      sdc.delete_db(id)
+      sdc.delete_db(id: id)
     rescue StandardError => e
       raise e
     end

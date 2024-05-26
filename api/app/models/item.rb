@@ -79,7 +79,6 @@ class Item # rubocop:disable Style/Documentation
 
   def create
     @idc.create_db(
-      {
       name: @name,
       price: @price,
       description: @description,
@@ -89,8 +88,8 @@ class Item # rubocop:disable Style/Documentation
       inventory: @inventory,
       maji_flag: @maji_flag,
       action: @action
-      }
     )
+
   rescue StandardError => e
     raise e
   end
@@ -134,8 +133,10 @@ class Item # rubocop:disable Style/Documentation
 
     def delete(id)
       idc = ItemCommand.new
-      idc.delete_db(id)
+      idc.delete_db(id: id)
     rescue StandardError => e
+      ## TODO：あとで消す
+    	Rails.logger.debug "err---------------------------------#{e}"
       raise e
     end
   end

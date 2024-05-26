@@ -29,10 +29,11 @@ class SchedulesController < ApplicationController # rubocop:disable Style/Docume
     @schedule_instance = Schedule.new(schedule_params)
     res = @schedule_instance.update
     if res == true
-      redirect_to index_path, notice: '予定が更新されました'
+      redirect_to index_path, notice: "予定が更新されました"
     else
-      redirect_to index_path, alert: 'エラーで更新されませんでした'
+      redirect_to index_path, alert: "エラーで更新されませんでした"
     end
+
   end
 
   def delete

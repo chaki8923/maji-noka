@@ -17,7 +17,6 @@ class ItemCommand # rubocop:disable Style/Documentation
     maji_flag:,
     action:
   )
-  Rails.logger.debug "iten_command---------------------------------#{name.value}"
     DB[:items]
       .returning(:id)
       .insert(
@@ -46,28 +45,26 @@ class ItemCommand # rubocop:disable Style/Documentation
     maji_flag:,
     action:
   )
+  ## TODO：あとで消す
+  Rails.logger.debug "item_update---------------------------------#{}"
     DB[:items]
       .returning(:id)
       .where(
         id: id
       )
-      .update(update_params(
-        name: name,
-        price: price,
-        description: description,
-        images: images,
-        postage: postage,
-        category_id: category_id,
-        inventory: inventory,
-        maji_flag: maji_flag,
-        action: action
-        )
+      .update(
+        name: name.value,
+        price: price.value,
+        description: description.value,
+        postage: postage.value,
+        category_id: category_id.value,
+        inventory: inventory.value,
+        maji_flag: maji_flag.value,
+        action: action.value
       )
   end
 
   def delete_db(id)
-    ## TODO：あとで消す
-    Rails.logger.debug "削除id---------------------------------#{id}"
     DB[:items]
       .returning(:id)
       .where(:id => id)
@@ -80,31 +77,5 @@ class ItemCommand # rubocop:disable Style/Documentation
       id: id
     )
     .update(image_count: count)
-  end
-
-  private
-
-  def update_params(
-    name:,
-    price:,
-    description:,
-    images:,
-    postage:,
-    category_id:,
-    inventory:,
-    maji_flag:,
-    action:
-  )
-    {
-      name: name.value,
-      price: price.value,
-      description: description.value,
-      postage: postage.value,
-      inventory: inventory.value,
-      maji_flag: maji_flag.value,
-      category_id: category_id.value,
-      updated_at: 'NOW()',
-      created_at: 'NOW()'
-    }
   end
 end
