@@ -6,10 +6,14 @@ require 'securerandom'
 RSpec.describe ItemsController, type: :request  do
   # 画像データを作成するヘルパーメソッド
   def uploaded_file(filename)
+    file_path = Rails.root.join("spec/fixtures/#{filename}")
+    tempfile = Tempfile.new(filename)
+    FileUtils.copy_file(file_path, tempfile.path)
     ActionDispatch::Http::UploadedFile.new(
-      tempfile: File.new(Rails.root.join("spec/fixtures/#{filename}")),
+      tempfile: tempfile,
       filename: filename,
-      type: 'image/jpeg'
+      type: 'image/jpeg',
+      head: "Content-Disposition: form-data; name=\"images[]\"; filename=\"#{filename}\"\r\nContent-Type: image/jpeg\r\n"
     )
   end
 
@@ -25,16 +29,20 @@ RSpec.describe ItemsController, type: :request  do
 
   it "アイテムが登録できる" do
     params = {
-      name: "商品だぜ",
-      price: "1200",
-      description: "美味しすぎる！",
-      postage: "120",
-      inventory: "90",
-      maji_flag: "0",
-      category_id: "1",
-      images: uploaded_files
+      "name" => "商品だぜ",
+      "price" => "1200",
+      "description" => "美味しすぎる！",
+      "postage" => "120",
+      "inventory" => "90",
+      "maji_flag" => "0",
+      "category_id" => "1",
+      "action" => "create",
+      "images" => uploaded_files
     }
+    puts "params---------------#{params}"
+    puts "uploaded_files classes---------------#{uploaded_files.map(&:class).inspect}"
     post "/item/create", params: params
+    p "res-----------------#{response.body}"
     expect(response.status).to eq 200
   end
 

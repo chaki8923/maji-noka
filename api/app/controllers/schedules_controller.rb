@@ -4,9 +4,11 @@ class SchedulesController < ApplicationController # rubocop:disable Style/Docume
   def create
     convert_params = format_date(schedule_params)
     schedule = Schedule.new(convert_params)
-    schedule.create(schedule)
+    schedule.create
     render json: { value: nil, success_message: SystemMessage::API_SUCCESS }
   rescue => err_message
+    ## TODO：あとで消す
+    Rails.logger.errors "err_message---------------------------------#{err_message}"
     render json: {
              value: nil,
              err_message: err_message
@@ -17,7 +19,7 @@ class SchedulesController < ApplicationController # rubocop:disable Style/Docume
   def update
     convert_params = format_date(schedule_params)
     schedule = Schedule.new(convert_params)
-    res = schedule.update(schedule)
+    res = schedule.update
     render json: { value: nil, success_message: SystemMessage::API_SUCCESS }
   rescue => err_message
     render json: {

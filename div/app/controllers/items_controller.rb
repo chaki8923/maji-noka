@@ -32,7 +32,6 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
 
   def index
     data = Item.new
-    # @items = data.index.page(params[:page])
     @items = Kaminari.paginate_array(data.index).page(params[:page])
   end
 
