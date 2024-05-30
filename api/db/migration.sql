@@ -408,3 +408,5 @@ ALTER TABLE "Purchase" ALTER COLUMN "quantity" DROP NOT NULL;
 */
 -- AlterTable
 ALTER TABLE "Purchase" ALTER COLUMN "quantity" SET NOT NULL;
+
+INSERT INTO category (id, name, created_at, updated_at) VALUES (1, "米", now(), now());
