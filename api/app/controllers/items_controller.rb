@@ -16,8 +16,8 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
     item_images_upload(item_params, s3resource, res.first[:id])
     render json: { value: nil, success_message: SystemMessage::API_SUCCESS }
   rescue => err_message
-    ## TODO:Chakiあとで消す
     Rails.logger.debug "err_message---------------------------------#{err_message}"
+    Rails.logger.debug "Backtrace: #{err_message.backtrace.join("\n")}"
     render json: {value: nil, err_message: err_message}, status: :internal_server_error
   end
 

@@ -4,28 +4,11 @@ require 'securerandom'
 
 
 RSpec.describe ItemsController, type: :request  do
-  # 画像データを作成するヘルパーメソッド
-  def uploaded_file(filename)
-    file_path = Rails.root.join("spec/fixtures/#{filename}")
-    tempfile = Tempfile.new(filename)
-    FileUtils.copy_file(file_path, tempfile.path)
-    ActionDispatch::Http::UploadedFile.new(
-      tempfile: tempfile,
-      filename: filename,
-      type: 'image/jpeg',
-      head: "Content-Disposition: form-data; name=\"images[]\"; filename=\"#{filename}\"\r\nContent-Type: image/jpeg\r\n"
-    )
-  end
-
-  # 画像データを配列に格納する
-  let(:uploaded_files) do
-  [
-    uploaded_file('test_image1.jpg'),
-    uploaded_file('test_image2.jpg'),
-    uploaded_file('test_image3.jpg'),
-    uploaded_file('test_image4.jpg')
-  ]
-  end
+  let(:image_file) { fixture_file_upload(Rails.root.join("spec/fixtures/test_image1.jpg"), 'image/jpeg') }
+  let(:image_file2) { fixture_file_upload(Rails.root.join("spec/fixtures/test_image2.jpg"), 'image/jpeg') }
+  let(:image_file3) { fixture_file_upload(Rails.root.join("spec/fixtures/test_image3.jpg"), 'image/jpeg') }
+  let(:image_file4) { fixture_file_upload(Rails.root.join("spec/fixtures/test_image4.jpg"), 'image/jpeg') }
+  let(:size_over) { fixture_file_upload(Rails.root.join("spec/fixtures/size_over.jpg"), 'image/jpeg') }
 
   it "アイテムが登録できる" do
     params = {
@@ -37,15 +20,43 @@ RSpec.describe ItemsController, type: :request  do
       "maji_flag" => "0",
       "category_id" => "1",
       "action" => "create",
-      "images" => uploaded_files
+      "images" => [image_file, image_file2, image_file3, image_file4]
     }
-    puts "params---------------#{params}"
-    puts "uploaded_files classes---------------#{uploaded_files.map(&:class).inspect}"
     post "/item/create", params: params
-    p "res-----------------#{response.body}"
     expect(response.status).to eq 200
   end
 
+  it "変なアクション名だと登録できない" do
+    params = {
+      "name" => "商品だぜ",
+      "price" => "1200",
+      "description" => "美味しすぎる！",
+      "postage" => "120",
+      "inventory" => "90",
+      "maji_flag" => "0",
+      "category_id" => "1",
+      "action" => "hogehoge",
+      "images" => [image_file, image_file2, image_file3, image_file4]
+    }
+    post "/item/create", params: params
+    expect(response.status).to eq 200
+  end
+
+  it "画像サイズオーバーは登録できない" do
+    params = {
+      "name" => "商品だぜ",
+      "price" => "1200",
+      "description" => "美味しすぎる！",
+      "postage" => "120",
+      "inventory" => "90",
+      "maji_flag" => "0",
+      "category_id" => "1",
+      "action" => "hogehoge",
+      "images" => [image_file, image_file2, image_file3, size_over]
+    }
+    post "/item/create", params: params
+    expect(response.status).to eq 500
+  end
 
   it "アイテムが全て取得されること" do
     params = {}
@@ -68,35 +79,21 @@ RSpec.describe ItemsController, type: :request  do
   end
 
   it "商品編集画面で商品が取得できること" do
-    params = {
-      "category_id": "1",
-      "description": "甘くて美味しいお米",
-      "id": "1",
-      "images": [
-        "",
-        "",
-        "",
-        ""
-      ],
-      "inventory": "192",
-      "maji_flag": "1",
-      "name": "お米3kg",
-      "postage": "120",
-      "price": "1500"
-    }
+    params = {"id"=>"4"}
     get "/item/edit", params: params
     expect(response.status).to eq 200
   end
 
   it "商品が更新できること" do
     params = {
-      id: "1",
-      name: "お米3kg",
+      id: "4",
+      name: "更新商品",
       price: "1500",
       description: "甘くて美味しいお米",
       postage: "120",
       inventory: "192",
       maji_flag: "1",
+      action: "update",
       category_id: "1"
     }
     post "/item/update", params: params
@@ -104,13 +101,11 @@ RSpec.describe ItemsController, type: :request  do
   end
 
   it "商品を削除できること" do
-  params = {
-    "id": "1"
-  }
-  post "/item/delete", params: params
-  expect(response.status).to eq 200
+    params = {
+      "id": "4"
+    }
+    post "/item/delete", params: params
+    expect(response.status).to eq 200
   end
-
-
 
 end

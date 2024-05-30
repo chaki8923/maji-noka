@@ -9,9 +9,6 @@ class Image # rubocop:disable Style/Documentation
   end
 
   def self.new(value:, action:)
-    ## TODO：あとで消す
-    Rails.logger.debug "imagevalue---------------------------------#{value}"
-    Rails.logger.debug "action---------------------------------#{action}"
     return nil, '画像は流石に必要です' if value.nil? && action == 'create'
 
     if value.present?

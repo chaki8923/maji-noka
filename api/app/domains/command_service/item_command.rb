@@ -42,11 +42,8 @@ class ItemCommand # rubocop:disable Style/Documentation
     postage:,
     category_id:,
     inventory:,
-    maji_flag:,
-    action:
+    maji_flag:
   )
-  ## TODO：あとで消す
-  Rails.logger.debug "item_update---------------------------------#{}"
     DB[:items]
       .returning(:id)
       .where(
@@ -59,12 +56,11 @@ class ItemCommand # rubocop:disable Style/Documentation
         postage: postage.value,
         category_id: category_id.value,
         inventory: inventory.value,
-        maji_flag: maji_flag.value,
-        action: action.value
+        maji_flag: maji_flag.value
       )
   end
 
-  def delete_db(id)
+  def delete_db(id:)
     DB[:items]
       .returning(:id)
       .where(:id => id)

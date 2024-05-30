@@ -104,8 +104,7 @@ class Item # rubocop:disable Style/Documentation
       postage: @postage,
       category_id: @category_id,
       inventory: @inventory,
-      maji_flag: @maji_flag,
-      action: @action
+      maji_flag: @maji_flag
     )
   rescue StandardError => e
     raise e
