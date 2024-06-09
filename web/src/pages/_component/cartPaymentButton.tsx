@@ -12,7 +12,7 @@ type PaymentProps = {
 };
 
 const Checkout: React.FC<Partial<PaymentProps>> = () => {
-  const { cartDetails, cartCount } = useShoppingCart();
+  const { cartDetails, clearCart } = useShoppingCart();
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const router = useRouter();
   const items: any = Object.values(cartDetails ?? {}).map((entry) => entry);
@@ -33,9 +33,9 @@ const Checkout: React.FC<Partial<PaymentProps>> = () => {
     }
   }, [items.data]);
 
-
-  console.log("items!!!", items);
-  console.log("cartDetails!!!", cartDetails);
+  const allClearCart = () => {
+    clearCart();
+  }
 
   //stripe checkout
   const startCheckout = async () => {
@@ -79,6 +79,9 @@ const Checkout: React.FC<Partial<PaymentProps>> = () => {
     <div className="mt-2">
       <Button color="blue" onClick={() => startCheckout()} className="w-full rounded-none p-6 total-buy">
         まとめて購入　<RiMoneyCnyCircleLine />
+      </Button>
+      <Button color="red" onClick={() => allClearCart()} className="w-full rounded-none cart-delete">
+        カートの中身を削除
       </Button>
     </div>
   )

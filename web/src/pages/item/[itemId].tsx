@@ -1,17 +1,15 @@
 import { trpc } from '../../utils/trpc';
 import React, { useState, useEffect } from 'react';
-import { useCart } from "../../hooks/useCart";
 import { useRouter } from "next/router";
 import Payment from "../_component/paymentButton";
 import { Select, Button, Toast } from 'flowbite-react';
-import { CartItem } from '@/src/types';
 import { Autoplay, Navigation, Pagination, Thumbs, FreeMode, EffectFade } from "swiper/modules";
 import { Swiper, SwiperSlide, SwiperClass } from "swiper/react";
 import { getImageUrl } from '../../hooks/awsImageOperations';
-import { HiCheck } from "react-icons/hi";
 import { TbShoppingCartPin } from "react-icons/tb";
 import Image from "next/legacy/image";
 import { useShoppingCart } from 'use-shopping-cart'
+import  FadeModal from '../_component/fademodal';
 
 import 'swiper/css';
 import 'swiper/css/free-mode';
@@ -24,11 +22,12 @@ export default function Item() {
 
   const router = useRouter();
   const [imageUrls, setImageUrls] = useState<string[]>([]);
-  const [isCart, setIsCart] = useState<Boolean>(false);
+  const [isCart, setIsCart] = useState<boolean>(false);
+  const [isVisible, setIsVisible] = useState(false);
   const [orderQuantity, setorderQuantity] = useState<number>(1);
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null);
   const itemId = typeof router.query.itemId === 'string' ? parseInt(router.query.itemId, 10) : null;
-  const { addItem, cartDetails } = useShoppingCart();
+  const { addItem } = useShoppingCart();
   const { data } = trpc.item.getItemById.useQuery({
     id: itemId ?? 0, // idがnullの場合は0を使用
   }, {
@@ -55,13 +54,13 @@ export default function Item() {
   }
 
   const insertCart = () => {
-    setIsCart(true);
-    console.log("カート中身", cartDetails);
-    
+    setIsCart(true);    
+    setIsVisible(true);
   }
-
-  const closeModal = (event: React.MouseEvent<HTMLSpanElement>) => {
+  
+  const closeModal = () => {
     setIsCart(false);
+    setIsVisible(false);
   };
 
   if (!data) {
@@ -72,13 +71,7 @@ export default function Item() {
   return (
     <div className='lg:flex pt-3 overflow-hidden w-full justify-center pb-10'>
       {isCart ?
-        <Toast className='fixed top-2/4 left-1/3 z-50 py-9'>
-          <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200">
-            <HiCheck className="h-5 w-5" />
-          </div>
-          <div className="ml-3 text-sm font-normal">カートに追加しましまた</div>
-          <Toast.Toggle onClick={closeModal} />
-        </Toast> : null}
+        <FadeModal isCart={isCart} setIsVisible={setIsVisible} closeModal={closeModal}/> : null}
 
       <div className='lg:flex w-full'>
         <div className='lg:w-[70%] w-full'>
@@ -126,20 +119,20 @@ export default function Item() {
         <div className='lg:w-[30%] w-full xl:m-auto flex justify-between lg:block item-info'>
           <div className='w-[50%] lg:w-auto p-10 xl:p-0 item-info__inner'>
             <div className="text-group mb-6">
-              <h2 className='font-bold text-lg'>Name</h2>
+              <h2 className='font-bold text-lg'>商品名</h2>
               <p className='text-gray-900'>{data.name}</p>
             </div>
             <div className="text-group mb-6">
-              <h2 className='font-bold text-lg'>Cmment</h2>
               <p className='text-gray-900'>{data.description}</p>
             </div>
             <div className="text-group mb-6">
-              <h2 className='font-bold text-lg'>Price</h2>
+            <h2 className='font-bold text-lg'>価格</h2>
               <p className='text-gray-900'>{data.price.toLocaleString()}円</p>
             </div>
             <div className="text-group mb-6">
               <h2 className='font-bold text-lg'>在庫</h2>
               <p className='text-gray-900'>{data.inventory}個</p>
+              <span className='text-xs'>ご購入のタイミングによっては表示在庫よりも少ない場合があります</span>
             </div>
           </div>
           <div className='w-[50%] lg:w-auto p-10 xl:p-0 item-info__inner'>

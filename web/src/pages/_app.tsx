@@ -17,21 +17,21 @@ function MyApp({ Component, pageProps }: AppProps<{
 
   return (
     <SessionProvider session={pageProps.session}>
-      <Header />
-      <div className="min-h-[640px]">
-        <CartProvider
-          mode="payment"
-          cartMode="client-only"
-          shouldPersist={true}
-          stripe={process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string}
-          currency="JPY"
-          successUrl="http://localhost:3000/success"
-          cancelUrl="http://localhost:3000"
-        >
+      <CartProvider
+        mode="payment"
+        cartMode="client-only"
+        shouldPersist={true}
+        stripe={process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string}
+        currency="JPY"
+        successUrl="http://localhost:3000/success"
+        cancelUrl="http://localhost:3000"
+      >
+        <Header />
+        <div className="min-h-[640px]">
           <Component {...pageProps} />
-        </CartProvider>
-      </div>
-      <FooterComponent />
+        </div>
+        <FooterComponent />
+      </CartProvider>
     </SessionProvider>
   )
 }

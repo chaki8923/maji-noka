@@ -33,7 +33,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-, "src/pages/item/[itemId].tsx", "src/pages/policy/index.jsx"  ],
+, "src/pages/item/[itemId].tsx", "src/pages/policy/index.jsx", "src/app/not-found.tsx", "src/app/errors.tsx"  ],
   "exclude": [
     "node_modules"
   ]

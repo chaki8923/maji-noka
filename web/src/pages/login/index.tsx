@@ -10,9 +10,10 @@ import Loading from '../_component/loading';
 const LoginPage = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
-
   // MEMO:現状会員機能不要とのことでホームへ遷移
   useEffect(() => {
+    // NOTE:現在ログイン機能は不要
+    router.push("/");
     // ログイン済みの場合はTOPページにリダイレクト
     if (status === "authenticated") {
       router.push("/");

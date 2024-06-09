@@ -10,6 +10,8 @@ const LoginPage = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
   useEffect(() => {
+    // NOTE:現在会員登録機能は不要
+    router.push("/");
     // ログイン済みの場合はTOPページにリダイレクト
     if (status === "authenticated") {
       router.push("/");

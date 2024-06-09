@@ -8,7 +8,7 @@ import { useShoppingCart } from 'use-shopping-cart'
 
 export default function PaymentSuccess() {
     const router = useRouter();
-    const { clearCart } = useShoppingCart()
+    const { clearCart } = useShoppingCart();
     const transitionItems = (event: React.MouseEvent<HTMLSpanElement>) => {
         clearCart();
         router.push("/");
