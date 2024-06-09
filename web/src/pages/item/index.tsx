@@ -3,10 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { getImageUrl } from '../../hooks/awsImageOperations';
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Card, Badge } from 'flowbite-react';
+import { Card, Badge, Pagination } from 'flowbite-react';
 import Loading from '../_component/loading';
 import Image from "next/image";
-import { Pagination } from "flowbite-react";
 import { Items } from '@/src/types';
 
 export default function Page() {
@@ -16,7 +15,7 @@ export default function Page() {
   const [products, setProducts] = useState<any>([]);
   const searchParams = useSearchParams();
   const keyword = searchParams?.get("keyword");
-  const limit = 1;
+  const limit = 8;
 
   const allItemsCount = trpc.item.allItemsCount.useQuery();
   const items = trpc.item.getItems.useQuery({ limit: limit, offset: currentPage - 1 });
@@ -51,50 +50,44 @@ export default function Page() {
   if (!items.data) {
     return <Loading />
   }
-  if (keyword) {
-    items.data.filter((item) =>
-      item.name.toLowerCase().includes(keyword.toLowerCase())
-    );
-  }
+
 
   return (
     <>
+      <h2 className='page-title'>商品リスト</h2>
       <div className='lg:flex lg:justify-start'>
         <div className="
-      grid 
-      px-2
-      lg:ml-6 
-      lg:grid-cols-3 
-      sm:grid-cols-2 
-      grid-cols-1
-      mb-24 
-      justify-items-center 
-      md:px-5 
-      gap-2
-      ">
+                        grid 
+                        px-2
+                        lg:grid-cols-3
+                        sm:grid-cols-2 
+                        grid-cols-1
+                        mb-24 
+                        justify-items-center 
+                        md:px-5 
+                        gap-12
+                        mx-auto
+                        ">
           {products.map((item: Items, index: number) => (
-            <Link href={`item/${item.id}`} key={item.id} className='w-full flex justify-center sm:w-[320px] item-card'>
+            <Link href={`item/${item.id}`} key={item.id} className='sm:mb-8 w-full flex justify-center sm:w-[360px] item-card'>
               <Card
-                className="w-full overflow-hidden relative rounded-none bg-transparent"
+                className="w-full overflow-hidden relative rounded-none bg-transparent flow-card"
                 renderImage={() => {
                   if (imageUrls && imageUrls[index]) {
-                    return <Image width={500} height={280} src={imageUrls[index]} alt={`image ${index}`} className="min-h-[280px] max-h-[280px] object-cover" />;
+                    return <div className='image-wrapper'><Image width={500} height={380} src={imageUrls[index]} alt={`image ${index}`} className="min-h-[240px] max-h-[240px] object-cover" /></div>;
                   } else {
                     return <Image width={500} height={500} src="/default-image.jpg" alt="Default Image" className="h-[280px]" />;
                   }
                 }}
               >
                 {item.maji_flag && (
-                  <Badge color="pink" className='absolute top-2 left-0 p-2 border-gray-50 border-2 animate-bounce'>New</Badge>
+                  <span className="absolute top-0 left-0 bg-red-100 text-red-800 font-medium me-2 p-2 rounded dark:bg-gray-700 dark:text-red-300 border border-red-300">新入荷！</span>
                 )}
 
-                <h5 className="text-2xl tracking-tight text-gray-900 dark:text-white item-title">
+                <h5 className="text-2xl tracking-tight text-gray-900 dark:text-white item-title text-center">
                   {item.name}
                 </h5>
-                <p className="font-normal text-gray-700 dark:text-gray-400 index-description">
-                  {item.description}
-                </p>
-                <p className="font-normal text-gray-700 dark:text-gray-400">
+                <p className="font-normal text-gray-700 dark:text-gray-400 text-center">
                   {item.price.toLocaleString()}円
                 </p>
               </Card>

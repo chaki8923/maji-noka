@@ -1,0 +1,19 @@
+.container {
+  padding: 20px;
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+}
+
+.fadeOut {
+  opacity: 1;
+}
+
+.hide {
+  z-index: 20;
+  opacity: 0;
+  transition: .3s;
+  transition: opacity  .5s ease-out;
+}
