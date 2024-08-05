@@ -8,7 +8,7 @@
 <%= form_for @slide_instance, url: {action: :create}, multipart: true do |f| %>
     <div class="mb-3">
       <%= f.label :images, "スライド画像(複数選択可。スライドなので4枚以上推奨)",class: "form-label" %>
-      <%= f.file_field :images ,include_hidden: false, multiple: true, class: "form-control js-multi-image" %>
+      <%= f.file_field :images ,include_hidden: false, multiple: true, class: "form-control js-multi-image slide_field" %>
       <% (1..4).each_with_index do |num, idx| %>
         <div class="mb-3">
           <img src="" alt="" class="js-previewImage-<%= num %> preview-format">
@@ -17,7 +17,7 @@
     </div>
   <%=  f.hidden_field :id, value: 1 %>
   <div class="mt-3" style="margin-top: 20px;">
-    <%= submit_tag "画像登録",class: "btn btn-primary mb-5" %>
+    <%= submit_tag "画像登録",class: "btn btn-primary mb-5 slide-submit" %>
   </div>
 <% end %>
 

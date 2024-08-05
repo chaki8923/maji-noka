@@ -42,7 +42,4 @@ RSpec.describe PurchaseController, type: :request  do
     post "/schedule/delete", params: params
     expect(response.status).to eq 200
   end
-
-
-
 end
