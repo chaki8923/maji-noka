@@ -7,7 +7,7 @@ import { Select, Button, Toast } from 'flowbite-react';
 import { CartItem } from '@/src/types';
 import { Autoplay, Navigation, Pagination, Thumbs, FreeMode, EffectFade } from "swiper/modules";
 import { Swiper, SwiperSlide, SwiperClass } from "swiper/react";
-import { getImageUrl } from '../../hooks/awsImageoperations';
+import { getImageUrl } from '../../hooks/awsimageoperations';
 import { HiCheck } from "react-icons/hi";
 import { TbShoppingCartPin } from "react-icons/tb";
 import Image from "next/legacy/image";
