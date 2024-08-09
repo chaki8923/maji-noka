@@ -2,7 +2,7 @@ import { Button, Card, Select } from 'flowbite-react';
 import React, { useState, useEffect } from 'react';
 import Link from "next/link";
 import { getImageUrl } from '../../hooks/awsImageOperations';
-import Payment from "../_component/paymentButton";
+import Payment from "../_component/paymentButtonComponent";
 import CartPayment from "../_component/Tranfer";
 import { useRouter } from 'next/router';
 import { TbArrowBackUp } from "react-icons/tb";
