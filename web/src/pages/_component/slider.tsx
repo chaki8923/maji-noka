@@ -1,7 +1,7 @@
 import { Autoplay, Navigation, Pagination, Thumbs, EffectFade } from "swiper/modules";
 import React, { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { getImageUrl } from '../../hooks/awsimageoperations';
+import { getImageUrl } from '../../hooks/awsImageOperations';
 import Image from "next/legacy/image";
 
 // Import Swiper styles
