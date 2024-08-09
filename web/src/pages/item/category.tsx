@@ -1,10 +1,10 @@
 import { trpc } from '../../utils/trpc';
 import React, { useState, useEffect } from 'react';
-import {getImageUrl}  from '../../hooks/awsImageOperations';
+import {getImageUrl}  from '../../hooks/awsimageoperations';
 import Link from "next/link";
 import { Card, Badge } from 'flowbite-react';
 import { useSearchParams } from "next/navigation";
-import { useWindowSize } from "../../hooks/useWindowSize";
+import { useWindowSize } from "../../hooks/usewindowsize";
 import Image from "next/legacy/image";
 
 export default function Items() {
