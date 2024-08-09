@@ -1,6 +1,6 @@
 import { trpc } from '../../utils/trpc';
 import React, { useState, useEffect } from 'react';
-import { getImageUrl } from '../../hooks/awsimageoperations';
+import { getImageUrl } from '../../hooks/awsImageOperations';
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Card, Badge } from 'flowbite-react';

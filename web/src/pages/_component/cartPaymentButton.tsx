@@ -4,7 +4,7 @@ import { Button } from 'flowbite-react';
 import { createCustomerId } from "../../feature/stripe/stripe";
 import { RiMoneyCnyCircleLine } from "react-icons/ri";
 import { useShoppingCart } from 'use-shopping-cart'
-import { getImageUrl } from '../../hooks/awsimageoperations';
+import { getImageUrl } from '../../hooks/awsImageOperations';
 import { CartEntry } from "use-shopping-cart/core";
 type PaymentProps = {
   item: CartEntry,
