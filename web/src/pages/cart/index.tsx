@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Link from "next/link";
 import { getImageUrl } from '../../hooks/awsimageoperations';
 import Payment from "../_component/paymentbutton";
-import CartPayment from "../_component/cartpaymentbutton";
+import CartPayment from "../_component/cartPaymentButton";
 import { useRouter } from 'next/router';
 import { TbArrowBackUp } from "react-icons/tb";
 import Image from "next/legacy/image";
