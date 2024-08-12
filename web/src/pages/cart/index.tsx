@@ -1,7 +1,7 @@
 import { Button, Card, Select } from 'flowbite-react';
 import React, { useState, useEffect } from 'react';
 import Link from "next/link";
-import { getImageUrl } from '../../hooks/awsImageOperations';
+import { getImageUrl } from '../../hooks/getAwsImage';
 import Payment from "../_component/paymentButtonComponent";
 import CartPayment from "../_component/Tranfer";
 import { useRouter } from 'next/router';
