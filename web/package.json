@@ -8,9 +8,6 @@
     "start": "next start",
     "lint": "next lint"
   },
-  "engines": {
-    "node": "21.x"
-  },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.556.0",
     "@aws-sdk/client-s3": "^3.556.0",
