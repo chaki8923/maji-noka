@@ -1,4 +1,17 @@
 {
+  "version": 2,
+  "builds": [
+    {
+      "src": "web/package.json",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "web/src"
+    }
+  ],
   "cleanUrls": true
 }
 
