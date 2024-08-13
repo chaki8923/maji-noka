@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "/web/next.config.mjs",
+      "src": "/web/hogehoge.js",
       "use": "@vercel/next"
     }
   ],
