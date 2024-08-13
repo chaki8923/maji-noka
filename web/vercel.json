@@ -1,9 +1,9 @@
 {
   "version": 2,
-  "routes": [
+  "builds": [
     {
-      "src": "/(.*)",
-      "dest": "/web/$1"
+      "src": "web/next.config.mjs",
+      "use": "@vercel/next"
     }
   ]
 }

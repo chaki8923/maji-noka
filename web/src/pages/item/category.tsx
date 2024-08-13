@@ -4,7 +4,7 @@ import {getImageUrl}  from '../../hooks/getAwsImage';
 import Link from "next/link";
 import { Card, Badge } from 'flowbite-react';
 import { useSearchParams } from "next/navigation";
-import { useWindowSize } from "../../hooks/useWindowSize";
+import { useWindowSize } from "../../hooks/getWindowSize";
 import Image from "next/legacy/image";
 
 export default function Items() {
