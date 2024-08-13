@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { HiCheck } from "react-icons/hi";
 import { TbShoppingCartPin } from "react-icons/tb";
 import { Toast } from 'flowbite-react';
+import styles from '../../../styles/fade.module.css';
 
 interface FadeModalProps {
   isCart: boolean;
@@ -36,8 +37,8 @@ const Component: React.FC<FadeModalProps> = ({ isCart, setIsVisible, closeModal 
   }, [isCart]);
 
   return (
-    <div>
-      <Toast>
+    <div className={`${styles.fadeOut} ${!isVisible ? styles.hide : ''}`}>
+      <Toast className={styles.container}>
         <>
           <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200">
             <HiCheck className="h-5 w-5" />
