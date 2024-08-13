@@ -5,7 +5,7 @@ export default function NotFound() {
   return (
     <div>
       <center>
-        <p>指定したページが見つかりません</p>
+        <p>指定したページが見つかりません。</p>
         <Link href="/">
           トップに戻る
         </Link>
