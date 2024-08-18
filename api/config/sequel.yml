@@ -1,7 +1,7 @@
 
 development:
-  # db: "postgresql://postgres:password@maji-noka_db_1/web_development"
-  db: "postgres://default:aAvjJ6DyOk2n@ep-lingering-sky-a43h4bem-pooler.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require&options=endpoint%3Dep-lingering-sky-a43h4bem-pooler"
+  db: "postgresql://postgres:password@maji-noka_db_1/web_development"
+  # db: "postgres://default:aAvjJ6DyOk2n@ep-lingering-sky-a43h4bem-pooler.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require&options=endpoint%3Dep-lingering-sky-a43h4bem-pooler"
 test:
   db: "postgresql://postgres:password@maji-noka-test_db-1/postgres"
 production:

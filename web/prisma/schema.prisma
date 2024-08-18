@@ -2,24 +2,24 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 // 開発=================================
-//generator client {
-//  provider = "prisma-client-js"
-//}
-
-//datasource db {
-//  provider = "postgresql"
-//  url      = env("DATABASE_URL")
-// }
-
-
-// 本番=================================
 generator client {
   provider = "prisma-client-js"
 }
+
 datasource db {
   provider = "postgresql"
-  url      = env("POSTGRES_PRISMA_URL")
-}
+  url      = env("DATABASE_URL")
+ }
+
+
+// 本番=================================
+//generator client {
+ // provider = "prisma-client-js"
+//}
+//datasource db {
+  //provider = "postgresql"
+  //url      = env("POSTGRES_PRISMA_URL")
+//}
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
@@ -35,7 +35,10 @@ model items {
   purchases    Purchase[]                        
   category_id Int
   category    category  @relation(fields: [category_id], references: [id])
-  image_count     Int                        
+  image_path01 String?
+  image_path02 String?
+  image_path03 String?
+  image_path04 String?
   maji_flag   Boolean   @default(false)
   postage     Int?
   inventory   Int      @default(0)

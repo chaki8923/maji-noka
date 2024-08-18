@@ -10,8 +10,6 @@ class Schedule < BaseModel # rubocop:disable Style/Documentation
                 :memo
 
   def create
-    ## TODO：あとで消す
-    Rails.logger.debug "スケパラ---------------------------------#{@title}"
     res = execute_api('schedule/create', schedule_params, method: 'post')
     convert_boolean(res)
   end

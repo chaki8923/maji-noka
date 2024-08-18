@@ -27,8 +27,8 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
 
     res = item.update
     item_images_upload(item_params, s3resource, res.first[:id])
-    image_count = object_count(res.first[:id])
-    item.update_image_count(res.first[:id], image_count)
+    # image_count = object_count(res.first[:id])
+    # item.update_image_count(res.first[:id], image_count)
     render json: { value: nil, success_message: SystemMessage::API_SUCCESS }
   rescue => err_message
     ## TODO:Chakiあとで消す
@@ -140,7 +140,7 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
   def item_images_upload(item_params, s3resource, item_id)
     return if item_params['images'].nil?
 
-    item_params['images'].each do |image|
+    item_params['images'].each_with_index do |image, idx|
       file_name = "item_#{image.original_filename}_#{item_id}"
       file_path = Rails.root.join('public/images', file_name)
       FileUtils.mkdir_p('public/images')
@@ -151,6 +151,10 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
       # s3へアップロード
       s3_key = "item/#{item_id}/#{file_name}"
       s3_upload(s3resource, s3_key, file_path, content_type)
+      s3_url = s3resource.bucket(BUCKET).object(s3_key).public_url
+      ## TODO：あとで消す
+    	Rails.logger.debug "s3_url---------------------------------#{s3_url}"
+      Item.set_image_path(item_id, s3_url, idx + 1)
       # ローカルのデータは消す
       image_delete(file_path)
     end

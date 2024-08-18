@@ -18,7 +18,8 @@ class Item # rubocop:disable Style/Documentation
     inventory:,
     maji_flag:,
     category_id:,
-    action:)
+    action:
+  )
     @id = id
     @name = name
     @price = price
@@ -138,5 +139,17 @@ class Item # rubocop:disable Style/Documentation
     	Rails.logger.debug "err---------------------------------#{e}"
       raise e
     end
+
+    def set_image_path(id, image_path, idx)
+      idc = ItemCommand.new
+      idc.set_image_path(
+        id: id,
+        image_path: image_path,
+        idx: idx
+      )
+    rescue StandardError => e
+      raise e
+    end
+
   end
 end
