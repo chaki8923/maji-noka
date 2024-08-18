@@ -67,6 +67,13 @@ export default function Item() {
     return <Loading />
   }
 
+  const image_paths = [
+    data.image_path01, 
+    data.image_path02, 
+    data.image_path03, 
+    data.image_path04
+  ].filter(path => path);
+
 
   return (
     <div className='lg:flex pt-3 overflow-hidden w-full justify-center pb-10'>
@@ -93,7 +100,7 @@ export default function Item() {
             className="mainSwiper"
           >
 
-            {imageUrls.map((src: string, index: number) => (
+            {image_paths.map((src: string, index: number) => (
               <SwiperSlide key={index} className='main-inner-slide'>
                 <Image src={src} alt="商品画像" layout="fill" objectFit="cover" />
               </SwiperSlide>
@@ -103,12 +110,12 @@ export default function Item() {
           <Swiper
             onSwiper={setThumbsSwiper}
             spaceBetween={10}
-            slidesPerView={data.image_count}
+            slidesPerView={image_paths.length}
             watchSlidesProgress={true}
             modules={[FreeMode, Navigation, Thumbs]}
             className="subSwiper"
           >
-            {imageUrls.map((src: string, index: number) => (
+            {image_paths.map((src: string, index: number) => (
               <SwiperSlide key={index}>
                 <Image src={src} alt="商品画像" layout="fill" objectFit="cover" />
               </SwiperSlide>

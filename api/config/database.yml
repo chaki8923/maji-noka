@@ -23,10 +23,16 @@ default: &default
   host: db
   username: postgres
   password: password
+# default: &default
+#   adapter: postgresql
+#   encoding: unicode
+#   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+#   url: postgres://default:aAvjJ6DyOk2n@ep-lingering-sky-a43h4bem-pooler.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require&options=endpoint%3Dep-lingering-sky-a43h4bem-pooler
 
 development:
   <<: *default
   database: web_development
+  
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.

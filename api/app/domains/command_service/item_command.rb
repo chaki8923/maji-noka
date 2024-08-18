@@ -74,4 +74,14 @@ class ItemCommand # rubocop:disable Style/Documentation
     )
     .update(image_count: count)
   end
+
+  def set_image_path(id:, image_path:, idx:)
+    ## TODO：あとで消す
+    Rails.logger.debug "update入った---------------------------------#{}"
+    DB[:items]
+    .where(
+      id: id
+    )
+    .update("image_path0#{idx}".to_sym => image_path)
+  end
 end

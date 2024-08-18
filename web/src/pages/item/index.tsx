@@ -1,6 +1,5 @@
 import { trpc } from '../../utils/trpc';
 import React, { useState, useEffect } from 'react';
-import { getImageUrl } from '../../hooks/getAwsImage';
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Card, Badge, Pagination } from 'flowbite-react';
@@ -9,7 +8,6 @@ import Image from "next/image";
 import { Items } from '@/src/types';
 
 export default function Page() {
-  const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   const [products, setProducts] = useState<any>([]);
@@ -31,21 +29,6 @@ export default function Page() {
     setCurrentPage(pageNumber);
   };
 
-  useEffect(() => {
-    if (products) {
-      const fetchImageUrls = async () => {
-        const urls = await Promise.all(products.map(async (item: Items) => {
-          return await getImageUrl(
-            'maji-image',
-            `item/${item.id}/item_image_0_${item.id}`,
-            3600
-          );
-        }));
-        setImageUrls(urls);
-      };
-      fetchImageUrls();
-    }
-  }, [products]);
 
   if (!items.data) {
     return <Loading />
@@ -55,6 +38,18 @@ export default function Page() {
   return (
     <>
       <h2 className='page-title'>商品リスト</h2>
+      <style jsx>{`
+      .page-title:before {
+          position: absolute;
+          bottom: 0px;
+          left: 0;
+          width: 100%;
+          height: 10px;
+          background: repeating-linear-gradient(#c9efcb 0 2px, transparent 2px 4px),
+            repeating-linear-gradient(90deg, #c9efcb 0 2px, transparent 2px 4px);
+          content: '';
+        }
+      `}</style>
       <div className='lg:flex lg:justify-start'>
         <div className="
                         grid 
@@ -73,8 +68,8 @@ export default function Page() {
               <Card
                 className="w-full overflow-hidden relative rounded-none bg-transparent flow-card"
                 renderImage={() => {
-                  if (imageUrls && imageUrls[index]) {
-                    return <div className='image-wrapper'><Image width={500} height={380} src={imageUrls[index]} alt={`image ${index}`} className="min-h-[240px] max-h-[240px] object-cover" /></div>;
+                  if (item.image_path01) {
+                    return <div className='image-wrapper'><Image width={500} height={380} src={item.image_path01} alt={`image ${index}`} className="min-h-[240px] max-h-[240px] object-cover" /></div>;
                   } else {
                     return <Image width={500} height={500} src="/default-image.jpg" alt="Default Image" className="h-[280px]" />;
                   }
