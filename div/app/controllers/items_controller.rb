@@ -75,7 +75,6 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
     (1..4).each do |num|
       images.push(params['item']["image#{num}"])
     end
-    ## TODO：あとで消す
     params.require(:item).permit(
       :id,
       :name,

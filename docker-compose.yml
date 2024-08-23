@@ -48,8 +48,8 @@ services:
     volumes:
       - ./div:/div
     ports:
-      - "127.0.0.6:3000:3000"
-      # - "3004:3000"
+      # - "127.0.0.6:3000:3000"
+      - "3004:3000"
     depends_on:
       - db
   api:
@@ -71,8 +71,8 @@ services:
     volumes:
       - ./api:/api
     ports:
-      - "127.0.0.2:3000:3000"
-      # - "3003:3000"
+      # - "127.0.0.2:3000:3000"
+      - "3003:3000"
     depends_on:
       - db
   mailcatcher:

@@ -17,6 +17,8 @@ export default function Page() {
 
   const allItemsCount = trpc.item.allItemsCount.useQuery();
   const items = trpc.item.getItems.useQuery({ limit: limit, offset: currentPage - 1 });
+  console.log("items",items.data);
+  
   useEffect(() => {
     if (items.data && allItemsCount.data) {
       setProducts(items.data);

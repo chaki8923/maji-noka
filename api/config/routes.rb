@@ -37,6 +37,12 @@ Rails.application.routes.draw do
     get '/index', to: 'users#index'
   end
 
+  scope 'slider' do
+    post '/create', to: 'sliders#create'
+    post '/update', to: 'sliders#update'
+    get '/index', to: 'sliders#index'
+  end
+
   scope 'mail' do
     post '/send_mail', to: 'send_mail#send_mail'
     post '/bulk_send_mail', to: 'send_mail#bulk_send_mail'

@@ -140,12 +140,12 @@ class Item # rubocop:disable Style/Documentation
       raise e
     end
 
-    def set_image_path(id, image_path, idx)
+    def set_image_path(id, image_path, file_name)
       idc = ItemCommand.new
       idc.set_image_path(
         id: id,
         image_path: image_path,
-        idx: idx
+        file_name: file_name
       )
     rescue StandardError => e
       raise e

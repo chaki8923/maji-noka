@@ -13,6 +13,8 @@ import { trpc } from "@/src/utils/trpc";
 export default function Slider() {
     const [imageUrls, setImageUrls] = useState<string[]>([]);
     const { data: images } = trpc.slider.getItemById.useQuery({ id: 1 });
+    console.log("images", images);
+    
     useEffect(() => {
         const fetchImageUrls = async () => {
             const imagesAry = [];
