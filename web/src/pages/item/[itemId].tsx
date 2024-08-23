@@ -34,19 +34,6 @@ export default function Item() {
     enabled: itemId !== null, // idがnullでない場合にのみクエリを実行
   });
 
-  useEffect(() => {
-    if (data && itemId !== null) {
-      const fetchImageUrls = async () => {
-        const imagesAry = [];
-        for (let index = 0; index < data.image_count; index++) {
-          const urls = await getImageUrl('maji-image', `item/${data.id}/item_image_${index}_${data.id}`, 3600);
-          imagesAry.push(urls)
-        }
-        setImageUrls(imagesAry);
-      };
-      fetchImageUrls();
-    }
-  }, [data, itemId]);
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const quantity = parseInt(event.target.value, 10); //数値に変換
@@ -170,7 +157,7 @@ export default function Item() {
                     id: data.id,
                     price: data.price,
                     currency: 'JPY',
-                    image: imageUrls[0],
+                    image: data.image_path01,
                   }, { count: orderQuantity });
                   insertCart();
                 }}>

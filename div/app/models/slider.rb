@@ -1,10 +1,25 @@
 # frozen_string_literal: true
 
-class Slider < ApplicationRecord # rubocop:disable Style/Documentation
-  mount_uploaders :images, ImageUploader
-  skip_callback :store_previous_changes_for_images
-  skip_callback :remove_images!, on: :destroy
-  skip_callback :mark_remove_images_false, on: :update
-  skip_callback :remove_previously_stored_images, on: :update
-  skip_callback :store_images!, on: [:create, :update]
+class Slider < BaseModel # rubocop:disable Style/Documentation
+
+
+
+  def create(params)
+    Rails.logger.debug "params---------------------------------#{params}"
+    res = execute_api('slider/create', params, method: 'post')
+    convert_boolean(res)
+  end
+
+  def update(params)
+    ## TODO:Chakiあとで消す
+
+    res = execute_api('slider/update', params, method: 'post')
+    convert_boolean(res)
+  end
+
+  def index
+    res = execute_api('slider/index', method: 'get')
+    res
+  end
+
 end

@@ -3,33 +3,44 @@
 class SliderController < ApplicationController # rubocop:disable Style/Documentation
   def new
     @slide_instance = Slider.new
-    @sliders = Slider.find(1) if slide_exist?(Slider)
+    @list = @slide_instance.index
   end
 
   def create
-    if slide_exist?(Slider)
-      slider = Slider.find(1)
-      slide_update(slider)
+    @slider_instance = Slider.new
+    res = @slider_instance.create(slider_params)
+    if res == true
+      redirect_to slider_new_path, notice: '画像が登録されました'
     else
-      slider = Slider.new(slider_params)
-      slide_save(slider)
+      render action: 'new'
     end
   end
 
   def index
-    @slide_instance = Slider.find(1)
+    data = Item.new
+    @items = Kaminari.paginate_array(data.index).page(params[:page])
   end
 
   def edit
-
+    @item_instance = Item.new
+    @item = get_item(params.permit(:id), @item_instance)
+    category_instance = Category.new
+    @categories = category_instance.index
+    redirect_to item_index_path, alert: @item[:err_message] if @item[:err_message].present?
   end
 
   def update
-
-  end
-
-  def delete
-
+    @item_instance = Item.new(item_params)
+    item_params['maji_flag'] = item_params['maji_flag'].to_i == 1
+    @item = get_item(item_params, @item_instance)
+    category_instance = Category.new
+    @categories = category_instance.index
+    res = @item_instance.update(item_params)
+    if res == true
+      redirect_to item_index_path, notice: '商品が編集されました'
+    else
+      render action: 'edit'
+    end
   end
 
   private
@@ -55,10 +66,5 @@ class SliderController < ApplicationController # rubocop:disable Style/Documenta
     else
       render action: 'new'
     end
-  end
-
-  def slide_exist?(slide)
-    all_slide = slide.all
-    all_slide.count > 0
   end
 end

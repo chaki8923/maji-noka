@@ -2,30 +2,15 @@
 
 require 'sequel'
 
-class ItemCommand # rubocop:disable Style/Documentation
+class SliderCommand # rubocop:disable Style/Documentation
   DB = Sequel.connect(Rails.configuration.x.sequel[:db])
 
   # 新規作成
-  def create_db(
-    name:,
-    price:,
-    description:,
-    postage:,
-    category_id:,
-    inventory:,
-    maji_flag:,
-    action:
-  )
-    DB[:items]
+  def create_db
+    DB[:sliders]
       .returning(:id)
       .insert(
-        name: name.value,
-        price: price.value,
-        description: description.value,
-        postage: postage.value,
-        inventory: inventory.value,
-        category_id: category_id.value,
-        maji_flag: maji_flag.value,
+        images: '{}',
         updated_at: 'NOW()',
         created_at: 'NOW()'
       )
@@ -73,13 +58,15 @@ class ItemCommand # rubocop:disable Style/Documentation
     .update(image_count: count)
   end
 
-  def set_image_path(id:, image_path:, file_name:)
-    ## TODO：あとで消す
-    Rails.logger.debug "update入った---------------------------------#{file_name}"
-    DB[:items]
+  def set_image_path(id:, images:)
+    images_array_literal = "{#{images.map { |i| %Q("#{i}") }.join(',')}}"
+    ## TODO:Chakiあとで消す
+    Rails.logger.debug "images_array_literal---------------------------------#{images_array_literal}"
+
+    DB[:sliders]
     .where(
       id: id
     )
-    .update("#{file_name}".to_sym => image_path)
+    .update(images: Sequel.lit("ARRAY[?]::TEXT[]", images))
   end
 end

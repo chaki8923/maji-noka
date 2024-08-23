@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 require 'sequel'
-class ItemsController < ApplicationController # rubocop:disable Style/Documentation
+class SlidersController < ApplicationController # rubocop:disable Style/Documentation
   DB = Sequel.connect(Rails.configuration.x.sequel[:db])
   Dotenv.load
   ACCESS_KEY = ENV.fetch('ACCESS_KEY_ID', nil)
@@ -10,10 +10,10 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
   after_action :set_csrf_token_header
 
   def create
-    item = Item.new(item_params)
+    slider = Slider.new(slider_params)
     s3resource = get_s3_resource(ACCESS_KEY, SECRET_KEY, REGION)
-    res = item.create
-    item_images_upload(item_params, s3resource, res.first[:id])
+    res = slider.create
+    item_images_upload(slider_params, s3resource, res.first[:id])
     render json: { value: nil, success_message: SystemMessage::API_SUCCESS }
   rescue => err_message
     Rails.logger.debug "err_message---------------------------------#{err_message}"
@@ -36,14 +36,12 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
   end
 
   def index
-    res = Item.index
-    s3resource = get_s3_resource(ACCESS_KEY, SECRET_KEY, REGION)
-    signer = Aws::S3::Presigner.new(client: s3resource.client)
-    res.map do |d|
-      d[:image] = item_first_image(signer, d)
-    end
+    res = Slider.index
+     Rails.logger.debug "res---------------------------------#{res.first[:images]}"
+     parsed_data = res.first[:images].gsub(/[{}\\"]/, '').split(',')
+     Rails.logger.debug "parsed_data---------------------------------#{parsed_data}"
 
-    render json: res
+    render json: parsed_data
   end
 
   def show
@@ -77,17 +75,9 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
 
   private
 
-  def item_params
+  def slider_params
     params.permit(
       :id,
-      :name,
-      :price,
-      :description,
-      :postage,
-      :inventory,
-      :maji_flag,
-      :action,
-      :category_id,
       images: []
     )
   end
@@ -136,11 +126,11 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
     image_hash
   end
 
-  def item_images_upload(item_params, s3resource, item_id)
-    return if item_params['images'].nil?
-
-    item_params['images'].each_with_index do |image, idx|
-      file_name = "item_#{image.original_filename}_#{item_id}"
+  def item_images_upload(slider_params, s3resource, slider_id)
+    return if slider_params['images'].nil?
+    images = []
+    slider_params['images'].each_with_index do |image, idx|
+      file_name = "item_#{image.original_filename}_#{slider_id}"
       file_path = Rails.root.join('public/images', file_name)
       FileUtils.mkdir_p('public/images')
       image_upload(image, file_name)
@@ -148,13 +138,14 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
       compress_image("public/images/#{file_name}")
       content_type = image.content_type
       # s3へアップロード
-      s3_key = "item/#{item_id}/#{file_name}"
+      s3_key = "slider/#{slider_id}/#{file_name}"
       s3_upload(s3resource, s3_key, file_path, content_type)
       s3_url = s3resource.bucket(BUCKET).object(s3_key).public_url
-      Item.set_image_path(item_id, s3_url, image.original_filename)
+      images.push(s3_url)
       # ローカルのデータは消す
       image_delete(file_path)
     end
+    Slider.set_image_path(slider_id, images)
   rescue StandardError => e
     raise e
   end

@@ -21,18 +21,6 @@ function Cart() {
   });
 
 
-  useEffect(() => {
-    if (items) {
-      const fetchImageUrls = async () => {
-        const urls = await Promise.all(items.map(async (item) => {
-          return await getImageUrl('maji-image', `item/${item.id}/item_image_0_${item.id}`, 3600);
-        }));
-        setImageUrls(urls);
-      };
-      fetchImageUrls();
-    }
-  }, [cartDetails]);
-
   const handleChange = (item: any, selectedQuantity: number) => {
     //一度消してから更新
     removeItem(item.id);
@@ -62,8 +50,8 @@ function Cart() {
         {items.map((item, index) => (
           <div key={item.id} className='cart-content p-2'>
             <Link href={`item/${item.id}`} className='cart-item'>
-              {imageUrls[index] && (
-                <Image src={imageUrls[index]} alt="" className="min-h-[160px] max-h-[180px] object-cover" width={180} height={200} />
+              {item.image && (
+                <Image src={item.image} alt="" className="min-h-[160px] max-h-[180px] object-cover" width={180} height={200} />
               )}
               <p className='item-name'>{item.name}</p>
             </Link>

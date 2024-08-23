@@ -39,8 +39,6 @@ class BaseModel # rubocop:disable Style/Documentation
       end
     end
     json_res = JSON.parse(response.body)
-    ## TODO：あとで消す
-    Rails.logger.debug "json_res---------------------------------#{json_res}"
     return output_error(json_res['err_message']) if response.code.to_i == 500 || response.code.to_i == 404
     json_res
   end
@@ -116,7 +114,7 @@ class BaseModel # rubocop:disable Style/Documentation
     images.each_with_index do |image_file, index|
       next unless image_file
 
-      file_path = File.join(temp_dir, "image_#{index}")
+      file_path = File.join(temp_dir, "image_path0#{index + 1}")
       File.binwrite(file_path, image_file.read)
       file_paths << file_path
     end

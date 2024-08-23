@@ -21,13 +21,13 @@
   </div>
 <% end %>
 
-<% if @sliders.present? %>
+<% if @list.present? %>
   <p class="text-center fs-3">現在のスライド画像</p>
   <div class="container">
     <div class="d-flex justify-content-evenly">
-      <% @sliders.images.each do |image| %>
+      <% @list.each do |image| %>
       <div class="slide-content">
-        <%= image_tag image.url %>
+        <%= image_tag image %>
       </div>
       <% end %>
     </div>
