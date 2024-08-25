@@ -23,8 +23,8 @@ function MyApp({ Component, pageProps }: AppProps<{
         shouldPersist={true}
         stripe={process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string}
         currency="JPY"
-        successUrl="http://localhost:3000/success"
-        cancelUrl="http://localhost:3000"
+        successUrl={`${process.env.NEXT_PUBLIC_BASE_URL}/success`}
+        cancelUrl={`${process.env.NEXT_PUBLIC_BASE_URL}`}
       >
         <Header />
         <div className="min-h-[640px]">

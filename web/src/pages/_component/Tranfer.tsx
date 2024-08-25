@@ -53,7 +53,7 @@ const Checkout: React.FC<Partial<PaymentProps>> = () => {
           customerId
         }));
       const response = await fetch(
-        `http://localhost:3000/api/checkout`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/checkout`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
