@@ -17,7 +17,6 @@ export async function POST(request: Request, response: Response) {
   }
 
   try {
-    console.log("try手前", checkoutAry);
     const line_items = checkoutAry.map((item: LineItem) => ({
       price_data: {
         currency: "jpy",

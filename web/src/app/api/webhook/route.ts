@@ -136,7 +136,7 @@ export async function POST(req: Request) {
 
           // 最後に注文情報のURLを追加
           mailText +=
-            "\n注文情報をご確認ください=>http://localhost3001/purchase/index";
+            `\n注文情報をご確認ください=>${process.env.NEXT_PUBLIC_BASE_URL}/purchase/index`;
 
           const adminMailOptions = {
             from: `田中本気農家<${process.env.GMAILUSER}>`,
