@@ -36,7 +36,6 @@ class ItemCommand # rubocop:disable Style/Documentation
     name:,
     price:,
     description:,
-    images:,
     postage:,
     category_id:,
     inventory:,

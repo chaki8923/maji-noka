@@ -6,7 +6,7 @@ class SlidersController < ApplicationController # rubocop:disable Style/Document
   ACCESS_KEY = ENV.fetch('ACCESS_KEY_ID', nil)
   SECRET_KEY = ENV.fetch('SECRET_ACCESS_KEY', nil)
   REGION = 'ap-northeast-1'
-  BUCKET = 'maji-image'
+  BUCKET = Rails.configuration.s3_bucket
   after_action :set_csrf_token_header
 
   def create
@@ -22,12 +22,9 @@ class SlidersController < ApplicationController # rubocop:disable Style/Document
   end
 
   def update
-    item = Item.new(item_params)
+    slider = Slider.new(slider_params)
     s3resource = get_s3_resource(ACCESS_KEY, SECRET_KEY, REGION)
-    res = item.update
-    item_images_upload(item_params, s3resource, res.first[:id])
-    # image_count = object_count(res.first[:id])
-    # item.update_image_count(res.first[:id], image_count)
+    item_images_upload(slider_params, s3resource, 1)
     render json: { value: nil, success_message: SystemMessage::API_SUCCESS }
   rescue => err_message
     ## TODO:Chakiあとで消す
@@ -36,12 +33,12 @@ class SlidersController < ApplicationController # rubocop:disable Style/Document
   end
 
   def index
-    res = Slider.index
-     Rails.logger.debug "res---------------------------------#{res.first[:images]}"
-     parsed_data = res.first[:images].gsub(/[{}\\"]/, '').split(',')
-     Rails.logger.debug "parsed_data---------------------------------#{parsed_data}"
-
-    render json: parsed_data
+    res = Slider.find(1)
+    if res.present?
+      render json: res[:images]
+    else
+      render json: nil
+    end
   end
 
   def show

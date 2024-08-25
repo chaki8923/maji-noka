@@ -4,6 +4,8 @@ class SliderController < ApplicationController # rubocop:disable Style/Documenta
   def new
     @slide_instance = Slider.new
     @list = @slide_instance.index
+    ## TODO：あとで消す
+    	Rails.logger.debug "list---------------------------------#{@list}"
   end
 
   def create
@@ -30,16 +32,12 @@ class SliderController < ApplicationController # rubocop:disable Style/Documenta
   end
 
   def update
-    @item_instance = Item.new(item_params)
-    item_params['maji_flag'] = item_params['maji_flag'].to_i == 1
-    @item = get_item(item_params, @item_instance)
-    category_instance = Category.new
-    @categories = category_instance.index
-    res = @item_instance.update(item_params)
+    @slider_instance = Slider.new
+    res = @slider_instance.update(slider_params)
     if res == true
-      redirect_to item_index_path, notice: '商品が編集されました'
+      redirect_to slider_new_path, notice: '画像が更新されました'
     else
-      render action: 'edit'
+      render action: 'new'
     end
   end
 

@@ -17,7 +17,6 @@ export default function Page() {
 
   const allItemsCount = trpc.item.allItemsCount.useQuery();
   const items = trpc.item.getItems.useQuery({ limit: limit, offset: currentPage - 1 });
-  console.log("items",items.data);
   
   useEffect(() => {
     if (items.data && allItemsCount.data) {
@@ -39,19 +38,8 @@ export default function Page() {
 
   return (
     <>
-      <h2 className='page-title'>商品リスト</h2>
-      <style jsx>{`
-      .page-title:before {
-          position: absolute;
-          bottom: 0px;
-          left: 0;
-          width: 100%;
-          height: 10px;
-          background: repeating-linear-gradient(#c9efcb 0 2px, transparent 2px 4px),
-            repeating-linear-gradient(90deg, #c9efcb 0 2px, transparent 2px 4px);
-          content: '';
-        }
-      `}</style>
+      <h2 className='page-title'>商品リスト<span className='under-line'></span></h2>
+      
       <div className='lg:flex lg:justify-start'>
         <div className="
                         grid 
