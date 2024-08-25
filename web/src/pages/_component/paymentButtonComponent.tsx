@@ -51,7 +51,7 @@ const Checkout: React.FC<PaymentProps> = ({ items, quantity }) => {
 
   return (
     <div className="mt-2">
-      <Button  onClick={() => startCheckout(items!.id)} className="xl:w-[180px] w-full rounded-none bg-black text-white">
+      <Button  onClick={() => startCheckout(items!.id)} className="xl:w-[180px] w-full rounded-none bg-black text-white payment-button">
         購入する　<RiMoneyCnyCircleLine />
       </Button>
     </div>
