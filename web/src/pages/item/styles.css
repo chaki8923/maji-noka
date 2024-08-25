@@ -282,7 +282,8 @@
   width: 180px;
   text-align: center;
   position: relative;
-  background: #a4a4a4;
+  border: 1px solid #333;
+  background: transparent;
   box-shadow: 0px 2px 2px 0px #7c7979;
 }
 
@@ -321,7 +322,7 @@
 
 .quantity-select select {
   padding: 8px 8px 8px 8px;
-  color: #ffffff;
+  color: #333;
   text-align: center;
   font-size: 16px;
 }
