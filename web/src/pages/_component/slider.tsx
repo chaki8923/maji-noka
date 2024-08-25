@@ -1,8 +1,8 @@
-import { Autoplay, Navigation, Pagination, Thumbs, EffectFade } from "swiper/modules";
+import { Autoplay } from "swiper/modules";
 import React, { useEffect, useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { getImageUrl } from '../../hooks/getAwsImage';
 import Image from "next/legacy/image";
+import Loading from './loading';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -11,25 +11,13 @@ import 'swiper/css/navigation';
 import { trpc } from "@/src/utils/trpc";
 
 export default function Slider() {
-    const [imageUrls, setImageUrls] = useState<string[]>([]);
-    const { data: images } = trpc.slider.getItemById.useQuery({ id: 1 });
-    console.log("images", images);
-    
-    useEffect(() => {
-        const fetchImageUrls = async () => {
-            const imagesAry = [];
-            if (images) {
-                console.log("iamges", images);
-                for (let index = 0; index < images.images.length; index++) {
-                    const urls = await getImageUrl('maji-image', `uploads/slider/images/${images.id}/${images.images[index]}`, 3600);
-                    imagesAry.push(urls)
-                }
-                setImageUrls(imagesAry);
-            }
-        };
-        fetchImageUrls();
-    }, [images]);
+    const { data } = trpc.slider.getItemById.useQuery({ id: 1 });
+    console.log("data",data);
 
+    if (!data) {
+        return 
+      }
+    
     return (
         <>
             <Swiper
@@ -47,10 +35,10 @@ export default function Slider() {
                 }} // ページネーション, クリックで対象のスライドに切り替わる
                 className="topSwiper"
             >
-                {imageUrls.map((src: string, index: number) => (
+                {data.images.map((src: string, index: number) => (
                     <SwiperSlide key={index}>
                         {src ? 
-                        <Image src={src} alt="スライダー" layout="fill" /> : null
+                        <Image src={src} alt="スライダー" layout="fill" className="parallax-image" /> : null
                         }
                     </SwiperSlide>
 

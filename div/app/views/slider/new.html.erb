@@ -5,7 +5,8 @@
   <p class="alert-line js-toggle-msg"><%= flash[:alert] %></p>
 <% end %>
 <%= render 'layouts/error', model: @slide_instance %>
-<%= form_for @slide_instance, url: {action: :create}, multipart: true do |f| %>
+<%  action = @list.present? ? 'update' : 'create' %>
+<%= form_for @slide_instance, url: {action: "#{action}".to_sym}, multipart: true do |f| %>
     <div class="mb-3">
       <%= f.label :images, "スライド画像(複数選択可。スライドなので4枚以上推奨)",class: "form-label" %>
       <%= f.file_field :images ,include_hidden: false, multiple: true, class: "form-control js-multi-image slide_field" %>

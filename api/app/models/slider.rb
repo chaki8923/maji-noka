@@ -54,9 +54,8 @@ class Slider # rubocop:disable Style/Documentation
 
     def find(id)
       idq = SliderQuery.new
-      item = idq.find(id)
-      raise "商品#{SystemMessage::NOTFOUND}" if item.nil?
-      item
+      slider = idq.find(id)
+      slider
     end
 
     def delete(id)

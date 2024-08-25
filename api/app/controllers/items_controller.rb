@@ -6,7 +6,7 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
   ACCESS_KEY = ENV.fetch('ACCESS_KEY_ID', nil)
   SECRET_KEY = ENV.fetch('SECRET_ACCESS_KEY', nil)
   REGION = 'ap-northeast-1'
-  BUCKET = 'maji-image'
+  BUCKET = Rails.configuration.s3_bucket
   after_action :set_csrf_token_header
 
   def create

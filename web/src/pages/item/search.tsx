@@ -22,7 +22,7 @@ export default function Items() {
     if (items.data) {
       const fetchImageUrls = async () => {
         const urls = await Promise.all(items.data.map(async (item) => {
-          return await getImageUrl('maji-image', `item/${item.id}/item_image_0_${item.id}`, 3600);
+          return await getImageUrl(process.env.NEXT_PUBLIC_S3_BUCKET!, `item/${item.id}/item_image_0_${item.id}`, 3600);
         }));
         setImageUrls(urls);
       };

@@ -12,7 +12,6 @@ class Slider < BaseModel # rubocop:disable Style/Documentation
 
   def update(params)
     ## TODO:Chakiあとで消す
-
     res = execute_api('slider/update', params, method: 'post')
     convert_boolean(res)
   end

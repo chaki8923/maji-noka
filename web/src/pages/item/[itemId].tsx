@@ -1,11 +1,10 @@
 import { trpc } from '../../utils/trpc';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from "next/router";
 import Payment from "../_component/paymentButtonComponent";
 import { Select, Button, Toast } from 'flowbite-react';
 import { Autoplay, Navigation, Pagination, Thumbs, FreeMode, EffectFade } from "swiper/modules";
 import { Swiper, SwiperSlide, SwiperClass } from "swiper/react";
-import { getImageUrl } from '../../hooks/getAwsImage';
 import { TbShoppingCartPin } from "react-icons/tb";
 import Image from "next/legacy/image";
 import { useShoppingCart } from 'use-shopping-cart'

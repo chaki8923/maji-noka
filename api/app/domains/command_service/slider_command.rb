@@ -18,28 +18,15 @@ class SliderCommand # rubocop:disable Style/Documentation
 
   def update_db(
     id:,
-    name:,
-    price:,
-    description:,
-    images:,
-    postage:,
-    category_id:,
-    inventory:,
-    maji_flag:
+    images:
   )
-    DB[:items]
+    DB[:sliders]
       .returning(:id)
       .where(
         id: id
       )
       .update(
-        name: name.value,
-        price: price.value,
-        description: description.value,
-        postage: postage.value,
-        category_id: category_id.value,
-        inventory: inventory.value,
-        maji_flag: maji_flag.value
+        images: images
       )
   end
 
@@ -59,14 +46,10 @@ class SliderCommand # rubocop:disable Style/Documentation
   end
 
   def set_image_path(id:, images:)
-    images_array_literal = "{#{images.map { |i| %Q("#{i}") }.join(',')}}"
-    ## TODO:Chakiあとで消す
-    Rails.logger.debug "images_array_literal---------------------------------#{images_array_literal}"
-
     DB[:sliders]
     .where(
       id: id
     )
-    .update(images: Sequel.lit("ARRAY[?]::TEXT[]", images))
+    .update(images: Sequel.cast(images.to_json, :jsonb))
   end
 end

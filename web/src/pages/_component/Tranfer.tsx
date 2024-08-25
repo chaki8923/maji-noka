@@ -22,7 +22,7 @@ const Checkout: React.FC<Partial<PaymentProps>> = () => {
       const fetchImageUrls = async () => {
         const urls = await Promise.all(items.map(async (item: any) => {
           return await getImageUrl(
-            'maji-image',
+            process.env.NEXT_PUBLIC_S3_BUCKET!,
             `item/${item.id}/item_image_0_${item.id}`,
             3600
           );
