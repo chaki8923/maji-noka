@@ -1,3 +1,4 @@
+import { AnimatePresence } from 'framer-motion'
 import { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react"
 import Header from "./_component/header";
@@ -9,12 +10,13 @@ import './policy/styles.css';
 import './_component/styles.css';
 import FooterComponent from "./_component/footer";
 import { CartProvider } from 'use-shopping-cart'
+import { useRouter } from "next/router";
 
 
 function MyApp({ Component, pageProps }: AppProps<{
   session: Session;
 }>) {
-
+  const router = useRouter();
   return (
     <SessionProvider session={pageProps.session}>
       <CartProvider
@@ -26,11 +28,13 @@ function MyApp({ Component, pageProps }: AppProps<{
         successUrl={`${process.env.NEXT_PUBLIC_BASE_URL}/success`}
         cancelUrl={`${process.env.NEXT_PUBLIC_BASE_URL}`}
       >
-        <Header />
-        <div className="min-h-[640px]">
-          <Component {...pageProps} />
-        </div>
-        <FooterComponent />
+        <AnimatePresence mode="wait" onExitComplete={() => window.scrollTo(0, 0)}>
+          <Header />
+          <div className="min-h-[640px]">
+            <Component key={router.asPath} {...pageProps} />
+          </div>
+          <FooterComponent />
+        </AnimatePresence>
       </CartProvider>
     </SessionProvider>
   )

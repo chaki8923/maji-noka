@@ -1,8 +1,9 @@
+import { motion } from 'framer-motion'
 import { trpc } from '../../utils/trpc';
 import React, { useState, useEffect } from 'react';
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Card, Badge, Pagination } from 'flowbite-react';
+import { Card, Pagination } from 'flowbite-react';
 import Loading from '../_component/loading';
 import Image from "next/image";
 import { Items } from '@/src/types';
@@ -12,12 +13,12 @@ export default function Page() {
   const [totalPage, setTotalPage] = useState(1);
   const [products, setProducts] = useState<any>([]);
   const searchParams = useSearchParams();
-  const keyword = searchParams?.get("keyword");
+  // const keyword = searchParams?.get("keyword");
   const limit = 8;
 
   const allItemsCount = trpc.item.allItemsCount.useQuery();
   const items = trpc.item.getItems.useQuery({ limit: limit, offset: currentPage - 1 });
-  
+
   useEffect(() => {
     if (items.data && allItemsCount.data) {
       setProducts(items.data);
@@ -30,29 +31,32 @@ export default function Page() {
     setCurrentPage(pageNumber);
   };
 
-
   if (!items.data) {
-    return <Loading />
+    return;
   }
 
-
   return (
-    <>
+    <motion.div
+      initial={{ opacity: 0 }} // 初期状態
+      animate={{ opacity: 1 }} // マウント時
+      exit={{ opacity: 0 }}    // アンマウント時
+      transition={{ duration: 1.3 }} //遅延実行y
+    >
       <h2 className='page-title'>商品リスト<span className='under-line'></span></h2>
-      
+
       <div className='lg:flex lg:justify-start'>
         <div className="
-                        grid 
-                        px-2
-                        lg:grid-cols-3
-                        sm:grid-cols-2 
-                        grid-cols-1
-                        mb-24 
-                        justify-items-center 
-                        md:px-5 
-                        gap-12
-                        mx-auto
-                        ">
+                      grid 
+                      px-2
+                      lg:grid-cols-3
+                      sm:grid-cols-2 
+                      grid-cols-1
+                      mb-24 
+                      justify-items-center 
+                      md:px-5 
+                      gap-12
+                      mx-auto
+                      ">
           {products.map((item: Items, index: number) => (
             <Link href={`item/${item.id}`} key={item.id} className='sm:mb-8 w-full flex justify-center sm:w-[360px] item-card'>
               <Card
@@ -87,8 +91,10 @@ export default function Page() {
           totalPages={totalPage}
           currentPage={currentPage}
           onPageChange={handlePageChange}
+          previousLabel="前へ" // 「Previous」を「前のページ」に
+          nextLabel="次へ" // 「Next」を「次のページ」に
         />
       ) : null}
-    </>
+    </motion.div>
   );
 }
