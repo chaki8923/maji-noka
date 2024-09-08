@@ -1,4 +1,5 @@
 
+import { motion } from 'framer-motion'
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Items from "./item/index";
@@ -13,17 +14,27 @@ export default function IndexPage() {
       return (<Loading />);
     case "unauthenticated":
       return (
-        <>
+        <motion.div
+        initial={{ opacity: 0 }} // 初期状態
+        animate={{ opacity: 1 }} // マウント時
+        exit={{ opacity: 0 }}    // アンマウント時
+        transition={{ duration: 1.3 }} //遅延実行
+      >
         <Slider />
         <Items />
-        </>
+      </motion.div>
       );
     case "authenticated":
       return (
-        <>
+        <motion.div
+        initial={{ opacity: 0 }} // 初期状態
+        animate={{ opacity: 1 }} // マウント時
+        exit={{ opacity: 0 }}    // アンマウント時
+        transition={{ duration: 1.3 }} //遅延実行
+      >
         <Slider />
         <Items />
-        </>
+      </motion.div>
       );
   }
 
