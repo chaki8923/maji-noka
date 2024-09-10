@@ -9,6 +9,5 @@ export type PurchaseWithItem = Purchase & {item: Items};
 export type ItemWithAuthor = Items & { author: Customer };
 export type CartItem = Items & { 
     quantity: number; 
-    categoryName: string;
  };
  

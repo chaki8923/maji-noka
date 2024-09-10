@@ -6,7 +6,7 @@ Dir['/api/app/domains/query_service/*.rb'].sort.each { |file| require file }
 
 class Item # rubocop:disable Style/Documentation
   include ActiveModel::Model
-  attr_accessor :id, :name, :price, :images, :description, :postage, :inventory, :maji_flag, :action, :category_id
+  attr_accessor :id, :name, :price, :images, :description, :postage, :inventory, :maji_flag, :action
 
   def initialize(
     id:,
@@ -17,7 +17,6 @@ class Item # rubocop:disable Style/Documentation
     postage:,
     inventory:,
     maji_flag:,
-    category_id:,
     action:
   )
     @id = id
@@ -29,7 +28,6 @@ class Item # rubocop:disable Style/Documentation
     @inventory = inventory
     @maji_flag = maji_flag
     @action = action
-    @category_id = category_id
     @idc = ItemCommand.new
   end
 
@@ -53,9 +51,6 @@ class Item # rubocop:disable Style/Documentation
     maji_flag, err = Flag.new(value: value[:maji_flag])
     errors.push(err) unless maji_flag
 
-    category_id, err = CategoryId.new(value: value[:category_id])
-    errors.push(err) unless category_id
-
     action, err = Action.new(value: value[:action])
     errors.push(err) unless action
     # Imageクラスに配列ごと渡して@value=[{}]の形にする
@@ -71,7 +66,6 @@ class Item # rubocop:disable Style/Documentation
       description: description,
       images: images,
       postage: postage,
-      category_id: category_id,
       inventory: inventory,
       maji_flag: maji_flag,
       action: action
@@ -84,7 +78,6 @@ class Item # rubocop:disable Style/Documentation
       price: @price,
       description: @description,
       postage: @postage,
-      category_id: @category_id,
       inventory: @inventory,
       maji_flag: @maji_flag,
       action: @action
@@ -101,7 +94,6 @@ class Item # rubocop:disable Style/Documentation
       price: @price,
       description: @description,
       postage: @postage,
-      category_id: @category_id,
       inventory: @inventory,
       maji_flag: @maji_flag
     )

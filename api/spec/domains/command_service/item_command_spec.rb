@@ -17,7 +17,6 @@ RSpec.describe ItemCommand do
   let(:postage) { 120 }
   let(:inventory) { 50 }
   let(:maji_flag) { 0 }
-  let(:category_id) { 1 }
   let(:create_action) { "create" }
   let(:update_action) { "update" }
 
@@ -29,7 +28,6 @@ RSpec.describe ItemCommand do
       postage: postage,
       inventory: inventory,
       maji_flag: maji_flag,
-      category_id: category_id,
       action: create_action,
       'images' => [image_file, image_file2, image_file3, image_file4]
     }
@@ -46,7 +44,6 @@ RSpec.describe ItemCommand do
       postage: postage,
       inventory: inventory,
       maji_flag: maji_flag,
-      category_id: category_id,
       action: update_action,
       'images' => [image_file, image_file2, image_file3, image_file4]
     }
@@ -65,7 +62,6 @@ RSpec.describe ItemCommand do
         postage: create_item.postage,
         inventory: create_item.inventory,
         maji_flag: create_item.maji_flag,
-        category_id: create_item.category_id,
         action: create_item.action,
         images: create_item.images
         ).first[:id]).to be_integer
@@ -82,7 +78,6 @@ RSpec.describe ItemCommand do
         postage: update_item.postage,
         inventory: update_item.inventory,
         maji_flag: update_item.maji_flag,
-        category_id: update_item.category_id,
         images: update_item.images
         ).first[:id]).to be_integer
     end

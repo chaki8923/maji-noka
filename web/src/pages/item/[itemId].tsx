@@ -6,7 +6,6 @@ import Payment from "../_component/paymentButtonComponent";
 import { Select, Button } from 'flowbite-react';
 import { Autoplay, Navigation, Pagination, Thumbs, FreeMode, EffectFade } from "swiper/modules";
 import { Swiper, SwiperSlide, SwiperClass } from "swiper/react";
-import { TbShoppingCartPin } from "react-icons/tb";
 import Image from "next/legacy/image";
 import { useShoppingCart } from 'use-shopping-cart'
 import FadeModal from '../_component/fademodal';
@@ -16,7 +15,6 @@ import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 import "swiper/css/effect-fade";
-import Loading from '../_component/loading';
 
 export default function Item() {
 
@@ -33,6 +31,7 @@ export default function Item() {
     enabled: itemId !== null, // idがnullでない場合にのみクエリを実行
   });
 
+  
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const quantity = parseInt(event.target.value, 10); //数値に変換
@@ -53,7 +52,7 @@ export default function Item() {
     if (!data) {
       const timer = setTimeout(() => {
         router.push('/'); // トップ画面に遷移
-      }, 5000); // 10秒後に遷移
+      }, 5000); // 5秒後に遷移
 
       return () => clearTimeout(timer); // クリーンアップ用
     }
@@ -187,7 +186,7 @@ export default function Item() {
                           bg-white 
                           cart-button 
                           hover:text-white">
-                  カートへ行く　<TbShoppingCartPin />
+                  カートへ行く
                 </Button>
               </div>
             </div>

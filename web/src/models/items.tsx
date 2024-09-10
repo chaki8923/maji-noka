@@ -4,7 +4,6 @@ export interface Items {
     id: number;
     price: number;
     description: string;
-    category_id: number;
     image_count: number;
     maji_flag: boolean;
     postage: number | null;

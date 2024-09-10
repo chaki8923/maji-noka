@@ -17,22 +17,14 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  # For details on connection pooling, see Rails configuration guide
-  # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   host: db
-  username: postgres
-  password: password
-# default: &default
-#   adapter: postgresql
-#   encoding: unicode
-#   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-#   url: postgres://default:aAvjJ6DyOk2n@ep-lingering-sky-a43h4bem-pooler.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require&options=endpoint%3Dep-lingering-sky-a43h4bem-pooler
+  username: <%= ENV.fetch("POSTGRES_USER", 'postgres') %>
+  password: <%= ENV.fetch("POSTGRES_PASSWORD", 'password') %>
 
 development:
   <<: *default
   database: web_development
-  
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.

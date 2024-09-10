@@ -33,8 +33,6 @@ model items {
   price       Int                         
   description String
   purchases    Purchase[]                        
-  category_id Int
-  category    category  @relation(fields: [category_id], references: [id])
   image_path01 String?
   image_path02 String?
   image_path03 String?
@@ -131,14 +129,6 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model category {
-  id          Int      @id @default(autoincrement())  
-  name        String
-  items       items[]                           
-  deleted_at  DateTime?                                 
-  created_at  DateTime                                 
-  updated_at  DateTime                                  
-}
 
 model Purchase {
   id                 String    @id @default(cuid())

@@ -11,7 +11,6 @@ class ItemCommand # rubocop:disable Style/Documentation
     price:,
     description:,
     postage:,
-    category_id:,
     inventory:,
     maji_flag:,
     action:
@@ -24,7 +23,6 @@ class ItemCommand # rubocop:disable Style/Documentation
         description: description.value,
         postage: postage.value,
         inventory: inventory.value,
-        category_id: category_id.value,
         maji_flag: maji_flag.value,
         updated_at: 'NOW()',
         created_at: 'NOW()'
@@ -37,7 +35,6 @@ class ItemCommand # rubocop:disable Style/Documentation
     price:,
     description:,
     postage:,
-    category_id:,
     inventory:,
     maji_flag:
   )
@@ -51,7 +48,6 @@ class ItemCommand # rubocop:disable Style/Documentation
         price: price.value,
         description: description.value,
         postage: postage.value,
-        category_id: category_id.value,
         inventory: inventory.value,
         maji_flag: maji_flag.value
       )

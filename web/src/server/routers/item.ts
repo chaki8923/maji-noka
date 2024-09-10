@@ -55,7 +55,6 @@ export const itemRouter = router({
       // 指定されたIDのitemをデータベースから取得します。
       const item = await prisma.items.findUnique({
         where: { id: input.id },
-        include: { category: { select: { name: true } } },
       });
 
       // itemが見つからない場合、エラーをスローします。
@@ -67,7 +66,6 @@ export const itemRouter = router({
       // 取得したitemをCartItemに変換して返します。
       const cartItem: CartItem = {
         ...item,
-        categoryName: item.category?.name ?? "Unknown",
         quantity: 0, // ここで適切な数量を設定してください
       };
       await prisma.$disconnect();
@@ -100,28 +98,28 @@ export const itemRouter = router({
       // 取得したitemを返します。
       return items;
     }),
-  getItemByCategory: procedure
-    .input(
-      // 入力スキーマを指定します。IDは数値である必要があります。
-      z.object({
-        category_id: z.number(),
-      }),
-    )
-    .query(async ({ input }) => {
-      // 指定されたIDのitemをデータベースから取得します。
-      const items = await prisma.items.findMany({
-        where: {category_id: input.category_id},
-        include: { category: { select: { name: true } } },
-      });
+  // getItemByCategory: procedure
+  //   .input(
+  //     // 入力スキーマを指定します。IDは数値である必要があります。
+  //     z.object({
+  //       category_id: z.number(),
+  //     }),
+  //   )
+  //   .query(async ({ input }) => {
+  //     // 指定されたIDのitemをデータベースから取得します。
+  //     const items = await prisma.items.findMany({
+  //       where: {category_id: input.category_id},
+  //       include: { category: { select: { name: true } } },
+  //     });
 
-      // itemが見つからない場合、エラーをスローします。
-      if (!items) {
-        throw new Error("item not found");
-      }
+  //     // itemが見つからない場合、エラーをスローします。
+  //     if (!items) {
+  //       throw new Error("item not found");
+  //     }
 
-      // 取得したitemを返します。
-      return items;
-    }),
+  //     // 取得したitemを返します。
+  //     return items;
+  //   }),
 
   updateItem: procedure.input(updateInput).mutation(async ({ input }) => {
     const { id, inventory } = input;

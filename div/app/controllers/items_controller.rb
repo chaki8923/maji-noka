@@ -9,8 +9,6 @@ BUCKET = 'maji-image'
 class ItemsController < ApplicationController # rubocop:disable Style/Documentation
   def new
     @item_instance = Item.new
-    category_instance = Category.new
-    @categories = category_instance.index
     @prm = {
       file_name: nil,
       ctype: nil
@@ -19,8 +17,6 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
 
   def create
     @item_instance = Item.new(item_params)
-    category_instance = Category.new
-    @categories = category_instance.index
     item_params['maji_flag'] = item_params['maji_flag'].to_i == 1
     res = @item_instance.create(item_params)
     if res == true
@@ -38,8 +34,6 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
   def edit
     @item_instance = Item.new
     @item = get_item(params.permit(:id), @item_instance)
-    category_instance = Category.new
-    @categories = category_instance.index
     redirect_to item_index_path, alert: @item[:err_message] if @item[:err_message].present?
   end
 
@@ -47,8 +41,6 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
     @item_instance = Item.new(item_params)
     item_params['maji_flag'] = item_params['maji_flag'].to_i == 1
     @item = get_item(item_params, @item_instance)
-    category_instance = Category.new
-    @categories = category_instance.index
     res = @item_instance.update(item_params)
     if res == true
       redirect_to item_index_path, notice: '商品が編集されました'
@@ -83,8 +75,7 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
       :postage,
       :inventory,
       :maji_flag,
-      :action,
-      :category_id
+      :action
     ).merge!(images: images)
   end
 
