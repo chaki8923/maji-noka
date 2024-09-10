@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
 import { Button } from 'flowbite-react';
 import { createCustomerId } from "../../feature/stripe/stripe";
-import { RiMoneyCnyCircleLine } from "react-icons/ri";
 import { CartEntry } from "use-shopping-cart/core";
 type PaymentProps = {
   items: CartEntry,
@@ -52,7 +51,7 @@ const Checkout: React.FC<PaymentProps> = ({ items, quantity }) => {
   return (
     <div className="mt-2">
       <Button  onClick={() => startCheckout(items!.id)} className="xl:w-[180px] w-full rounded-none bg-black text-white payment-button">
-        購入する　<RiMoneyCnyCircleLine />
+        購入する
       </Button>
     </div>
   )

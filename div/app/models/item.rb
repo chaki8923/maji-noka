@@ -9,7 +9,6 @@ class Item < BaseModel # rubocop:disable Style/Documentation
                 :postage,
                 :inventory,
                 :maji_flag,
-                :category_id,
                 :action,
                 :image1,
                 :image2,
@@ -22,8 +21,6 @@ class Item < BaseModel # rubocop:disable Style/Documentation
   end
 
   def update(params)
-    ## TODO:Chakiあとで消す
-    Rails.logger.debug "params---------------------------------#{params}"
     res = execute_api('item/update', params, method: 'post')
     convert_boolean(res)
   end

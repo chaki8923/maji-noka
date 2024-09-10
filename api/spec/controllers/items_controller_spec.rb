@@ -18,7 +18,6 @@ RSpec.describe ItemsController, type: :request  do
       "postage" => "120",
       "inventory" => "90",
       "maji_flag" => "0",
-      "category_id" => "1",
       "action" => "create",
       "images" => [image_file, image_file2, image_file3, image_file4]
     }
@@ -34,7 +33,6 @@ RSpec.describe ItemsController, type: :request  do
       "postage" => "120",
       "inventory" => "90",
       "maji_flag" => "0",
-      "category_id" => "1",
       "action" => "hogehoge",
       "images" => [image_file, image_file2, image_file3, image_file4]
     }
@@ -50,7 +48,6 @@ RSpec.describe ItemsController, type: :request  do
       "postage" => "120",
       "inventory" => "90",
       "maji_flag" => "0",
-      "category_id" => "1",
       "action" => "hogehoge",
       "images" => [image_file, image_file2, image_file3, size_over]
     }
@@ -72,7 +69,6 @@ RSpec.describe ItemsController, type: :request  do
       postage: "120",
       inventory: "90",
       maji_flag: "0",
-      category_id: "1",
     }
     post "/item/create", params: params
     expect(response.status).to eq 500
@@ -93,8 +89,7 @@ RSpec.describe ItemsController, type: :request  do
       postage: "120",
       inventory: "192",
       maji_flag: "1",
-      action: "update",
-      category_id: "1"
+      action: "update"
     }
     post "/item/update", params: params
     expect(response.status).to eq 200

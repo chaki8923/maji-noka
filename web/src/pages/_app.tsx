@@ -10,13 +10,11 @@ import './policy/styles.css';
 import './_component/styles.css';
 import FooterComponent from "./_component/footer";
 import { CartProvider } from 'use-shopping-cart'
-import { useRouter } from "next/router";
 
 
 function MyApp({ Component, pageProps }: AppProps<{
   session: Session;
 }>) {
-  const router = useRouter();
   return (
     <SessionProvider session={pageProps.session}>
       <CartProvider
@@ -28,13 +26,13 @@ function MyApp({ Component, pageProps }: AppProps<{
         successUrl={`${process.env.NEXT_PUBLIC_BASE_URL}/success`}
         cancelUrl={`${process.env.NEXT_PUBLIC_BASE_URL}`}
       >
-        <AnimatePresence mode="wait" onExitComplete={() => window.scrollTo(0, 0)}>
+        {/* <AnimatePresence mode="wait" onExitComplete={() => window.scrollTo(0, 0)}> */}
           <Header />
           <div className="min-h-[640px]">
-            <Component key={router.asPath} {...pageProps} />
+            <Component {...pageProps} />
           </div>
           <FooterComponent />
-        </AnimatePresence>
+        {/* </AnimatePresence> */}
       </CartProvider>
     </SessionProvider>
   )

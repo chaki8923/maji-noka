@@ -15,7 +15,7 @@ RSpec.describe AdminUsers do
   let(:postage) { 120 }
   let(:inventory) { 50 }
   let(:maji_flag) { 0 }
-  let(:category_id) { 1 }
+
   let(:action) { "create" }
 
   let(:item) do
@@ -26,7 +26,6 @@ RSpec.describe AdminUsers do
       postage: postage,
       inventory: inventory,
       maji_flag: maji_flag,
-      category_id: category_id,
       action: action,
       'images' => [image_file, image_file2, image_file3, image_file4]
     }
