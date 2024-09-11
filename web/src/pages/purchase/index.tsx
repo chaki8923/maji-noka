@@ -53,7 +53,6 @@ export default function Purchase() {
                             <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                                 {purchase.item.name}
                             </Table.Cell>
-                            <Table.Cell>{purchase.item.category.name}</Table.Cell>
                             <Table.Cell>{purchase.item.price}</Table.Cell>
                             <Table.Cell>{purchase.createdAt}</Table.Cell>
                             <Table.Cell>

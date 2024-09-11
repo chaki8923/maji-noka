@@ -26,7 +26,7 @@ export const purchaseRouter = router({
         include: {
           item: {
             include: {
-              category: true, // Itemに紐づくCategoryのデータを含める
+             
             },
           },
         },
