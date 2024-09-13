@@ -5,6 +5,6 @@ RUN apt-get update -qq \
  && rm -rf /var/lib/apt/lists/* \
  && npm install --global yarn
 WORKDIR /api
-COPY /api/Gemfile /api/Gemfile
-COPY /api/Gemfile.lock /api/Gemfile.lock
+COPY Gemfile Gemfile
+COPY Gemfile.lock Gemfile.lock
 RUN bundle install
