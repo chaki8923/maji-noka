@@ -15,7 +15,8 @@ export async function POST(request: Request, response: Response) {
     description: number;
     images: string;
   }
-
+  console.log("checkoutAry>>>>>>>>", checkoutAry);
+  
   try {
     const line_items = checkoutAry.map((item: LineItem) => ({
       price_data: {

@@ -14,6 +14,7 @@ const Checkout: React.FC<PaymentProps> = ({ items, quantity }) => {
   const startCheckout = async (productId: string) => {
     try {
       const customerId = await createCustomerId({ items: [items] });
+      console.log("購入アイテム", items!)
       let checkoutAry
         checkoutAry = [{
           productId,
@@ -21,7 +22,8 @@ const Checkout: React.FC<PaymentProps> = ({ items, quantity }) => {
           price: items!.price,
           quantity: quantity,
           description: items.description,
-          customerId: customerId
+          customerId: customerId,
+          images: items.image_path01
         }]
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/checkout`,
@@ -34,8 +36,6 @@ const Checkout: React.FC<PaymentProps> = ({ items, quantity }) => {
       const responseData = await response.json();
       if (responseData && responseData.checkout_url) {
         sessionStorage.setItem("stripeSessionId", responseData.session_id);
-  
-        
         router.push(responseData.checkout_url);
       
       } else {

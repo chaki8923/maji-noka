@@ -83,6 +83,6 @@ test:
 #
 production:
   <<: *default
-  database: web_production
-  username: div
-  password: <%= ENV["DIV_DATABASE_PASSWORD"] %>
+  database: verceldb
+  username: default
+  password: <%= ENV["DATABASE_PASSWORD"] %>
