@@ -3,5 +3,5 @@ development:
   div: "http://div:3000"
   web: "http://web:3000"
 production:
-  api: 1000
-  div: false
+  api: "http://maji-noka.api.com:3000/"
+  div: 

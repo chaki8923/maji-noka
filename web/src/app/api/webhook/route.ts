@@ -152,8 +152,8 @@ export async function POST(req: Request) {
           };
 
           Promise.all([
-            // transporter.sendMail(adminMailOptions),
-            // transporter.sendMail(customerMailOptions),
+            transporter.sendMail(adminMailOptions),
+            transporter.sendMail(customerMailOptions),
           ])
             .then((respose) => {
               console.log("Email sent: " + respose);

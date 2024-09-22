@@ -162,3 +162,12 @@ model Customer {
   updatedAt DateTime @updatedAt
   purchases     Purchase[]
 }
+
+model GoogleApi {
+  id          BigInt      @id @default(autoincrement())   // id (BIGSERIALに相当)
+  api_key       String                                   
+  calendar_id    String                                  
+  deleted_at  DateTime?                                 // 削除日時 (timestamp with time zoneに相当、NULLを許可)
+  created_at  DateTime                                  // 作成日時 (timestamp with time zoneに相当)
+  updated_at  DateTime                                  // 更新日時 (timestamp with time zoneに相当)
+}
