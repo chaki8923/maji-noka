@@ -29,6 +29,12 @@ Rails.application.routes.draw do
     post '/delete', to: 'schedules#delete'
   end
 
+  scope 'google_api' do
+    post '/create', to: 'google_api#create'
+    post '/update', to: 'google_api#update'
+    get '/find', to: 'google_api#find'
+  end
+
   scope 'categories' do
     get '/index', to: 'categories#index'
   end

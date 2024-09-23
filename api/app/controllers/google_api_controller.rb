@@ -7,7 +7,7 @@ class GoogleApiController < ApplicationController # rubocop:disable Style/Docume
     render json: { value: nil, success_message: SystemMessage::API_SUCCESS }
   rescue => err_message
     ## TODO：あとで消す
-    Rails.logger.errors "err_message---------------------------------#{err_message}"
+    Rails.logger.debug "err_message---------------------------------#{err_message}"
     render json: {
              value: nil,
              err_message: err_message
@@ -27,15 +27,15 @@ class GoogleApiController < ApplicationController # rubocop:disable Style/Docume
            status: :internal_server_error
   end
 
-  def index
-    res = Schedule.index
+  def find
+    res = GoogleApi.find(params[:user_id])
     render json: res
   end
 
   private
 
   def google_api_params
-    params.permit(:id, :api_key, :calendar_id)
+    params.permit(:id, :api_key, :user_id,:calendar_id)
   end
 
 end

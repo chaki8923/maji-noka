@@ -5,6 +5,12 @@
   <p class="alert-line js-toggle-msg"><%= flash[:alert] %></p>
 <% end %>
 <%= render 'layouts/error', model: @schedule_instance %>
+<%= render 'layouts/error', model: @google_api %>
+<% if @db_google_api.blank? %>
+  <%= render 'admin_user/googl_api_create_form' %>
+<% else %>
+  <%= render 'admin_user/googl_api_update_form' %>
+<% end %>
 
 <div id="calendar" class="mt-5"  data-email=<%= session[:user][:email]%>></div>
 

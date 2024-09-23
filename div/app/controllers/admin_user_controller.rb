@@ -21,8 +21,9 @@ class AdminUserController < ApplicationController # rubocop:disable Style/Docume
   end
 
   def index
-    AdminUser.new
     @schedule_instance = Schedule.new
+    @google_api = GoogleApi.new
+    @db_google_api = @google_api.find(@current_user["id"])
     session[:user] = session[:user].symbolize_keys
   end
 

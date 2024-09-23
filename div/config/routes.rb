@@ -43,6 +43,12 @@ Rails.application.routes.draw do
     post '/update', to: 'schedules#update'
   end
 
+  scope 'google_api' do
+    post '/create', to: 'google_api#create'
+    put '/update', to: 'google_api#update'
+    get '/find', to: 'google_api#find'
+  end
+
   scope 'users' do
     get '/index', to: 'users#index'
   end

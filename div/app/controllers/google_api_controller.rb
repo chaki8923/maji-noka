@@ -11,37 +11,29 @@ class GoogleApiController < ApplicationController # rubocop:disable Style/Docume
     end
   end
 
-  def index
-    data = Schedule.new
-    res = data.index
-    render json: res
-  end
-
-  def edit
-
-  end
-
   def update
     @google_api_instance = GoogleApi.new(google_api_params)
     res = @google_api_instance.update
     if res == true
-      redirect_to index_path, notice: "予定が更新されました"
+      redirect_to index_path, notice: "apiが更新されました"
     else
       redirect_to index_path, alert: "エラーで更新されませんでした"
     end
 
   end
 
-  def delete
-    @schedule_instance = Schedule.new(schedule_params)
-    res =  @schedule_instance.delete
-    if res.key?('id')
-      redirect_to index_path, notice: '予定が削除されました'
+  def find
+    @instance = GoogleApi.new
+    @google_api = @instance.find(@current_user["id"])
+    if @google_api[:err_message].present?
+      render json: {err_message: @google_api[:err_message]}
     else
-      redirect_to index_path, alert: res["err_message"]
+      ## TODO：あとで消す
+    	Rails.logger.debug "@google_api---------------------------------#{@google_api}"
+      render json: @google_api
     end
-
   end
+
 
   private
 
@@ -49,6 +41,7 @@ class GoogleApiController < ApplicationController # rubocop:disable Style/Docume
     params.require(:google_api).permit(
       :id,
       :api_key,
+      :user_id,
       :calendar_id
     )
   end
