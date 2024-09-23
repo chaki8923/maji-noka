@@ -7,7 +7,7 @@ class GoogleApiQuery
     DB[:google_api].all
   end
 
-  def find(id)
-    DB[:google_api].where(:id => id).first
+  def find(user_id)
+    DB[:google_api].where(:user_id => user_id).first
   end
 end

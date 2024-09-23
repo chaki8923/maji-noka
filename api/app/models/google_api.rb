@@ -8,22 +8,25 @@ class GoogleApi # rubocop:disable Style/Documentation
   include ActiveModel::Model
   attr_accessor :id, :api_key, :calendar_id
 
-  def initialize(id:, api_key:, calendar_id:)
+  def initialize(id:, api_key:, user_id:, calendar_id:)
     @id = id
     @api_key = api_key
+    @user_id = user_id
     @calendar_id = calendar_id
-    @sdc = ScheduleCommand.new
+    @gac = GoogleApiCommand.new
   end
 
   def self.new(value)
     errors = []
 
     api_key, err = ApiKey.new(value: value[:api_key])
-    errors.push(err) unless name
+    errors.push(err) unless api_key
 
     calendar_id, err = CalendarId.new(value: value[:calendar_id])
-    errors.push(err) unless start_time
-
+    errors.push(err) unless calendar_id
+    
+    user_id, err = UserId.new(value: value[:user_id])
+    errors.push(err) unless user_id
 
     raise errors.join(', ') unless errors.blank?
 
@@ -31,14 +34,16 @@ class GoogleApi # rubocop:disable Style/Documentation
     super(
       id: value[:id],
       api_key: api_key,
+      user_id: user_id,
       calendar_id: calendar_id,
     )
   end
 
   def create
-    @sdc.create_db(
+    @gac.create_db(
       api_key: @api_key,
-      calendar_id: @calendar_id
+      calendar_id: @calendar_id,
+      user_id: @user_id
     )
   rescue StandardError => e
     raise e
@@ -46,10 +51,11 @@ class GoogleApi # rubocop:disable Style/Documentation
 
 
   def update
-    @sdc.update_db(
+    @gac.update_db(
       id: @id,
       api_key: @api_key,
-      calendar_id: @calendar_id
+      calendar_id: @calendar_id,
+      user_id: @user_id
     )
   rescue StandardError => e
     raise e
@@ -61,11 +67,12 @@ class GoogleApi # rubocop:disable Style/Documentation
       gaq.get_all
     end
 
-    def find(id)
+    def find(user_id)
       gaq = GoogleApiQuery.new
-      google_api = gaq.find(id)
+      google_api = gaq.find(user_id)
+      google_api = gaq.find(user_id)
 
-      raise "スケジュール#{SystemMessage::NOTFOUND}" if google_api.nil?
+      return {} if google_api.nil?
       google_api
     end
   end

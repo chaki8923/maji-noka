@@ -85,4 +85,4 @@ production:
   <<: *default
   database: verceldb
   username: default
-  password: <%= ENV["DATABASE_PASSWORD"] %>
+  password: <%= ENV["PRO_DATABASE_PASSWORD"] %>

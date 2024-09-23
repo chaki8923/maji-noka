@@ -3,6 +3,7 @@
 class GoogleApi < BaseModel # rubocop:disable Style/Documentation
   attr_accessor :id,
                 :api_key,
+                :user_id,
                 :calendar_id
 
 
@@ -12,20 +13,26 @@ class GoogleApi < BaseModel # rubocop:disable Style/Documentation
   end
 
   def update
-    res = execute_api('schedule/update', schedule_params, method: 'post')
+    res = execute_api('google_api/update', google_api_params, method: 'post')
     convert_boolean(res)
   end
 
-  def index
-    res = execute_api('schedule/index', method: 'get')
-    make_list(res)
+
+  def find(user_id)
+    res = execute_api('google_api/find', {user_id: user_id}, method: 'get')
+    ## TODO：あとで消す
+    Rails.logger.debug "res---------------------------------#{res}"
+    make_data(res)
   end
 
   private
 
+
+
   def google_api_params
     {
       id: @id,
+      user_id: @user_id,
       api_key: @api_key,
       calendar_id: @calendar_id
     }
