@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class SendMailController < ApplicationController # rubocop:disable Style/Documentation
+  after_action :set_csrf_token_header
   def mail
     @data = SendMail.new
     render template: 'send_mailer/mail', status: 200

@@ -1,5 +1,6 @@
 // import jquery from "jquery";
 // window.$ = window.jQuery = jquery;
+console.log("プレビュー");
 $(function () {
   $(".navbar-toggler").on("click", () => {
     $("#navbarNav").slideToggle("fast");
@@ -38,6 +39,7 @@ $(function () {
     };
     reader.readAsDataURL(file);
   }
+
 
   function imagePreview(i, e) {
     var fileset = $(this).val();

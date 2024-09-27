@@ -37,7 +37,7 @@ gem 'net-http'
 
 gem 'rack-cors'
 
-gem 'sequel-rails'
+# gem 'sequel-rails'
 
 gem 'jquery-rails'
 # Use Redis adapter to run Action Cable in production

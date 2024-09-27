@@ -3,14 +3,17 @@
 require 'date'
 class AuthController < ApplicationController # rubocop:disable Style/Documentation
   skip_before_action :check_logined
+  after_action :set_csrf_token_header, only: [:new, :login]
+  skip_before_action :verify_authenticity_token
   def new
     @admin_user = AdminUser.new
   end
 
   def login
     @admin_user = AdminUser.new(auth_params)
+    # set_csrf_token_header
+    Rails.logger.debug "Request Headers>>>>>>>>>>>>>>>>>>>>>>: #{request.headers['X-CSRF-Token']}"
     res = @admin_user.login(auth_params)
-
     if res == true
       admin_user = @admin_user.get_admin_user(auth_params)
       session[:user] = admin_user

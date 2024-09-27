@@ -1,6 +1,6 @@
 # frozen_string_literal: true
-# ここだけ特別にActiverecordを使用
 class SliderController < ApplicationController # rubocop:disable Style/Documentation
+  after_action :set_csrf_token_header
   def new
     @slide_instance = Slider.new
     @list = @slide_instance.index
