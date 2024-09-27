@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+5# frozen_string_literal: true
 require 'sequel'
 class ItemsController < ApplicationController # rubocop:disable Style/Documentation
   DB = Sequel.connect(Rails.configuration.x.sequel[:db])

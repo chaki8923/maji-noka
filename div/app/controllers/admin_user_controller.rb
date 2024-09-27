@@ -3,6 +3,8 @@
 require 'date'
 class AdminUserController < ApplicationController # rubocop:disable Style/Documentation
   skip_before_action :check_logined, only: %i[new signup]
+  skip_before_action :verify_authenticity_token
+  after_action :set_csrf_token_header
   def new
     @admin_user = AdminUser.new
   end

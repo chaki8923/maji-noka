@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class SchedulesController < ApplicationController # rubocop:disable Style/Documentation
+  after_action :set_csrf_token_header
   def new
     @schedule_instance = Schedule.new
   end

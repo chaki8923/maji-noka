@@ -83,6 +83,7 @@ test:
 #
 production:
   <<: *default
+  host: <%= ENV["DB_HOST"] %>
   database: verceldb
   username: default
-  password: <%= ENV["DIV_DATABASE_PASSWORD"] %>
+  password: <%= ENV["PRO_DATABASE_PASSWORD"] %>

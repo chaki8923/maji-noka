@@ -4,47 +4,50 @@
 // import "day";
 // import "time";
 // import "list";
-// import "common";
+import "common";
 // import "@hotwired/turbo-rails"
 
 const calendarEl = document.getElementById('calendar');
-fetch('/google_api/find').then(response => response.json()).then(data => {
-  console.log("data", data);
-  // AIzaSyBI7uOdf-Y7VmJzJTs235BF3pxiTlFEPYU
-  // c0557488530372b24bf09e3a95837753afc104fa9726bdcc05db61bb56020a97@group.calendar.google.com
-  let calendar = new FullCalendar.Calendar(calendarEl, {
-    googleCalendarApiKey: data.api_key,
-    events: {
-      googleCalendarId: data.calendar_id,
-    },
-     // イベントクリック時に別タブでリンクを開く
-     eventClick: function(info) {
-      info.jsEvent.preventDefault(); // 既定のクリック動作を無効化
-  
-      if (info.event.url) {
-        window.open(info.event.url, '_blank'); // 新しいタブでリンクを開く
-      }
-    },
-    header: {
-              left: "prev,next today",
-              center: "title",
-              right: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
-            },
-            navLinks: true, // can click day/week names to navigate views
-            businessHours: true, // display business hours
-            editable: true,
-            nowIndicator: true,
-            locale: "local",
-            buttonText: {
-              today: "今日",
-              month: "月",
-              week: "週",
-              day: "日",
-              list: "一覧",
-            },
-  });
-  calendar.render();
-}).catch(error => console.error('ajaxエラー:', error));
+if (calendarEl != null) {
+
+  fetch('/google_api/find').then(response => response.json()).then(data => {
+    console.log("data", data);
+    // AIzaSyBI7uOdf-Y7VmJzJTs235BF3pxiTlFEPYU
+    // c0557488530372b24bf09e3a95837753afc104fa9726bdcc05db61bb56020a97@group.calendar.google.com
+    let calendar = new FullCalendar.Calendar(calendarEl, {
+      googleCalendarApiKey: data.api_key,
+      events: {
+        googleCalendarId: data.calendar_id,
+      },
+       // イベントクリック時に別タブでリンクを開く
+       eventClick: function(info) {
+        info.jsEvent.preventDefault(); // 既定のクリック動作を無効化
+    
+        if (info.event.url) {
+          window.open(info.event.url, '_blank'); // 新しいタブでリンクを開く
+        }
+      },
+      header: {
+                left: "prev,next today",
+                center: "title",
+                right: "dayGridMonth,timeGridWeek,timeGridDay,listMonth",
+              },
+              navLinks: true, // can click day/week names to navigate views
+              businessHours: true, // display business hours
+              editable: true,
+              nowIndicator: true,
+              locale: "local",
+              buttonText: {
+                today: "今日",
+                month: "月",
+                week: "週",
+                day: "日",
+                list: "一覧",
+              },
+    });
+    calendar.render();
+  }).catch(error => console.error('ajaxエラー:', error));
+}
 // var date = new Date();
 // const year = date.getFullYear();
 // var intMonth = date.getMonth() + 1;
