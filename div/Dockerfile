@@ -31,8 +31,6 @@ RUN yarn build:css
 COPY entrypoint.sh /usr/bin/
 RUN chmod +x /usr/bin/entrypoint.sh
 
-RUN bundle exec rails assets:precompile
-
 # コンテナ起動時にentrypoint.shを実行
 ENTRYPOINT ["entrypoint.sh"]
 
