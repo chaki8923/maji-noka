@@ -8,8 +8,7 @@ ENV YARN_VERSION=1.22.19
 # Node.jsとYarnのインストール
 RUN curl -sL https://deb.nodesource.com/setup_${NODE_VERSION} | bash - && \
     apt-get update -qq && \
-    apt-get install -y nodejs postgresql-client && \
-    npm install -g yarn@${YARN_VERSION}
+    apt-get install -y nodejs postgresql-client
 
 # アプリケーションディレクトリの作成
 WORKDIR /api
