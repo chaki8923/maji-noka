@@ -83,6 +83,7 @@ test:
 
 production:
   <<: *default
-  database: verceldb
-  username: default
+  host: <%= ENV["DB_HOST"] %>
+  database: maji_database
+  username: <%= ENV["DB_USERNAME"] %>
   password: <%= ENV["PRO_DATABASE_PASSWORD"] %>
