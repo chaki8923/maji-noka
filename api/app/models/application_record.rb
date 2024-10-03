@@ -1,3 +1,3 @@
 class ApplicationRecord 
-  primary_abstract_class
+  # primary_abstract_class
 end

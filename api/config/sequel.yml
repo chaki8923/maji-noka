@@ -4,10 +4,4 @@ development:
 test:
   db: "postgresql://postgres:password@maji-noka-test_db-1/postgres"
 production:
-  adapter: postgresql
-  encoding: unicode
-  database: maji_database
-  host: <%= ENV["DB_HOST"] %>
-  port: 5432
-  username: <%= ENV["DB_USERNAME"] %>
-  password: <%= ENV["PRO_DATABASE_PASSWORD"] %>
+  db: <%= "postgresql://#{ENV['DB_USERNAME']}:#{ENV['PRO_DATABASE_PASSWORD']}@#{ENV['DB_HOST']}:5432/maji_database" %>
