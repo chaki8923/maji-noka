@@ -24,8 +24,8 @@ RUN bundle install
 COPY . .
 
 # パッケージのインストールとCSSビルドを実行
-RUN yarn cache clean && yarn install --check-files --verbose
-RUN yarn build:css
+# RUN yarn cache clean && yarn install --check-files --verbose
+# RUN yarn build:css
 
 # entrypoint.shをコピーして実行権限を付与
 COPY entrypoint.sh /usr/bin/
