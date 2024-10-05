@@ -14,14 +14,16 @@ RUN npm install
 COPY prisma ./prisma/
 
 # ダミーのDATABASE_URLを設定
-ARG DATABASE_URL="postgres://postgres:password@localhost:5434/web_development?schema=public"
-ENV DATABASE_URL=$DATABASE_URL
+# ARG DATABASE_URL="postgres://postgres:password@localhost:5434/web_development?schema=public"
+# ENV DATABASE_URL=$DATABASE_URL
 
 # Prisma Clientを生成するために環境変数を指定
-RUN DATABASE_URL=$DATABASE_URL npx prisma generate
+# RUN DATABASE_URL=$DATABASE_URL npx prisma generate
 
 # ソースコードをコピー
 COPY . .
+# 実際のデータベースの接続情報を設定
+ENV NODE_ENV=production
 
 # Next.jsのビルドを実行
 RUN npm run build
@@ -40,9 +42,7 @@ COPY --from=base /web/.next ./.next
 COPY --from=base /web/public ./public
 COPY --from=base /web/package.json ./
 
-# 実際のデータベースの接続情報を設定
-ENV NODE_ENV=production
-ENV DATABASE_URL="postgresql://maji_master:maji_password@maji-db.c8x1ub9aigmb.ap-northeast-1.rds.amazonaws.com:5432/maji_database"
+# ENV DATABASE_URL="postgresql://maji_master:maji_password@maji-db.c8x1ub9aigmb.ap-northeast-1.rds.amazonaws.com:5432/maji_database"
 
 # アプリケーションを起動
 CMD ["npm", "start"]
