@@ -68,18 +68,10 @@ services:
     volumes:
       - ./api:/api
     ports:
-      # - "127.0.0.2:3000:3000"
-      - "3003:3000"
+      - "127.0.0.2:3000:3000"
+      # - "3003:3000"
     depends_on:
       - db
-  nginx:
-    image: nginx:latest
-    container_name: nginx
-    ports:
-      - "81:80"
-    volumes:
-      - ./div/nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./div/logs/nginx:/var/log/nginx
 
   mailcatcher:
     image: schickling/mailcatcher

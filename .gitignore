@@ -8,6 +8,7 @@
 /tmp/
 /div/.env
 /api/.env
+/web/.env
 
 # rspec failure tracking
 .rspec_status
