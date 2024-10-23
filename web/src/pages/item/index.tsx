@@ -2,9 +2,7 @@ import { motion } from 'framer-motion'
 import { trpc } from '../../utils/trpc';
 import React, { useState, useEffect } from 'react';
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { Card, Pagination } from 'flowbite-react';
-import Loading from '../_component/loading';
 import Image from "next/image";
 import { Items } from '@/src/types';
 
@@ -12,7 +10,6 @@ export default function Page() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   const [products, setProducts] = useState<any>([]);
-  const searchParams = useSearchParams();
   // const keyword = searchParams?.get("keyword");
   const limit = 8;
 

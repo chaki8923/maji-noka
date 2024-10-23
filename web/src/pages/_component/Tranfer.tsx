@@ -4,7 +4,6 @@ import { Button } from 'flowbite-react';
 import { createCustomerId } from "../../feature/stripe/stripe";
 import { RiMoneyCnyCircleLine } from "react-icons/ri";
 import { useShoppingCart } from 'use-shopping-cart'
-import { getImageUrl } from '../../hooks/getAwsImage';
 import { CartEntry } from "use-shopping-cart/core";
 type PaymentProps = {
   item: CartEntry,
@@ -13,25 +12,9 @@ type PaymentProps = {
 
 const Checkout: React.FC<Partial<PaymentProps>> = () => {
   const { cartDetails, clearCart } = useShoppingCart();
-  const [imageUrls, setImageUrls] = useState<string[]>([]);
   const router = useRouter();
   const items: any = Object.values(cartDetails ?? {}).map((entry) => entry);
 
-  useEffect(() => {
-    if (items) {
-      const fetchImageUrls = async () => {
-        const urls = await Promise.all(items.map(async (item: any) => {
-          return await getImageUrl(
-            process.env.NEXT_PUBLIC_S3_BUCKET!,
-            `item/${item.id}/item_image_0_${item.id}`,
-            3600
-          );
-        }));
-        setImageUrls(urls);
-      };
-      fetchImageUrls();
-    }
-  }, [items.data]);
 
   const allClearCart = () => {
     clearCart();
@@ -49,7 +32,7 @@ const Checkout: React.FC<Partial<PaymentProps>> = () => {
           price: item.price,
           quantity: item.quantity,
           description: item.description,
-          images: imageUrls[index],
+          images: item.image_path01,
           customerId
         }));
       const response = await fetch(
