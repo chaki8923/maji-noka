@@ -9,7 +9,6 @@ class ApplicationController < ActionController::Base # rubocop:disable Style/Doc
   def check_logined
     if check_session?(session)
       session.clear
-      Rails.logger.info "ログイン画面にリターン---------------------------------#{session[:limit]}"
       redirect_to login_path and return
     else
       @current_user = session[:user]

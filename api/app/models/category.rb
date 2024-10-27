@@ -15,7 +15,7 @@ class Category # rubocop:disable Style/Documentation
 
   class << self
     def index
-      cdq = CategoryQuery.new
+      cdq = QueryService::CategoryQuery.new
       cdq.get_all
     end
   end

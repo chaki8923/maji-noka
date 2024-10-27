@@ -68,8 +68,6 @@ class SchedulesController < ApplicationController # rubocop:disable Style/Docume
     new_end_datetime = "#{year_month_day}T#{only_end_time}"
     schedule_params[:start_time] = new_start_datetime
     schedule_params[:end_time] = new_end_datetime
-    ## TODO:Chakiあとで消す
-    Rails.logger.debug "schedule_params---------------------------------#{schedule_params}"
     schedule_params
   end
 end

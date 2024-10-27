@@ -6,7 +6,7 @@ Dir['/api/app/domains/query_service/*.rb'].sort.each { |file| require file }
 
 class Auth # rubocop:disable Style/Documentation
   def check(value)
-    adq = AdminQuery.new
+    adq = QueryService::AdminQuery.new
     errors = []
     hash_pass = adq.get_hash_password(value)
     # return nil, SystemMessage::AUTH_ERR if hash_pass.blank?

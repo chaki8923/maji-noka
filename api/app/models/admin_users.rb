@@ -11,15 +11,15 @@ class AdminUsers # rubocop:disable Style/Documentation
   def initialize(email:, password:)
     @email = email
     @password = password
-    @adc = AdminCommand.new
-    @adq = AdminQuery.new
+    @adc = CommandService::AdminCommand.new
+    @adq = QueryService::AdminQuery.new
   end
 
   def self.new(value)
     errors = []
-    email, err = Email.new(value: value[:email])
+    email, err = ValueObject::Email.new(value: value[:email])
     errors.push(err) unless email
-    password, err = Password.new(value: value[:password])
+    password, err = ValueObject::Password.new(value: value[:password])
     errors.push(err) unless password
     return nil, errors.join(', ') unless errors.blank?
     super(email: email, password: password)

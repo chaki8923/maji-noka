@@ -19,7 +19,7 @@ class AuthController < ApplicationController # rubocop:disable Style/Documentati
       session[:user] = admin_user
       Rails.logger.debug "ログイン期限---------------------------------#{Settings.session_limit.to_i}"
       session[:limit] = Time.now + Settings.session_limit.to_i
-      redirect_to home_path
+      redirect_to home_path, notice: 'ログインしました'
     else
       render action: 'new'
     end

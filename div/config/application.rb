@@ -32,9 +32,10 @@ module Div
     config.session_store :cookie_store, key: '_interslice_session'
     config.middleware.use ActionDispatch::Cookies
     config.middleware.use config.session_store, config.session_options
+    config.middleware.use ActionDispatch::Flash
     
     # 以下の行を追加してDBに接続しないようにする
     # config.active_record.raise_in_transactional_callbacks = false
-    # config.x.base_url = config_for(:base_url).symbolize_keys
+    config.x.base_url = config_for(:base_url).symbolize_keys
   end
 end

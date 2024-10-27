@@ -15,25 +15,25 @@ class Schedule # rubocop:disable Style/Documentation
     @start_time = start_time
     @end_time = end_time
     @memo = memo
-    @sdc = ScheduleCommand.new
+    @sdc = CommandService::ScheduleCommand.new
   end
 
   def self.new(value)
     errors = []
 
-    title, err = TextFormat.new(value: value[:title])
+    title, err = ValueObject::TextFormat.new(value: value[:title])
     errors.push(err) unless name
 
-    start_time, err = TimeFormat.new(value: Time.parse(value[:start_time]))
+    start_time, err = ValueObject::TimeFormat.new(value: Time.parse(value[:start_time]))
     errors.push(err) unless start_time
 
-    end_time, err = TimeFormat.new(value: Time.parse(value[:end_time]))
+    end_time, err = ValueObject::TimeFormat.new(value: Time.parse(value[:end_time]))
     errors.push(err) unless end_time
 
-    schedule_date, err = DateFormat.new(value: Date.parse(value[:schedule_date]))
+    schedule_date, err = ValueObject::DateFormat.new(value: Date.parse(value[:schedule_date]))
     errors.push(err) unless schedule_date
 
-    memo, err = TextFormat.new(value: value[:memo])
+    memo, err = ValueObject::TextFormat.new(value: value[:memo])
 
     errors.push('日付範囲が不正') if start_time.value > end_time.value
     errors.push(err) unless memo
@@ -78,12 +78,12 @@ class Schedule # rubocop:disable Style/Documentation
 
   class << self
     def index
-      sdq = ScheduleQuery.new
+      sdq = QueryService::ScheduleQuery.new
       sdq.get_all
     end
 
     def find(id)
-      sdq = ScheduleQuery.new
+      sdq = QueryService::ScheduleQuery.new
       schedule = sdq.find(id)
 
       raise "スケジュール#{SystemMessage::NOTFOUND}" if schedule.nil?
@@ -91,7 +91,7 @@ class Schedule # rubocop:disable Style/Documentation
     end
 
     def delete(id)
-      sdc = ScheduleCommand.new
+      sdc = CommandService::ScheduleCommand.new
       sdc.delete_db(id: id)
     rescue StandardError => e
       raise e
