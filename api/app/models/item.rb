@@ -28,33 +28,33 @@ class Item # rubocop:disable Style/Documentation
     @inventory = inventory
     @maji_flag = maji_flag
     @action = action
-    @idc = ItemCommand.new
+    @idc = CommandService::ItemCommand.new
   end
 
   def self.new(value)
     errors = []
-    name, err = Name.new(value: value[:name])
+    name, err = ValueObject::Name.new(value: value[:name])
     errors.push(err) unless name
 
-    price, err = Price.new(value: value[:price])
+    price, err = ValueObject::Price.new(value: value[:price])
     errors.push(err) unless price
 
-    description, err = Description.new(value: value[:description])
+    description, err = ValueObject::Description.new(value: value[:description])
     errors.push(err) unless description
 
-    postage, err = Postage.new(value: value[:postage])
+    postage, err = ValueObject::Postage.new(value: value[:postage])
     errors.push(err) unless postage
 
-    inventory, err = Inventory.new(value: value[:inventory])
+    inventory, err = ValueObject::Inventory.new(value: value[:inventory])
     errors.push(err) unless inventory
 
-    maji_flag, err = Flag.new(value: value[:maji_flag])
+    maji_flag, err = ValueObject::Flag.new(value: value[:maji_flag])
     errors.push(err) unless maji_flag
 
-    action, err = Action.new(value: value[:action])
+    action, err = ValueObject::Action.new(value: value[:action])
     errors.push(err) unless action
     # Imageクラスに配列ごと渡して@value=[{}]の形にする
-    images, err = Image.new(value: value['images'], action: action.value)
+    images, err = ValueObject::Image.new(value: value['images'], action: action.value)
     errors.push(err) unless images
 
     raise errors.join(', ') unless errors.blank?
@@ -110,19 +110,19 @@ class Item # rubocop:disable Style/Documentation
 
   class << self
     def index
-      idq = ItemQuery.new
+      idq = QueryService::ItemQuery.new
       idq.get_all
     end
 
     def find(id)
-      idq = ItemQuery.new
+      idq = QueryService::ItemQuery.new
       item = idq.find(id)
       raise "商品#{SystemMessage::NOTFOUND}" if item.nil?
       item
     end
 
     def delete(id)
-      idc = ItemCommand.new
+      idc = CommandService::ItemCommand.new
       idc.delete_db(id: id)
     rescue StandardError => e
       ## TODO：あとで消す
@@ -131,7 +131,7 @@ class Item # rubocop:disable Style/Documentation
     end
 
     def set_image_path(id, image_path, file_name)
-      idc = ItemCommand.new
+      idc = CommandService::ItemCommand.new
       idc.set_image_path(
         id: id,
         image_path: image_path,

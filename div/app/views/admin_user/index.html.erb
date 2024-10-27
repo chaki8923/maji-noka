@@ -1,7 +1,7 @@
-<% if  flash[:notice].present? %>
+<% if flash[:notice].present? %>
   <p class="notice-line js-toggle-msg"><%= flash[:notice] %></p>
 <% end %>
-<% if  flash[:alert].present? %>
+<% if flash[:alert].present? %>
   <p class="alert-line js-toggle-msg"><%= flash[:alert] %></p>
 <% end %>
 <%= render 'layouts/error', model: @schedule_instance %>

@@ -8,7 +8,7 @@ module ValueObject
   
     def self.new(value:)
   
-      adq = AdminQuery.new
+      adq = QueryService::AdminQuery.new
       mailRegex = /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
       return nil, 'mail is must be a string' unless value.is_a?(String)
       return nil, 'mail is must be a mail form' unless value.match? mailRegex

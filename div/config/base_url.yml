@@ -4,4 +4,4 @@ development:
   web: "http://web:3000"
 production:
   api: "http://maji-noka.api.com:3000/"
-  div: 
+  div: false

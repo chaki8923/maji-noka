@@ -14,12 +14,12 @@ class Purchase # rubocop:disable Style/Documentation
     # @customerId = customerId
     # @itemId = itemId
     @purchase_id = purchase_id
-    @pcs = PurchaseCommand.new
+    @pcs = CommandService::PurchaseCommand.new
   end
 
   def self.new(value)
     errors = []
-    purchase_id, err = ModelId.new(value: value[:purchase_id])
+    purchase_id, err = ValueObject::ModelId.new(value: value[:purchase_id])
     errors.push(err) unless purchase_id
     raise errors.join(', ') unless errors.blank?
     super(
@@ -33,17 +33,17 @@ class Purchase # rubocop:disable Style/Documentation
 
   class << self
     def index
-      pdq = PurchaseQuery.new
+      pdq = QueryService::PurchaseQuery.new
       pdq.get_all
     end
 
     def find(id:)
-      pdq = PurchaseQuery.new
+      pdq = QueryService::PurchaseQuery.new
       pdq.find(id: id)
     end
 
     def find_by_user(customer_id:, purchase_id:)
-      pdq = PurchaseQuery.new
+      pdq = QueryService::PurchaseQuery.new
       pdq.find_by_user(customer_id: customer_id, purchase_id: purchase_id)
     end
 

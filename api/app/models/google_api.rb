@@ -13,19 +13,19 @@ class GoogleApi # rubocop:disable Style/Documentation
     @api_key = api_key
     @user_id = user_id
     @calendar_id = calendar_id
-    @gac = GoogleApiCommand.new
+    @gac = CommandService::GoogleApiCommand.new
   end
 
   def self.new(value)
     errors = []
 
-    api_key, err = ApiKey.new(value: value[:api_key])
+    api_key, err = ValueObject::ApiKey.new(value: value[:api_key])
     errors.push(err) unless api_key
 
-    calendar_id, err = CalendarId.new(value: value[:calendar_id])
+    calendar_id, err = ValueObject::CalendarId.new(value: value[:calendar_id])
     errors.push(err) unless calendar_id
     
-    user_id, err = UserId.new(value: value[:user_id])
+    user_id, err = ValueObject::UserId.new(value: value[:user_id])
     errors.push(err) unless user_id
 
     raise errors.join(', ') unless errors.blank?
@@ -63,12 +63,12 @@ class GoogleApi # rubocop:disable Style/Documentation
 
   class << self
     def index
-      gaq = GoogleApiQuery.new
+      gaq = QueryService::GoogleApiQuery.new
       gaq.get_all
     end
 
     def find(user_id)
-      gaq = GoogleApiQuery.new
+      gaq = QueryService::GoogleApiQuery.new
       google_api = gaq.find(user_id)
       google_api = gaq.find(user_id)
 

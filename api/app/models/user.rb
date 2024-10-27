@@ -17,7 +17,7 @@ class User # rubocop:disable Style/Documentation
 
   class << self
     def index
-      idq = UserQuery.new
+      idq = QueryService::UserQuery.new
       idq.get_all
     end
 

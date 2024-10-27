@@ -13,14 +13,14 @@ class Slider # rubocop:disable Style/Documentation
   )
     @id = id
     @images = images
-    @idc = SliderCommand.new
+    @idc = CommandService::SliderCommand.new
   end
 
   def self.new(value)
     errors = []
 
     # Imageクラスに配列ごと渡して@value=[{}]の形にする
-    images, err = SlideImage.new(value: value['images'])
+    images, err = ValueObject::SlideImage.new(value: value['images'])
     errors.push(err) unless images
 
     raise errors.join(', ') unless errors.blank?
@@ -48,18 +48,18 @@ class Slider # rubocop:disable Style/Documentation
 
   class << self
     def index
-      idq = SliderQuery.new
+      idq = QueryService::SliderQuery.new
       idq.get_all
     end
 
     def find(id)
-      idq = SliderQuery.new
+      idq = QueryService::SliderQuery.new
       slider = idq.find(id)
       slider
     end
 
     def delete(id)
-      idc = ItemCommand.new
+      idc = CommandService::ItemCommand.new
       idc.delete_db(id: id)
     rescue StandardError => e
       ## TODO：あとで消す
@@ -68,7 +68,7 @@ class Slider # rubocop:disable Style/Documentation
     end
 
     def set_image_path(id, images)
-      idc = SliderCommand.new
+      idc = CommandService::SliderCommand.new
       idc.set_image_path(
         id: id,
         images: images,

@@ -25,13 +25,13 @@ class AdminUserController < ApplicationController # rubocop:disable Style/Docume
   end
 
   def get_admin_user # rubocop:disable Naming/AccessorMethodName
-    data = AdminQuery.new
+    data = QueryService::AdminQuery.new
     res = data.get_admin_user(admin_user_params[:email])
     render json: res
   end
 
   def get_calendar # rubocop:disable Naming/AccessorMethodName
-    data = AdminQuery.new
+    data = QueryService::AdminQuery.new
     res = data.get_admin_user(params['email'])
     render json: res
   end
