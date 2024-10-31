@@ -172,7 +172,7 @@ export default function Item() {
                       id: data.id,
                       price: data.price,
                       currency: 'JPY',
-                      image: data.image_path01,
+                      image_path01: data.image_path01,
                     }, { count: orderQuantity });
                     insertCart();
                   }}>
