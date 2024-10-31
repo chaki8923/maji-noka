@@ -11,7 +11,6 @@ import { useShoppingCart } from 'use-shopping-cart'
 
 function Cart() {
   const router = useRouter();
-  const [imageUrls, setImageUrls] = useState<string[]>([]);
   const { addItem, cartDetails, removeItem, formattedTotalPrice, cartCount, totalPrice } = useShoppingCart();
   const items = Object.values(cartDetails ?? {}).map((entry) => entry);
   const itemTotalPrice = totalPrice!.toLocaleString();
@@ -20,6 +19,8 @@ function Cart() {
     console.log(`Character at index ${index}: ${char}`);
   });
 
+  console.log("カート", items);
+  
 
   const handleChange = (item: any, selectedQuantity: number) => {
     //一度消してから更新
@@ -57,8 +58,8 @@ function Cart() {
           {items.map((item, index) => (
             <div key={item.id} className='cart-content p-2'>
               <Link href={`item/${item.id}`} className='cart-item'>
-                {item.image && (
-                  <Image src={item.image} alt="" className="min-h-[160px] max-h-[180px] object-cover" width={180} height={200} />
+                {item.image_path01 && (
+                  <Image src={item.image_path01} alt="" className="min-h-[160px] max-h-[180px] object-cover" width={180} height={200} />
                 )}
                 <p className='item-name'>{item.name}</p>
               </Link>
