@@ -1,6 +1,5 @@
-// import jquery from "jquery";
-// window.$ = window.jQuery = jquery;
-console.log("プレビュー");
+import jquery from "jquery";
+window.$ = window.jQuery = jquery;
 $(function () {
   $(".navbar-toggler").on("click", () => {
     $("#navbarNav").slideToggle("fast");

@@ -30,9 +30,7 @@ export default function Item() {
   }, {
     enabled: itemId !== null, // idがnullでない場合にのみクエリを実行
   });
-
   
-
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const quantity = parseInt(event.target.value, 10); //数値に変換
     setorderQuantity(quantity); // 選択された値をステートに設定

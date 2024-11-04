@@ -28,8 +28,6 @@ export async function POST(req: Request) {
   try {
     switch (event.type) {
       case "customer.updated": {
-
-
         break;
       }
       case "checkout.session.completed": {
@@ -39,6 +37,9 @@ export async function POST(req: Request) {
         const email = session.customer_details?.email;
         const metadata = session.metadata;
         var itemsArray = JSON.parse(metadata!.items);
+
+        console.log("itemsArray", itemsArray);
+
 
         console.log("completeのmetadata!!", metadata);
 
@@ -76,7 +77,7 @@ export async function POST(req: Request) {
             });
             let purchaseCustomer: any;
             await prisma.$transaction(async (prisma) => {
-              
+
               const customerService = new CustomerService(prisma);
               purchaseCustomer = await customerService.handleCustomer({
                 customer: customer,
@@ -85,7 +86,7 @@ export async function POST(req: Request) {
                 email: email,
                 shippingDetails: shippingDetails
               });
-              
+
               // Promiseの配列を生成
               var promises = itemsArray.map(async function (item: any) {
                 await prisma.purchase.create({
@@ -138,6 +139,56 @@ export async function POST(req: Request) {
           mailText +=
             `\n注文情報をご確認ください=>${process.env.NEXT_PUBLIC_BASE_URL}/purchase/index`;
 
+          var now = new Date();
+          var hours = now.getHours(); // 時を取得
+          var minutes = now.getMinutes(); // 分を取得
+          var seconds = now.getSeconds(); // 秒を取得
+
+          var shoppingTime = hours + ":" + minutes + ":" + seconds
+          var customerMailText = `----------------------------------------------------------------------
+          このメールはお客様の注文に関する大切なメールです。
+          お取引が完了するまで保存してください。
+          ----------------------------------------------------------------------
+          ${name}様
+
+          田中本気農家です。
+          ご注文いただきまして誠にありがとうございます。
+
+          お客様のご注文を下記の内容で承りました。
+
+          ■ご注文明細
+
+          [日時]${shoppingTime}
+          [注文者] ${name} 様
+          --------------------------------
+          [送付先] ${name} 様
+                〒${shippingDetails?.postal_code!} ${shippingDetails?.state!} ${shippingDetails?.line1!} ${shippingDetails?.line2!}
+          [商品]\n`
+
+          // 各商品のタイトルをメール本文に追加
+          itemsArray.forEach(function (item: any) {
+            customerMailText += `${item.title}\n`; // 各商品のタイトルを追加
+          });
+
+
+
+          let totalPrice = itemsArray.reduce(function (sum: number, item: any) {
+            return sum + item.price;
+          }, 0); // 初期値を0に設定
+
+          var postageTotalPrice = totalPrice + itemsArray[0].postage
+          customerMailText += `
+          ****************************************************************
+          合計商品数   ${itemsArray.length}(個)
+          商品価格計(税込) ${totalPrice.toLocaleString()}(円)
+          --------------------------------
+          商品小計(税込)   ${totalPrice.toLocaleString()}(円)
+          送料(税込)   ${itemsArray[0].postage}(円)
+          ----------------------------------------------------------------
+          お支払い金額(税込)   ${postageTotalPrice.toLocaleString()}(円)
+          ----------------------------------------------------------------
+                    `
+
           const adminMailOptions = {
             from: `田中本気農家<${process.env.GMAILUSER}>`,
             to: process.env.GMAILUSER,
@@ -148,7 +199,7 @@ export async function POST(req: Request) {
             from: `田中本気農家<${process.env.GMAILUSER}>`,
             to: email as string,
             subject: "商品のご購入ありがとうございます！",
-            text: mailText,
+            text: customerMailText,
           };
 
           Promise.all([

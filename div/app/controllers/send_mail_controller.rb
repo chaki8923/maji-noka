@@ -10,6 +10,7 @@ class SendMailController < ApplicationController # rubocop:disable Style/Documen
   def send_mail
     @send_mail = SendMail.new(mail_params)
     res = @send_mail.send(mail_params)
+    
     if res
       redirect_to purchase_index_path, notice: '発送済みメールを送信しました'
     else
