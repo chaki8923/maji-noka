@@ -7,6 +7,8 @@ class SendMailer < ApplicationMailer
     @postal_code = params[:postal_code]
     @address = "#{params[:state]}#{params[:line1]}#{params[:line2]}"
     @contact_form = "http://localhost:3000/contact"
+    ## TODO：あとで消す
+    Rails.logger.debug "@contact_form---------------------------------#{@contact_form}"
     mail(to: @email, subject: @subject)
   end
 

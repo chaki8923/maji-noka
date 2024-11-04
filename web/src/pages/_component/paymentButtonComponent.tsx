@@ -20,6 +20,7 @@ const Checkout: React.FC<PaymentProps> = ({ items, quantity }) => {
           productId,
           title: items!.name,
           price: items!.price,
+          postage: items!.postage,
           quantity: quantity,
           description: items.description,
           customerId: customerId,

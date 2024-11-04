@@ -14,6 +14,7 @@ export async function POST(request: Request, response: Response) {
     quantity: number;
     description: number;
     images: string;
+    postage: number;
   }
   console.log("checkoutAry>>>>>>>>", checkoutAry);
   
@@ -30,7 +31,6 @@ export async function POST(request: Request, response: Response) {
       },
       quantity: item.quantity,
     }));
-    console.log("line_items", line_items);
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       customer: checkoutAry[0].customerId,
@@ -43,7 +43,9 @@ export async function POST(request: Request, response: Response) {
         items: JSON.stringify(checkoutAry.map((item: any) => ({
           productId: item.productId,
           title: item.title,
-          quantity: item.quantity
+          quantity: item.quantity,
+          price: item.price,
+          postage: item.postage
         })))
       },
       shipping_address_collection: {

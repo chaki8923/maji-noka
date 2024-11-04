@@ -4,6 +4,14 @@
   left: 50%;
   transform: translateX(-50%);
 }
+@media (max-width: 768px) {
+.footerWrapper{
+  display: block;
+  li{
+    padding: 10px;
+  }
+}
+}
 
 @-webkit-keyframes rotate_pacman_half_up {
   0% {

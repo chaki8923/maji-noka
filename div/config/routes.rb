@@ -12,7 +12,8 @@ Rails.application.routes.draw do
     get '/login', to: 'auth#new'
     post '/login', to: 'auth#login'
     get '/index', to: 'admin_user#index'
-    delete '/logout', to: 'auth#logout', as: 'logout'
+    # delete '/logout', to: 'auth#logout', as: 'logout'
+    post '/logout', to: 'auth#logout', as: 'logout'
   end
 
   get '/home', to: 'admin_user#index', as: 'home'
@@ -23,7 +24,8 @@ Rails.application.routes.draw do
     get '/index', to: 'items#index', as: 'item_index'
     get '/edit/:id', to: 'items#edit', as: 'edit_item'
     post '/update', to: 'items#update'
-    delete '/delete/:id', to: 'items#delete', as: 'delete_item'
+    # delete '/delete/:id', to: 'items#delete', as: 'delete_item'
+    post '/delete/:id', to: 'items#delete', as: 'delete_item'
   end
 
   scope 'slider' do
