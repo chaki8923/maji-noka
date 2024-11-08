@@ -39,7 +39,7 @@ function Contact() {
       message: params.message,
     };
     reset();
-    await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/sendmail`, {
+    await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}api/sendmail`, {
       method: "POST",
       headers: {
         Accept: "application/json, text/plain",
