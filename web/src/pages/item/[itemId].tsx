@@ -78,7 +78,7 @@ export default function Item() {
     >
       <div className='lg:flex pt-3 overflow-hidden w-full justify-center pb-10'>
         {isCart ?
-          <FadeModal isCart={isCart} setIsVisible={setIsVisible} closeModal={closeModal} /> : null}
+          <FadeModal isCart={isCart} setIsVisible={setIsVisible} closeModal={closeModal} message="カートに追加しました"/> : null}
 
         <div className='lg:flex w-full'>
           <div className='lg:w-[70%] w-full'>
@@ -184,7 +184,7 @@ export default function Item() {
                           bg-white 
                           cart-button 
                           hover:text-white">
-                  カートへ行く
+                  カートの中身を確認
                 </Button>
               </div>
             </div>

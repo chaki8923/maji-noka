@@ -10,13 +10,12 @@ interface FadeModalProps {
   isCart: boolean;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
   closeModal: () => void;
+  message: string;
 }
 
 
-const Component: React.FC<FadeModalProps> = ({ isCart, setIsVisible, closeModal }) => {
+const Component: React.FC<FadeModalProps> = ({ isCart, setIsVisible, closeModal, message }) => {
   const [isVisible, setIsVisibleLocal] = useState(false);
-  console.log("isCart", isCart);
-  
   useEffect(() => {
     console.log("useEffectisCart", isCart);
     // 親から渡された isCart の値が true の場合にローカルの isVisible も true に設定
@@ -43,7 +42,7 @@ const Component: React.FC<FadeModalProps> = ({ isCart, setIsVisible, closeModal 
           <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200">
             <HiCheck className="h-5 w-5" />
           </div>
-          <div className="ml-3 text-sm font-normal">カートに追加しましまた</div>
+          <div className="ml-3 text-sm font-normal">{message}</div>
         </>
       </Toast>
     </div>

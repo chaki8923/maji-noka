@@ -36,9 +36,9 @@ function Cart() {
     return (
       <div className="flex justify-center self-center">
         <div className="mt-[260px]">
-          <div>何もカートに入ってまへん。</div>
+          <div className='text-center'>カートは現在空です</div>
           <Button color="blue" onClick={() => handleBack()} className="w-[180px] mt-2">
-            <TbArrowBackUp />戻る
+            戻る
           </Button>
         </div>
       </div>
