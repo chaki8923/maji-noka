@@ -1,7 +1,5 @@
 import { motion } from 'framer-motion'
 import { useState } from "react";
-import { Toast } from 'flowbite-react';
-import { HiCheck } from "react-icons/hi";
 import { ContactFormSchema, ContactFormType } from '@/schemas/ContactFormSchema';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -41,7 +39,7 @@ function Contact() {
       message: params.message,
     };
     reset();
-    await fetch("/api/sendmail", {
+    await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/sendmail`, {
       method: "POST",
       headers: {
         Accept: "application/json, text/plain",
