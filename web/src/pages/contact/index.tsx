@@ -5,9 +5,11 @@ import { HiCheck } from "react-icons/hi";
 import { ContactFormSchema, ContactFormType } from '@/schemas/ContactFormSchema';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import FadeModal from '../_component/fademodal';
 
 function Contact() {
-  const [isSuccess, setIsSuccess] = useState<Boolean>(false);
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [isVisible, setIsVisible] = useState(false);
   const methods = useForm<ContactFormType>({
     mode: 'onBlur',
     resolver: zodResolver(ContactFormSchema)
@@ -38,7 +40,7 @@ function Contact() {
       subject: params.subject,
       message: params.message,
     };
-
+    reset();
     await fetch("/api/sendmail", {
       method: "POST",
       headers: {
@@ -56,9 +58,9 @@ function Contact() {
     })
   };
 
-  const closeModal = (event: React.MouseEvent<HTMLSpanElement>) => {
+  const closeModal = () => {
     setIsSuccess(false);
-    reset();
+    setIsVisible(false);
   };
 
   return (
@@ -70,15 +72,7 @@ function Contact() {
     >
       <div className="min-h-screen flex justify-center items-center bg-gray-100">
         {isSuccess ?
-          <Toast className='fixed top-2/4 left-1/3 z-50 py-9'>
-            <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200">
-              <HiCheck className="h-5 w-5" />
-            </div>
-            <div className="ml-3 text-sm font-normal">メールを送信しました</div>
-            <Toast.Toggle onClick={closeModal} />
-          </Toast> : null
-
-        }
+          <FadeModal isCart={isSuccess} setIsVisible={setIsVisible} closeModal={closeModal} message="メッセージを送信しました"/> : null}
         <div className="bg-white p-8 rounded-lg shadow-md w-96">
           <h2 className="text-2xl mb-4 text-gray-800 text-center text-bold">お問い合わせ</h2>
           <FormProvider {...methods}>
