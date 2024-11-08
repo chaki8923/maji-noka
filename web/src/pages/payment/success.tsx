@@ -20,7 +20,7 @@ export default function PaymentSuccess() {
                 <div className="inline-flex items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200">
                     <HiCheck className="h-5 w-5" />
                 </div>
-                <div className="ml-3 text-sm font-normal">決済が完了しました。</div>
+                <div className="ml-3 text-sm font-normal">お買い上げありがとうございました！<br></br>注文の詳細のメールを送信させていただきました。</div>
                 <Toast.Toggle onClick={transitionItems} />
             </Toast>
         </div>
