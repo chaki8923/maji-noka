@@ -37,11 +37,11 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
 
   def index
     res = Item.index
-    s3resource = get_s3_resource(ACCESS_KEY, SECRET_KEY, REGION)
-    signer = Aws::S3::Presigner.new(client: s3resource.client)
-    res.map do |d|
-      d[:image] = item_first_image(signer, d)
-    end
+    # s3resource = get_s3_resource(ACCESS_KEY, SECRET_KEY, REGION)
+    # signer = Aws::S3::Presigner.new(client: s3resource.client)
+    # res.map do |d|
+    #   d[:image] = item_first_image(signer, d)
+    # end
 
     render json: res
   end
@@ -56,9 +56,6 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
 
   def edit
     res = Item.find(params['id'])
-    s3resource = get_s3_resource(ACCESS_KEY, SECRET_KEY, REGION)
-    signer = Aws::S3::Presigner.new(client: s3resource.client)
-    res[:image] = item_get_images(signer, res)
     render json: res
     rescue => err_message
       render json: {value: nil, err_message: err_message}, status: :not_found

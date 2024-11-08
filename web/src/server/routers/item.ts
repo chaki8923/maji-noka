@@ -30,7 +30,10 @@ export const itemRouter = router({
     // 全てのitemをデータベースから取得します。
     const items = await prisma.items.findMany({
       take: limit,
-      skip: offset
+      skip: offset,
+      orderBy: {
+        created_at: 'desc', // 作成日の降順で並べ替え
+      },
     });
     await prisma.$disconnect();
     // 取得したitemを返します。
