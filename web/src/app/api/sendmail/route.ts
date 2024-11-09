@@ -36,16 +36,36 @@ export async function POST(
         text: `下記アドレスよりお問合せがあります。\n\n${email} \nお問合せ内容\n${message}`,
       }
       // Promise.all([mailer.sendMail(mailOptions1), mailer.sendMail(mailOptions2)])
-      Promise.all([transporter.sendMail(mailOptions1), transporter.sendMail(mailOptions2)])
-      .then((respose) => {
-        console.log("Email sent: " + respose)
-      })
-      .catch((error) => {
-        console.log("Email sent Error: " + error)
+      try {
+        const sendMail1 = await new Promise((resolve, reject) => {
+          transporter.sendMail(mailOptions1, (error, info) => {
+            if (error) {
+              reject(error); // エラーが発生した場合
+            } else {
+              resolve(info); // 成功した場合
+            }
+          });
+        });
+      
+        const sendMail2 = await new Promise((resolve, reject) => {
+          transporter.sendMail(mailOptions2, (error, info) => {
+            if (error) {
+              reject(error); // エラーが発生した場合
+            } else {
+              resolve(info); // 成功した場合
+            }
+          });
+        });
+      
+        console.log("Email sent:", sendMail1);
+        console.log("Email sent:", sendMail2);
+      
+      } catch (error) {
+        console.log("Email sent Error: ", error);
         return NextResponse.json({
           error_message: "メール送信失敗",
         });
-      });
+      }
       return NextResponse.json({
         success_message: "メール送信成功",
       });
