@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useSession } from "next-auth/react";
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Navbar } from "flowbite-react";
 import Image from "next/legacy/image";
@@ -10,9 +10,13 @@ import { IconContext } from 'react-icons'
 
 
 function ResponsiveAppBar() {
-  const { data: session }: any = useSession();
   const { cartCount } = useShoppingCart();
   const router = useRouter();
+  const [iconSize, setIconSize] = useState("1em"); // デフォルトはサーバーサイドと一致させる
+  useEffect(() => {
+    // クライアントサイドでのみ24pxに設定
+    setIconSize("24px");
+  }, []);
 
   return (
     <Navbar fluid rounded>
@@ -25,7 +29,7 @@ function ResponsiveAppBar() {
           HOME
         </Navbar.Link>
         <Navbar.Link className='cart-icon' href="/cart" active={router.pathname === '/cart'}>
-        <IconContext.Provider value={{ size: '24px' }}>
+        <IconContext.Provider value={{ size: iconSize }}>
           <FaShoppingCart />
           {cartCount! > 0 && (
           <span className="w-5 h-5 text-gray-100 bg-red-500 rounded-full">

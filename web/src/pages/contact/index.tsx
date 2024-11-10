@@ -49,7 +49,6 @@ function Contact() {
     }).then((res) => {
       if (res.status === 200) {
         setIsSuccess(true);
-        console.log("メース送信成功");
       }
     }).catch((err) => {
       alert("メール送信エラー。いらんことすな")

@@ -16,7 +16,6 @@ export async function POST(request: Request, response: Response) {
     images: string;
     postage: number;
   }
-  console.log("checkoutAry>>>>>>>>", checkoutAry);
   
   try {
     const line_items = checkoutAry.map((item: LineItem) => ({

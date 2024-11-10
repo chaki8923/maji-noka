@@ -37,12 +37,6 @@ export async function POST(req: Request) {
         const email = session.customer_details?.email;
         const metadata = session.metadata;
         var itemsArray = JSON.parse(metadata!.items);
-
-        console.log("itemsArray", itemsArray);
-
-
-        console.log("completeのmetadata!!", metadata);
-
         if (shippingDetails !== null) {
           // stripeに保存
           await stripe.customers.update(session.customer as string, {
@@ -203,19 +197,36 @@ export async function POST(req: Request) {
             text: customerMailText,
           };
 
-          Promise.all([
-            transporter.sendMail(adminMailOptions),
-            transporter.sendMail(customerMailOptions),
-          ])
-            .then((respose) => {
-              console.log("Email sent: " + respose);
-            })
-            .catch((error) => {
-              console.log("Email sent Error: " + error);
-              return NextResponse.json({
-                error_message: "メール送信失敗",
+          try {
+            const sendMail1 = await new Promise((resolve, reject) => {
+              transporter.sendMail(adminMailOptions, (error, info) => {
+                if (error) {
+                  reject(error); // エラーが発生した場合
+                } else {
+                  resolve(info); // 成功した場合
+                }
               });
             });
+          
+            const sendMail2 = await new Promise((resolve, reject) => {
+              transporter.sendMail(customerMailOptions, (error, info) => {
+                if (error) {
+                  reject(error); // エラーが発生した場合
+                } else {
+                  resolve(info); // 成功した場合
+                }
+              });
+            });
+          
+            console.log("Email sent:", sendMail1);
+            console.log("Email sent:", sendMail2);
+          
+          } catch (error) {
+            console.log("Email sent Error: ", error);
+            return NextResponse.json({
+              error_message: "メール送信失敗",
+            });
+          }
         }
 
         break;
