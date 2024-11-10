@@ -1,1 +1,7 @@
-@import "../../styles/common.scss";
+
+@media (max-width: 428px) {
+  .itemImage{
+    object-position: -68px center;
+    object-fit: contain;
+  }
+  }

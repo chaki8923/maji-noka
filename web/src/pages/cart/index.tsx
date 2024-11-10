@@ -17,10 +17,7 @@ function Cart() {
   const totalPriceVharacters = [...itemTotalPrice];
   totalPriceVharacters.forEach((char, index) => {
     console.log(`Character at index ${index}: ${char}`);
-  });
-
-  console.log("カート", items);
-  
+  });  
 
   const handleChange = (item: any, selectedQuantity: number) => {
     //一度消してから更新

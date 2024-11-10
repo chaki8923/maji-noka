@@ -57,11 +57,8 @@ export async function POST(
           });
         });
       
-        console.log("Email sent:", sendMail1);
-        console.log("Email sent:", sendMail2);
       
       } catch (error) {
-        console.log("Email sent Error: ", error);
         return NextResponse.json({
           error_message: "メール送信失敗",
         });

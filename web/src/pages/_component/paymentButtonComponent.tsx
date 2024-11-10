@@ -14,7 +14,6 @@ const Checkout: React.FC<PaymentProps> = ({ items, quantity }) => {
   const startCheckout = async (productId: string) => {
     try {
       const customerId = await createCustomerId({ items: [items] });
-      console.log("購入アイテム", items!)
       let checkoutAry
         checkoutAry = [{
           productId,

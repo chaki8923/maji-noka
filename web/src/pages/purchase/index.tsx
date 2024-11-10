@@ -12,8 +12,6 @@ export default function Purchase() {
 
     const { data: purchases } =
         trpc.purchase.getPurchaseByUserId.useQuery({ customerId: session?.user.id });
-    console.log("purchases", purchases);
-
     // ToDoを削除する処理
     const deletePurchase = async (id: string) => {
         try {

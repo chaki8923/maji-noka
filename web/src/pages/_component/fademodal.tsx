@@ -17,7 +17,6 @@ interface FadeModalProps {
 const Component: React.FC<FadeModalProps> = ({ isCart, setIsVisible, closeModal, message }) => {
   const [isVisible, setIsVisibleLocal] = useState(false);
   useEffect(() => {
-    console.log("useEffectisCart", isCart);
     // 親から渡された isCart の値が true の場合にローカルの isVisible も true に設定
     if (isCart) {
       setIsVisibleLocal(true);

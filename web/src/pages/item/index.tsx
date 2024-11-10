@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Card, Pagination } from 'flowbite-react';
 import Image from "next/image";
 import { Items } from '@/src/types';
+import styles from './index.module.scss';
 
 export default function Page() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -47,11 +48,11 @@ export default function Page() {
                       px-2
                       lg:grid-cols-3
                       sm:grid-cols-2 
-                      grid-cols-1
+                      grid-cols-2
                       mb-24 
                       justify-items-center 
                       md:px-5 
-                      gap-12
+                      gap-2
                       mx-auto
                       ">
           {products.map((item: Items, index: number) => (
@@ -60,7 +61,7 @@ export default function Page() {
                 className="w-full overflow-hidden relative rounded-none bg-transparent flow-card"
                 renderImage={() => {
                   if (item.image_path01) {
-                    return <div className='image-wrapper'><Image width={500} height={380} src={item.image_path01} alt={`image ${index}`} className="min-h-[240px] max-h-[240px] object-cover" /></div>;
+                    return <div className='image-wrapper'><Image width={500} height={380} src={item.image_path01} alt={`image ${index}`} className={`min-h-[240px] max-h-[240px] object-cover ${styles.itemImage}`} /></div>;
                   } else {
                     return <Image width={500} height={500} src="/default-image.jpg" alt="Default Image" className="h-[280px]" />;
                   }

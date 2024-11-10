@@ -12,7 +12,6 @@ import { trpc } from "@/src/utils/trpc";
 
 export default function Slider() {
     const { data } = trpc.slider.getItemById.useQuery({ id: 1 });
-    console.log("data",data);
 
     if (!data) {
         return 
