@@ -31,6 +31,11 @@ export const itemRouter = router({
     const items = await prisma.items.findMany({
       take: limit,
       skip: offset,
+      where: {
+        inventory: {
+          gt: 0, // 在庫が0より大きいものを取得
+        },
+      },
       orderBy: {
         created_at: 'desc', // 作成日の降順で並べ替え
       },
