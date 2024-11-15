@@ -40,7 +40,7 @@ export default function Page() {
       exit={{ opacity: 0 }}    // アンマウント時
       transition={{ duration: 1.3 }} //遅延実行y
     >
-      <h2 className='page-title'>商品リスト<span className='under-line'></span></h2>
+      <h2 className='page-title'>商品リスト</h2>
 
       <div className='lg:flex lg:justify-start'>
         <div className="
