@@ -4,7 +4,6 @@ require 'sequel'
 module CommandService
   class ItemCommand # rubocop:disable Style/Documentation
     DB = Sequel.connect(Rails.configuration.x.sequel[:db])
-  
     # 新規作成
     def create_db(
       name:,
@@ -69,8 +68,6 @@ module CommandService
     end
   
     def set_image_path(id:, image_path:, file_name:)
-      ## TODO：あとで消す
-      Rails.logger.debug "update入った---------------------------------#{file_name}"
       DB[:items]
       .where(
         id: id
