@@ -34,11 +34,18 @@
 
 # 開発用
 # syntax=docker/dockerfile:1
-FROM ruby:3.1.2
-RUN apt-get update -qq \
- && apt-get install -y nodejs postgresql-client npm \
- && rm -rf /var/lib/apt/lists/* \
- && npm install --global yarn
+FROM --platform=linux/x86_64 ruby:3.1.2
+
+# Node.jsとYarnのバージョンを指定
+ENV NODE_VERSION=14.x
+ENV YARN_VERSION=1.22.19
+
+# Node.jsとYarnのインストール
+RUN curl -sL https://deb.nodesource.com/setup_${NODE_VERSION} | bash - && \
+    apt-get update -qq && \
+    apt-get install -y nodejs postgresql-client
+
+# アプリケーションディレクトリの作成
 WORKDIR /api
 COPY /api/Gemfile /api/Gemfile
 COPY /api/Gemfile.lock /api/Gemfile.lock
