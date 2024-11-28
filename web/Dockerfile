@@ -1,22 +1,17 @@
-<<<<<<< HEAD
 # ベースイメージの設定
 FROM --platform=linux/amd64 node:18-alpine AS base
-=======
-# # ベースイメージの設定
-# FROM --platform=linux/amd64 node:18-alpine AS base
->>>>>>> origin/main
 
-# # 作業ディレクトリの設定
-# WORKDIR /web
+# 作業ディレクトリの設定
+WORKDIR /web
 
-# # package.jsonとyarn.lockをコピー
-# COPY package.json ./
+# package.jsonとyarn.lockをコピー
+COPY package.json ./
 
-# # 必要な依存関係をインストール
-# RUN npm install
+# 必要な依存関係をインストール
+RUN npm install
 
-# # prismaのファイルをコピー
-# COPY prisma ./prisma/
+# prismaのファイルをコピー
+COPY prisma ./prisma/
 
 # ソースコードをコピー
 COPY . .

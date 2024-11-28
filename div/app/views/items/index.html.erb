@@ -8,7 +8,9 @@
           <img src="<%= it[:image_path01] %>" class="card-img-top" alt="...">
           <div class="card-body">
             <h5 class="card-title"><%= it[:name] %></h5>
-            <%= button_to "削除", delete_item_path(it[:id]), { method: :delete, form: { data: { turbo_confirm: "本当に削除しますか？" } }, class: 'btn btn-secondary delete-button' } %>
+            <%= form_with url: delete_item_path(it[:id]), method: :post, data: { turbo_confirm: "本当に削除しますか？" }, local: true, class: 'delete-form' do %>
+              <%= submit_tag "削除", class: 'btn btn-secondary delete-button' %>
+            <% end %>
           </div>
         </a>
       <% end %>

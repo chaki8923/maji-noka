@@ -51,8 +51,8 @@ export async function POST(request: Request, response: Response) {
         allowed_countries: ["JP"],
       },
       mode: "payment",
-      success_url: `${baseUrl}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${baseUrl}`,
+      success_url: `https://web.maji-noka.com/payment/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `https://web.maji-noka.com`,
     });
     return NextResponse.json({
       checkout_url: session.url,

@@ -16,7 +16,6 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
     item_images_upload(item_params, s3resource, res.first[:id])
     render json: { value: nil, success_message: SystemMessage::API_SUCCESS }
   rescue => err_message
-    Rails.logger.debug "err_message---------------------------------#{err_message}"
     Rails.logger.debug "Backtrace: #{err_message.backtrace.join("\n")}"
     render json: {value: nil, err_message: err_message}, status: :internal_server_error
   end
@@ -26,22 +25,13 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
     s3resource = get_s3_resource(ACCESS_KEY, SECRET_KEY, REGION)
     res = item.update
     item_images_upload(item_params, s3resource, res.first[:id])
-    # image_count = object_count(res.first[:id])
-    # item.update_image_count(res.first[:id], image_count)
     render json: { value: nil, success_message: SystemMessage::API_SUCCESS }
   rescue => err_message
-    ## TODO:Chakiあとで消す
-    Rails.logger.debug "err_message---------------------------------#{err_message}"
     render json: {value: nil, err_message: err_message}, status: :internal_server_error
   end
 
   def index
     res = Item.index
-    # s3resource = get_s3_resource(ACCESS_KEY, SECRET_KEY, REGION)
-    # signer = Aws::S3::Presigner.new(client: s3resource.client)
-    # res.map do |d|
-    #   d[:image] = item_first_image(signer, d)
-    # end
 
     render json: res
   end
@@ -66,9 +56,12 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
     object_key = "item/#{params['id']}/"
     delete_item = Item.find(params['id'])
     res = Item.delete(delete_item[:id])
+    Rails.logger.debug "res---------------------------------#{res}"
     s3_delete(s3resource, object_key)
     render json: res[0]
   rescue => err_message
+    ## TODO:Chakiあとで消す
+    Rails.logger.debug "err_message---------------------------------#{err_message}"
     render json: {value: nil, err_message: err_message}, status: :internal_server_error
   end
 
@@ -170,6 +163,7 @@ class ItemsController < ApplicationController # rubocop:disable Style/Documentat
 
     target_s3_directory.batch_delete!
   rescue Aws::S3::Errors::ServiceError => e
+    Rails.logger.debug "s3エラー---------------------------------#{e.message}"
     render json: {value: nil, err_message: "オブジェクトの削除中にエラーが発生しました：#{e.message}"}, status: :not_found
   end
 

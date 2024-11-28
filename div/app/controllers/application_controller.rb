@@ -12,7 +12,6 @@ class ApplicationController < ActionController::Base # rubocop:disable Style/Doc
       redirect_to login_path and return
     else
       @current_user = session[:user]
-      Rails.logger.info "ユーザー情報---------------------------------#{@current_user}"
     end
   end
 
