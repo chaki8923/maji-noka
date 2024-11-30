@@ -1,6 +1,10 @@
+import Head from 'next/head';
 export default function policy() {
   return (
     <>
+      <Head>
+        <title>田中本気農家 | プライバシーポリシー</title>
+      </Head>
       <div className="policy-title">
         <h1 className="text-3xl not-italic">プライバシーポリシー</h1>
       </div>

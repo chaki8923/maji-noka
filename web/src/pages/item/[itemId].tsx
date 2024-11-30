@@ -7,6 +7,7 @@ import { Select, Button } from 'flowbite-react';
 import { Autoplay, Navigation, Pagination, Thumbs, FreeMode, EffectFade } from "swiper/modules";
 import { Swiper, SwiperSlide, SwiperClass } from "swiper/react";
 import Image from "next/legacy/image";
+import Head from 'next/head';
 import { useShoppingCart } from 'use-shopping-cart'
 import FadeModal from '../_component/fademodal';
 
@@ -30,7 +31,7 @@ export default function Item() {
   }, {
     enabled: itemId !== null, // idがnullでない場合にのみクエリを実行
   });
-  
+
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const quantity = parseInt(event.target.value, 10); //数値に変換
     setorderQuantity(quantity); // 選択された値をステートに設定
@@ -68,6 +69,25 @@ export default function Item() {
     data.image_path04
   ].filter(path => path);
 
+  const structuredData = {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    name: data.name,
+    description: data.description,
+    "image": [
+      data.image_path01,
+      data.image_path02,
+      data.image_path03,
+      data.image_path04
+    ],
+    offers: {
+      "@type": "Offer",
+      priceCurrency: "JPY",
+      price: data.price,
+      availability: "InStock",
+      url: `https://web.maji-noka/item/${data.id}`,
+    },
+  };
 
   return (
     <motion.div
@@ -76,9 +96,17 @@ export default function Item() {
       exit={{ opacity: 0 }}    // アンマウント時
       transition={{ duration: 1.3 }} //遅延実行
     >
+      <Head>
+        <title>田中本気農家 | {data.name}購入画面</title>
+        <meta name="description" content={`${data.name}購入画面です。${data.description}`} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+      </Head>
       <div className='lg:flex pt-3 overflow-hidden w-full justify-center pb-10'>
         {isCart ?
-          <FadeModal isCart={isCart} setIsVisible={setIsVisible} closeModal={closeModal} message="カートに追加しました"/> : null}
+          <FadeModal isCart={isCart} setIsVisible={setIsVisible} closeModal={closeModal} message="カートに追加しました" /> : null}
 
         <div className='lg:flex w-full'>
           <div className='lg:w-[70%] w-full'>

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from "next/link";
 import { Card, Pagination } from 'flowbite-react';
 import Image from "next/image";
+import Head from 'next/head';
 import { Items } from '@/src/types';
 import styles from './index.module.scss';
 
@@ -33,6 +34,33 @@ export default function Page() {
     return;
   }
 
+  const itemListElement = products.map((product: Items, index: number) => ({
+    "@type": "ListItem",
+    "position": index + 1, // リストの順序
+    "item": {
+      "@type": "Product",
+      "name": product.name,
+      "image": product.image_path01,
+      "description": product.description,
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "JPY",
+        "price": product.price,
+        "availability": `InStock`,
+        "url":  `https://web.maji-noka.com/item/${product.id}/`,
+      },
+    },
+  }));
+
+  const structuredData = {
+    "@context": "https://schema.org/",
+    "@type": "ItemList",
+    description: "埼玉県熊谷市の激アツ農家の本気の商品",
+    name: "商品一覧ページ",
+   "itemListElement": itemListElement
+  };
+  
+
   return (
     <motion.div
       initial={{ opacity: 0 }} // 初期状態
@@ -40,6 +68,13 @@ export default function Page() {
       exit={{ opacity: 0 }}    // アンマウント時
       transition={{ duration: 1.3 }} //遅延実行y
     >
+       <Head>
+        {/* 構造化マークアップをJSON-LDで埋め込む */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+      </Head>
       <h2 className='page-title'>商品リスト</h2>
 
       <div className='lg:flex lg:justify-start'>

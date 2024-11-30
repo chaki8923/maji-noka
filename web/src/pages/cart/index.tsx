@@ -5,9 +5,10 @@ import Link from "next/link";
 import Payment from "../_component/paymentButtonComponent";
 import CartPayment from "../_component/Tranfer";
 import { useRouter } from 'next/router';
-import { TbArrowBackUp } from "react-icons/tb";
 import Image from "next/legacy/image";
 import { useShoppingCart } from 'use-shopping-cart'
+import Head from "next/head";
+
 
 function Cart() {
   const router = useRouter();
@@ -17,7 +18,7 @@ function Cart() {
   const totalPriceVharacters = [...itemTotalPrice];
   totalPriceVharacters.forEach((char, index) => {
     console.log(`Character at index ${index}: ${char}`);
-  });  
+  });
 
   const handleChange = (item: any, selectedQuantity: number) => {
     //一度消してから更新
@@ -49,6 +50,9 @@ function Cart() {
       exit={{ opacity: 0 }}    // アンマウント時
       transition={{ duration: 1 }}
     >
+      <Head>
+        <title>田中本気農家 | カートの中身</title>
+      </Head>
 
       <div className='flex gap-4 sm:p-8 p-2 flex-wrap ls:justify-normal justify-between'>
         <div className='md:w-[60%] w-full'>

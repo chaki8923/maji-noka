@@ -4,6 +4,7 @@ import { ContactFormSchema, ContactFormType } from '@/schemas/ContactFormSchema'
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import FadeModal from '../_component/fademodal';
+import Head from "next/head";
 
 function Contact() {
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
@@ -51,7 +52,7 @@ function Contact() {
         setIsSuccess(true);
       }
     }).catch((err) => {
-      alert("メール送信エラー。いらんことすな")
+      alert("メール送信エラー。もう一度お試しください")
     })
   };
 
@@ -67,9 +68,12 @@ function Contact() {
       exit={{ opacity: 0 }}    // アンマウント時
       transition={{ duration: 1.3 }} //遅延実行
     >
+      <Head>
+        <title>田中本気農家 | お問い合わせ</title>
+      </Head>
       <div className="min-h-screen flex justify-center items-center bg-gray-100">
         {isSuccess ?
-          <FadeModal isCart={isSuccess} setIsVisible={setIsVisible} closeModal={closeModal} message="メッセージを送信しました"/> : null}
+          <FadeModal isCart={isSuccess} setIsVisible={setIsVisible} closeModal={closeModal} message="メッセージを送信しました" /> : null}
         <div className="bg-white p-8 rounded-lg shadow-md w-96">
           <h2 className="text-2xl mb-4 text-gray-800 text-center text-bold">お問い合わせ</h2>
           <FormProvider {...methods}>
