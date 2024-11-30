@@ -4,11 +4,14 @@ import { ContactFormSchema, ContactFormType } from '@/schemas/ContactFormSchema'
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import FadeModal from '../_component/fademodal';
+import { Spinner } from "flowbite-react";
 import Head from "next/head";
+import styles from './index.module.scss';
 
 function Contact() {
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const methods = useForm<ContactFormType>({
     mode: 'onBlur',
     resolver: zodResolver(ContactFormSchema)
@@ -39,6 +42,7 @@ function Contact() {
       subject: params.subject,
       message: params.message,
     };
+    setIsLoading(true)
     reset();
     await fetch(`/api/sendmail`, {
       method: "POST",
@@ -49,6 +53,7 @@ function Contact() {
       body: JSON.stringify(data),
     }).then((res) => {
       if (res.status === 200) {
+        setIsLoading(false)
         setIsSuccess(true);
       }
     }).catch((err) => {
@@ -68,6 +73,7 @@ function Contact() {
       exit={{ opacity: 0 }}    // アンマウント時
       transition={{ duration: 1.3 }} //遅延実行
     >
+      <Spinner aria-label="Default status example" className={`${isLoading ? styles.spinner : styles.none}`} />
       <Head>
         <title>田中本気農家 | お問い合わせ</title>
       </Head>
