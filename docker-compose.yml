@@ -54,6 +54,8 @@ services:
     build:
       context: .
       dockerfile: ./api/Dockerfile
+    env_file:
+      - ./api/.env
     container_name: api
     working_dir: /api
     # tmp/pids/server.pidが残ってたら `A server is already running. ~~` のエラーでrailsを起動できないので事前に消してから、`rails sever` する

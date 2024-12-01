@@ -1,6 +1,7 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
+
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded any time
@@ -70,8 +71,8 @@ Rails.application.configure do
     port:                 587,
     address:              'smtp.gmail.com',
     domain:               'gmail.com',
-    # user_name:            Rails.application.credentials[:mail][:username],
-    # password:             Rails.application.credentials[:mail][:password],
+    user_name:            ENV['GMAIL_ADDRESS'],
+    password:             ENV['GMAIL_PASSWORD'],
     authentication:       'login'
   }
 

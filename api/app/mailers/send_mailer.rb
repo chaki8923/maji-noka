@@ -6,15 +6,11 @@ class SendMailer < ApplicationMailer
     @subject = "商品配送のお知らせ"
     @postal_code = params[:postal_code]
     @address = "#{params[:state]}#{params[:line1]}#{params[:line2]}"
-    @contact_form = "http://localhost:3000/contact"
-    ## TODO：あとで消す
-    Rails.logger.debug "@contact_form---------------------------------#{@contact_form}"
+    @contact_form = "https://web.maji-noka.com/contact"
     mail(to: @email, subject: @subject)
   end
 
   def bulk_send_email
-    ## TODO：あとで消す
-    Rails.logger.debug "bulk_params---------------------------------#{params}"
     @email = params.first[:email]
     @items = []
     params.each do |p|
@@ -23,7 +19,7 @@ class SendMailer < ApplicationMailer
     @subject = "商品配送のお知らせ"
     @postal_code = params.first[:postal_code]
     @address = "#{params.first[:state]}#{params.first[:line1]}#{params.first[:line2]}"
-    @contact_form = "http://localhost:3000/contact"
+    @contact_form = "https://web.maji-noka.com/contact"
     mail(to: @email, subject: @subject)
   end
 end

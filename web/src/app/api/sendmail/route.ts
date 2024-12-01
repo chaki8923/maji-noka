@@ -33,7 +33,7 @@ export async function POST(
         from: `田中本気農家<${process.env.MAJIUSER}>`, //　送信元メールアドレス
         to: process.env.MAJIUSER, //　送信先メールアドレス
         subject: 'お問合せがあります',
-        text: `下記アドレスよりお問合せがあります。\n\n${email} \nお問合せ内容\n${message}`,
+        text: `下記アドレスよりお問合せがあります。\n\n お名前：${name}様\n\n${email} \nお問合せ内容\n${message}`,
       }
       // Promise.all([mailer.sendMail(mailOptions1), mailer.sendMail(mailOptions2)])
       try {

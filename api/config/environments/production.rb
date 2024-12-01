@@ -29,7 +29,7 @@ Rails.application.configure do
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
   config.assets.compile = false
-   config.s3_bucket = "maji-image-pro"
+  config.s3_bucket = "maji-image-pro"
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = "http://assets.example.com"
@@ -40,6 +40,7 @@ Rails.application.configure do
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
+
 
   # Mount Action Cable outside main process or domain.
   # config.action_cable.mount_path = nil
@@ -64,6 +65,25 @@ Rails.application.configure do
   # config.active_job.queue_name_prefix = "api_production"
 
   config.action_mailer.perform_caching = false
+  # メール送信元のURL設定（本番環境のドメインを指定）
+  config.action_mailer.default_url_options = { host: 'http://maji-api.local:3000/', protocol: 'https' }
+
+  # 配信方法の設定
+  config.action_mailer.delivery_method = :smtp
+
+  # メール送信のエラーを表示（ログに記録）する設定
+  config.action_mailer.raise_delivery_errors = true
+
+  # SMTP 設定
+  config.action_mailer.smtp_settings = {
+    port:                 587,
+    address:              'smtp.gmail.com', # Gmailの場合
+    domain:               'your-domain.com', # メール送信者のドメイン
+    user_name:            ENV['GMAIL_ADDRESS'], # 環境変数に保存
+    password:             ENV['GMAIL_PASSWORD'], # 環境変数に保存
+    authentication:       'login',
+    enable_starttls_auto: true # TLSの使用を有効化
+  }
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
