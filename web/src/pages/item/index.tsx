@@ -47,7 +47,7 @@ export default function Page() {
         "priceCurrency": "JPY",
         "price": product.price,
         "availability": `InStock`,
-        "url":  `https://web.maji-noka.com/item/${product.id}/`,
+        "url": `https://web.maji-noka.com/item/${product.id}/`,
       },
     },
   }));
@@ -57,9 +57,9 @@ export default function Page() {
     "@type": "ItemList",
     description: "埼玉県熊谷市の激アツ農家の本気の商品",
     name: "商品一覧ページ",
-   "itemListElement": itemListElement
+    "itemListElement": itemListElement
   };
-  
+
 
   return (
     <motion.div
@@ -68,7 +68,7 @@ export default function Page() {
       exit={{ opacity: 0 }}    // アンマウント時
       transition={{ duration: 1.3 }} //遅延実行y
     >
-       <Head>
+      <Head>
         {/* 構造化マークアップをJSON-LDで埋め込む */}
         <script
           type="application/ld+json"
@@ -91,7 +91,32 @@ export default function Page() {
                       mx-auto
                       ">
           {products.map((item: Items, index: number) => (
-            <Link href={`item/${item.id}`} key={item.id} className='sm:mb-8 w-full flex justify-center sm:w-[360px] item-card'>
+            item.inventory > 0 ? (
+              <Link href={`item/${item.id}`} key={item.id} className='sm:mb-8 w-full flex justify-center sm:w-[360px] item-card'>
+                <Card
+                  className="w-full overflow-hidden relative rounded-none bg-transparent flow-card"
+                  renderImage={() => {
+                    if (item.image_path01) {
+                      return <div className='image-wrapper'><Image width={500} height={380} src={item.image_path01} alt={`image ${index}`} className={`min-h-[240px] max-h-[240px] object-cover ${styles.itemImage}`} /></div>;
+                    } else {
+                      return <Image width={500} height={500} src="/default-image.jpg" alt="Default Image" className="h-[280px]" />;
+                    }
+                  }}
+                >
+                  {item.maji_flag && (
+                    <span className="absolute top-0 left-0 bg-red-100 text-red-800 font-medium me-2 p-2 rounded dark:bg-gray-700 dark:text-red-300 border border-red-300">新入荷！</span>
+                  )}
+
+                  <h5 className="text-2xl tracking-tight text-gray-900 dark:text-white item-title text-center">
+                    {item.name}
+                  </h5>
+                  <p className="font-normal text-gray-700 dark:text-gray-400 text-center">
+                    {item.price.toLocaleString()}円
+                  </p>
+                </Card>
+
+              </Link>
+            ) : (//在庫がない場合
               <Card
                 className="w-full overflow-hidden relative rounded-none bg-transparent flow-card"
                 renderImage={() => {
@@ -102,10 +127,11 @@ export default function Page() {
                   }
                 }}
               >
-                {item.maji_flag && (
-                  <span className="absolute top-0 left-0 bg-red-100 text-red-800 font-medium me-2 p-2 rounded dark:bg-gray-700 dark:text-red-300 border border-red-300">新入荷！</span>
-                )}
-
+                <Image src="/soldout.png"
+                  height={250}
+                  width={250}
+                  className={`${styles.soldOut}`}
+                  alt="売り切れ" />
                 <h5 className="text-2xl tracking-tight text-gray-900 dark:text-white item-title text-center">
                   {item.name}
                 </h5>
@@ -114,7 +140,7 @@ export default function Page() {
                 </p>
               </Card>
 
-            </Link>
+            )
           ))}
         </div>
       </div>

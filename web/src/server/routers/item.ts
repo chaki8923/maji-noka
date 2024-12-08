@@ -31,11 +31,6 @@ export const itemRouter = router({
     const items = await prisma.items.findMany({
       take: limit,
       skip: offset,
-      where: {
-        inventory: {
-          gt: 0, // 在庫が0より大きいものを取得
-        },
-      },
       orderBy: {
         created_at: 'desc', // 作成日の降順で並べ替え
       },
@@ -62,14 +57,16 @@ export const itemRouter = router({
     .query(async ({ input }) => {
       // 指定されたIDのitemをデータベースから取得します。
       const item = await prisma.items.findUnique({
-        where: { id: input.id },
+        where: {
+          id: input.id
+        },
       });
 
       // itemが見つからない場合、エラーをスローします。
       if (!item) {
         throw new Error("item not found");
       }
- 
+
 
       // 取得したitemをCartItemに変換して返します。
       const cartItem: CartItem = {

@@ -16,8 +16,6 @@ function Cart() {
   const { addItem, cartDetails, removeItem, formattedTotalPrice, cartCount, totalPrice } = useShoppingCart();
   const items = Object.values(cartDetails ?? {}).map((entry) => entry);
   const totalPostage = items.reduce((sum, item) => sum + item.postage, 0);
-  console.log(items);
-  console.log(totalPostage);
   
   const realTotalPrice = totalPrice! + totalPostage;
   const itemTotalPrice = realTotalPrice!.toLocaleString();

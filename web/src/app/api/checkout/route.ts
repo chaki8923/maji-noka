@@ -15,9 +15,19 @@ export async function POST(request: Request, response: Response) {
     description: number;
     images: string;
     postage: number;
+    inventory: number;
   }
-  
+
   try {
+    const outOfStockItems = checkoutAry.filter((item: LineItem) => item.inventory === 0 || item.quantity > item.inventory);
+
+    console.log("checkoutAry", checkoutAry);
+    console.log("outOfStockItems", outOfStockItems);
+    
+    if (outOfStockItems.length > 0) {
+      throw new Error(
+        `在庫が不足している商品があります: ${outOfStockItems.map((item: LineItem) => item.title).join(", ")}`);
+    }
     const line_items = checkoutAry.map((item: LineItem) => ({
       price_data: {
         currency: "jpy",
@@ -30,26 +40,26 @@ export async function POST(request: Request, response: Response) {
       },
       quantity: item.quantity
     })
-  );
-   // 送料を別のline_itemとして追加
-   const postage = checkoutAry.reduce((total: number, item: LineItem) => total + (item.postage || 0), 0); // postageの合計を計算
-   if (postage > 0) {
-     line_items.push({
-       price_data: {
-         currency: "jpy",
-         product_data: {
-           name: "送料", // 送料の名前
-         },
-         unit_amount: postage, // 合計送料
-       },
-       quantity: 1,
-     });
-   }
+    );
+    // 送料を別のline_itemとして追加
+    const postage = checkoutAry.reduce((total: number, item: LineItem) => total + (item.postage || 0), 0); // postageの合計を計算
+    if (postage > 0) {
+      line_items.push({
+        price_data: {
+          currency: "jpy",
+          product_data: {
+            name: "送料", // 送料の名前
+          },
+          unit_amount: postage, // 合計送料
+        },
+        quantity: 1,
+      });
+    }
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       customer: checkoutAry[0].customerId,
       line_items: [
-       ...line_items
+        ...line_items
       ],
       // カード決済時の住所入力をstripeに任せます
       billing_address_collection: "auto",
@@ -61,7 +71,7 @@ export async function POST(request: Request, response: Response) {
           price: item.price,
           postage: item.postage
         })
-      ))
+        ))
       },
       shipping_address_collection: {
         allowed_countries: ["JP"],

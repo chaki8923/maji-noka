@@ -26,7 +26,7 @@ export default function Item() {
   const [orderQuantity, setorderQuantity] = useState<number>(1);
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null);
   const itemId = typeof router.query.itemId === 'string' ? parseInt(router.query.itemId, 10) : null;
-  const { addItem } = useShoppingCart();
+  const { addItem, cartDetails } = useShoppingCart();
   const { data } = trpc.item.getItemById.useQuery({
     id: itemId ?? 0, // idがnullの場合は0を使用
   }, {
@@ -58,11 +58,13 @@ export default function Item() {
     }
   }, [data, router]);
 
-
   if (!data) {
     return
   }
-
+  
+  if(data.inventory == 0){
+    router.push('/'); // トップ画面に遷移
+  }
   const image_paths = [
     data.image_path01,
     data.image_path02,
@@ -200,6 +202,7 @@ export default function Item() {
                       price: data.price,
                       removePostagePrice: data.price,
                       postage: data.postage,
+                      inventory: data.inventory,
                       currency: 'JPY',
                       image_path01: data.image_path01,
                     }, { count: orderQuantity });

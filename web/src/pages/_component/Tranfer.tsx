@@ -14,9 +14,7 @@ const Checkout: React.FC<Partial<PaymentProps>> = () => {
   const { cartDetails, clearCart } = useShoppingCart();
   const router = useRouter();
   const items: any = Object.values(cartDetails ?? {}).map((entry) => entry);
-  console.log("items", items);
   
-
   const allClearCart = () => {
     clearCart();
   }
@@ -34,6 +32,7 @@ const Checkout: React.FC<Partial<PaymentProps>> = () => {
           postage: item.postage,
           quantity: item.quantity,
           description: item.description,
+          inventory: item.inventory,
           images: item.image_path01,
           customerId
         }));
@@ -50,8 +49,8 @@ const Checkout: React.FC<Partial<PaymentProps>> = () => {
         sessionStorage.setItem("stripeSessionId", responseData.session_id);
         router.push(responseData.checkout_url);
       
-      } else {
-        alert("エラーが発生しました")
+      } else {        
+        alert(`${responseData.message}`)
       }
 
     } catch (err) {

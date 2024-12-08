@@ -8,8 +8,7 @@ type PaymentProps = {
 };
 
 const Checkout: React.FC<PaymentProps> = ({ items, quantity }) => {
-  const router = useRouter();
-  
+  const router = useRouter();  
   //stripe checkout
   const startCheckout = async (productId: string) => {
     try {
@@ -21,6 +20,7 @@ const Checkout: React.FC<PaymentProps> = ({ items, quantity }) => {
           price: items!.price,
           postage: items!.postage,
           quantity: quantity,
+          inventory: items!.inventory,
           description: items.description,
           customerId: customerId,
           images: items.image_path01
@@ -39,11 +39,11 @@ const Checkout: React.FC<PaymentProps> = ({ items, quantity }) => {
         router.push(responseData.checkout_url);
       
       } else {
-        alert("エラーが発生しました")
+        console.error("Error in 決済！:", responseData)
+        alert(`${responseData.message}`)
       }
 
-    } catch (err) {
-      console.error("Error in 決済！:", err);
+    } catch (err) {;
       alert(err)
     }
   };
