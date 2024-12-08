@@ -10,6 +10,7 @@ import Image from "next/legacy/image";
 import Head from 'next/head';
 import { useShoppingCart } from 'use-shopping-cart'
 import FadeModal from '../_component/fademodal';
+import { CartEntry } from "use-shopping-cart/core";
 import styles from './index.module.scss';
 
 import 'swiper/css';
@@ -53,7 +54,12 @@ export default function Item() {
       const timer = setTimeout(() => {
         router.push('/'); // トップ画面に遷移
       }, 5000); // 5秒後に遷移
-
+      console.log("cartDetails", cartDetails);
+      if(cartDetails){
+       
+        
+      }
+      
       return () => clearTimeout(timer); // クリーンアップ用
     }
   }, [data, router]);
