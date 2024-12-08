@@ -10,6 +10,7 @@ import Image from "next/legacy/image";
 import Head from 'next/head';
 import { useShoppingCart } from 'use-shopping-cart'
 import FadeModal from '../_component/fademodal';
+import styles from './index.module.scss';
 
 import 'swiper/css';
 import 'swiper/css/free-mode';
@@ -162,11 +163,11 @@ export default function Item() {
               </div>
               <div className="text-group mb-6">
                 <h2 className='font-bold text-lg'>価格</h2>
-                <p className='text-gray-900'>{data.price.toLocaleString()}円</p>
+                <p className='text-gray-900'>¥ {data.price.toLocaleString()} <span className={`${styles.priceTaxText}`}>税込</span></p>
               </div>
               <div className="text-group mb-6">
-                <h2 className='font-bold text-lg'>在庫</h2>
-                <p className='text-gray-900'>{data.inventory}個</p>
+                <h2 className='font-bold text-lg'>送料</h2>
+                <p className='text-gray-900'>¥ {data.postage}</p>
                 <span className='text-xs'>ご購入のタイミングによっては表示在庫よりも少ない場合があります</span>
               </div>
             </div>
@@ -197,6 +198,8 @@ export default function Item() {
                       description: data.description,
                       id: data.id,
                       price: data.price,
+                      removePostagePrice: data.price,
+                      postage: data.postage,
                       currency: 'JPY',
                       image_path01: data.image_path01,
                     }, { count: orderQuantity });

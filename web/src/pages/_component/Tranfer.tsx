@@ -14,7 +14,8 @@ const Checkout: React.FC<Partial<PaymentProps>> = () => {
   const { cartDetails, clearCart } = useShoppingCart();
   const router = useRouter();
   const items: any = Object.values(cartDetails ?? {}).map((entry) => entry);
-
+  console.log("items", items);
+  
 
   const allClearCart = () => {
     clearCart();
@@ -30,13 +31,14 @@ const Checkout: React.FC<Partial<PaymentProps>> = () => {
           productId: item.id,
           title: item.name,
           price: item.price,
+          postage: item.postage,
           quantity: item.quantity,
           description: item.description,
           images: item.image_path01,
           customerId
         }));
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/checkout`,
+        `/api/checkout`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

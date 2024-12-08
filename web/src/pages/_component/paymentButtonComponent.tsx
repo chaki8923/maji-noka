@@ -26,7 +26,7 @@ const Checkout: React.FC<PaymentProps> = ({ items, quantity }) => {
           images: items.image_path01
         }]
       const response = await fetch(
-        `https://web.maji-noka.com/api/checkout`,
+        `/api/checkout`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

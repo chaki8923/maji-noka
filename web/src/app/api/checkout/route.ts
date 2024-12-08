@@ -28,8 +28,23 @@ export async function POST(request: Request, response: Response) {
         },
         unit_amount: item.price,
       },
-      quantity: item.quantity,
-    }));
+      quantity: item.quantity
+    })
+  );
+   // 送料を別のline_itemとして追加
+   const postage = checkoutAry.reduce((total: number, item: LineItem) => total + (item.postage || 0), 0); // postageの合計を計算
+   if (postage > 0) {
+     line_items.push({
+       price_data: {
+         currency: "jpy",
+         product_data: {
+           name: "送料", // 送料の名前
+         },
+         unit_amount: postage, // 合計送料
+       },
+       quantity: 1,
+     });
+   }
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       customer: checkoutAry[0].customerId,
@@ -45,7 +60,8 @@ export async function POST(request: Request, response: Response) {
           quantity: item.quantity,
           price: item.price,
           postage: item.postage
-        })))
+        })
+      ))
       },
       shipping_address_collection: {
         allowed_countries: ["JP"],
