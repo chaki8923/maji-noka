@@ -37,6 +37,9 @@ gem 'net-http'
 
 gem 'rack-cors'
 
+gem 'slack-notifier'
+gem'exception_notification'
+
 # gem 'sequel-rails'
 
 gem 'jquery-rails'

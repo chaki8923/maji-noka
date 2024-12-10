@@ -5,6 +5,9 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root 'admin_user#new'
+  # エラーページテスト用
+  # get '*path', to: 'application#render_500'
+  # get '*path', to: 'application#render_404'
 
   scope 'admin_user' do
     get '/new', to: 'admin_user#new', as: 'admin_new'
