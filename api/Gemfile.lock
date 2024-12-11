@@ -1452,6 +1452,9 @@ GEM
     diff-lcs (1.5.1)
     dotenv (2.8.1)
     erubi (1.11.0)
+    exception_notification (4.5.0)
+      actionmailer (>= 5.2, < 8)
+      activesupport (>= 5.2, < 8)
     factory_bot (6.4.6)
       activesupport (>= 5.0.0)
     factory_bot_rails (6.4.3)
@@ -1572,6 +1575,7 @@ GEM
       activemodel (>= 4.0.0)
       railties (>= 4.0.0)
       sequel (>= 3.28, < 6.0)
+    slack-notifier (2.4.0)
     sprockets (4.1.1)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
@@ -1619,6 +1623,7 @@ DEPENDENCIES
   carrierwave (~> 2.0)
   debug
   dotenv
+  exception_notification
   factory_bot_rails
   faker
   importmap-rails
@@ -1631,6 +1636,7 @@ DEPENDENCIES
   rspec-rails (~> 4.0.1)
   selenium-webdriver
   sequel-rails
+  slack-notifier
   sprockets-rails
   stimulus-rails
   turbo-rails
