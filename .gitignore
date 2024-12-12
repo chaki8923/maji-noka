@@ -9,6 +9,6 @@
 /div/.env
 /api/.env
 /web/.env
-
+/web/node_modules
 # rspec failure tracking
 .rspec_status

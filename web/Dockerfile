@@ -1,5 +1,6 @@
 # ベースイメージの設定
 FROM --platform=linux/amd64 node:18-alpine AS base
+RUN apk add --no-cache openssl
 
 # 作業ディレクトリの設定
 WORKDIR /web

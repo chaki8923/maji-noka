@@ -118,6 +118,7 @@ export default function Page() {
               </Link>
             ) : (//在庫がない場合
               <Card
+                key={item.id}
                 className="w-full overflow-hidden relative rounded-none bg-transparent flow-card"
                 renderImage={() => {
                   if (item.image_path01) {
