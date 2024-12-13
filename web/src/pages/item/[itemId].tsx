@@ -176,7 +176,6 @@ export default function Item() {
               <div className="text-group mb-6">
                 <h2 className='font-bold text-lg'>送料</h2>
                 <p className='text-gray-900'>¥ {data.postage}</p>
-                <span className='text-xs'>ご購入のタイミングによっては表示在庫よりも少ない場合があります</span>
               </div>
             </div>
             <div className='w-[50%] lg:w-auto p-10 xl:p-0 item-info__inner'>
