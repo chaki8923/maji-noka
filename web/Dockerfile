@@ -1,5 +1,5 @@
 # ベースイメージの設定
-FROM --platform=linux/amd64 node:18-alpine AS base
+FROM --platform=linux/amd64 node:20-alpine3.20 AS base
 RUN apk add --no-cache openssl
 
 # 作業ディレクトリの設定
@@ -9,7 +9,7 @@ WORKDIR /web
 COPY package.json ./
 
 # 必要な依存関係をインストール
-RUN npm install
+RUN npm install -g --os=linux --cpu=x64 sharp
 
 # prismaのファイルをコピー
 COPY prisma ./prisma/
@@ -23,7 +23,7 @@ ENV NODE_ENV=production
 RUN npm run build
 
 # 実行環境のイメージを構築
-FROM --platform=linux/amd64 node:18-alpine AS production
+FROM --platform=linux/amd64 node:20-alpine3.20 AS production
 
 # 作業ディレクトリの設定
 WORKDIR /web

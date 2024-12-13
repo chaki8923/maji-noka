@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
-  root 'admin_user#new'
+  root 'admin_user#login'
   # エラーページテスト用
   # get '*path', to: 'application#render_500'
   # get '*path', to: 'application#render_404'
