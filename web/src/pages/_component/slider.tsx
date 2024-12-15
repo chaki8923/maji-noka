@@ -37,7 +37,7 @@ export default function Slider() {
                 {data.images.map((src: string, index: number) => (
                     <SwiperSlide key={index}>
                         {src ? 
-                        <Image src={src} alt="スライダー" layout="fill" className="parallax-image" /> : null
+                        <Image src={src} alt="スライダー" layout="fill" className="parallax-image mainPic" /> : null
                         }
                     </SwiperSlide>
 
