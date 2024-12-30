@@ -115,7 +115,7 @@ export async function POST(req: Request) {
               subject: "購入情報更新時にエラーが発生しました",
               text: `購入情報をstripeで直接確認してください。エラーを確認してください=>${error}`,
             };
-            // const info = await transporter.sendMail(errorMailOptions);
+            await transporter.sendMail(errorMailOptions);
             console.error("トランザクションエラー", error);
           } finally {
             await prisma.$connect();

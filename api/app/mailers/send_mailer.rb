@@ -1,6 +1,9 @@
 class SendMailer < ApplicationMailer
 
   def send_email
+    ## TODO：あとで消す
+    Rails.logger.debug " 入った---------------------------------#{ENV['GMAIL_ADDRESS']}"
+    Rails.logger.debug " 入った2---------------------------------#{ENV['GMAIL_PASSWORD']}"
     @email = params[:email]
     @item = params[:item]
     @subject = "商品配送のお知らせ"
